@@ -1,0 +1,42 @@
+<mat-card
+        class="ext-container"
+        [ngClass]="{
+    'ext-container-handset': (isHandset$ | async),
+    'ext-container-small': (isSmall$ | async),
+    'ext-container-medium': (isMedium$ | async),
+    'ext-container-large': (isLarge$ | async)
+    }">
+
+    <mat-grid-list [cols]="8" rowHeight="1:1">
+        <mat-grid-tile style="border-right: 1px solid #5696ff"
+                       [colspan]="3"
+                       [rowspan]="3">
+
+            <div *ngIf=" true || (hrac$ | async) as hrac">
+                <img style="background-color: cadetblue" height="200px" width="200px" src="{{ hrac.imgUrl }}"/>
+                <p style="text-align: center"> {{ hrac.displayName }} </p>
+                <div style="text-align: center">
+                    <button mat-button> {{ hrac.ready ? 'Připraven' : 'Čeká se na tebe!' }} </button>
+                </div>
+            </div>
+        </mat-grid-tile>
+        <mat-grid-tile
+                [colspan]="2"
+                [rowspan]="3">
+
+            <h2> VS </h2>
+        </mat-grid-tile>
+        <mat-grid-tile style="border-left: 1px solid #5696ff"
+                       [colspan]="3"
+                       [rowspan]="3">
+
+            <div *ngIf=" true || (souper$ | async) as souper">
+                <img style="background-color: cadetblue" height="200px" width="200px" src="{{ souper.imgUrl }}"/>
+                <p style="text-align: center"> {{ souper.displayName }} </p>
+                <div style="text-align: center"  disabled="true">
+                    <button style="color: #000;" disabled mat-button> {{ souper.ready ? 'Připraven' : 'Čeká se na hráče!' }} </button>
+                </div>
+            </div>
+        </mat-grid-tile>
+    </mat-grid-list>
+</mat-card>

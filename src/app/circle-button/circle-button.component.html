@@ -1,0 +1,14 @@
+<button mat-raised-button
+        (click)="click()"
+        [disabled]="disabled"
+        color="primary"
+        class="circular-progress-button">
+    {{ disabled ? '' : text }}
+    <span *ngIf="disabled" class="spinner-container">
+        <mat-progress-spinner
+                mode="indeterminate"
+                [diameter]="24"
+                class="circular-progress-button">
+        </mat-progress-spinner>
+    </span>
+</button>

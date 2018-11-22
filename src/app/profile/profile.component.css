@@ -1,0 +1,38 @@
+.nadpis-small p{
+    position: absolute !important;
+    left: 28px !important;
+    margin: 0 !important;
+}
+
+.nadpis-handset p{
+    position: absolute;
+    left: 10px;
+    top: 10px;
+    margin: 0;
+}
+
+.ext-container-handset{
+    margin: 10px 1.5%;
+}
+
+.ext-container-small{
+    margin: 10px 12%;
+}
+
+.ext-container-medium{
+    margin: 10px 10%;
+}
+
+.ext-container-large{
+    margin: 10px 20%;
+}
+
+.inputs{
+    position: absolute;
+    left: 10px;
+}
+
+.inputs-small{
+    position: absolute;
+    left: 25px;
+}

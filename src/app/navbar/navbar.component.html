@@ -1,0 +1,37 @@
+<mat-sidenav-container class="sidenav-container">
+  <mat-sidenav
+    #drawer
+    class="sidenav"
+    fixedInViewport="true"
+    [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'"
+    [mode]="(isHandset$ | async) ? 'over' : 'side'"
+    [opened]="false">
+    <mat-toolbar color="primary">Menu</mat-toolbar>
+    <mat-nav-list>
+      <a *ngIf="(isHandset$ | async) && (user$ | async) as user" mat-list-item routerLink="/profile" routerLinkActive="active">{{user.email}}</a>
+      <a mat-list-item href="#">Link 2</a>
+      <a mat-list-item href="#">Link 3</a>
+    </mat-nav-list>
+  </mat-sidenav>
+  <mat-sidenav-content>
+    <mat-toolbar id="navbar" color="primary">
+      <button
+        type="button"
+        aria-label="Toggle sidenav"
+        mat-icon-button
+        (click)="drawer.toggle()"
+        *ngIf="isHandset$ | async">
+        <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
+      </button>
+      <span>Vylepsenelode</span>
+      <span style="flex-grow: 1;"></span>
+      <span *ngIf="user$ | async as user">
+        <a *ngIf="!(isHandset | async)" mat-button routerLink="/profile" routerLinkActive="active"> {{user.email}} </a>
+          <button mat-button routerLink="matchmaking"> hrát </button>
+        <button mat-button (click)="logout()"> Logout </button>
+      </span>
+      <button mat-button *ngIf="!(user$ | async)" style="margin-right: 10px" routerLink="/Login" routerLinkActive="active">Login</button>
+    </mat-toolbar>
+    <ng-content></ng-content>
+  </mat-sidenav-content>
+</mat-sidenav-container>

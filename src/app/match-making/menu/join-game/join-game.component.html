@@ -1,0 +1,41 @@
+<table class="table" mat-table [dataSource]="listMatchData.matches">
+  <ng-container matColumnDef="state">
+    <th mat-header-cell *matHeaderCellDef> stav </th>
+    <td mat-cell *matCellDef="let element"> {{element.inLobby ? "In Lobby" : "In Game"}} </td>
+  </ng-container>
+  <ng-container matColumnDef="public">
+    <th mat-header-cell *matHeaderCellDef> Typ Skupiny </th>
+    <td mat-cell *matCellDef="let element"> {{element.groupType}} </td>
+  </ng-container>
+  <ng-container matColumnDef="cratorsNick">
+    <th mat-header-cell *matHeaderCellDef> NickName tvůrce </th>
+    <td mat-cell *matCellDef="let element; let i = index"> {{listMatchData.user[i].nickName}} </td>
+  </ng-container>
+  <ng-container matColumnDef="actions">
+    <th mat-header-cell *matHeaderCellDef> Akce </th>
+    <td mat-cell *matCellDef="let element">
+      <button color="primary" (click)="join(element.uid)" mat-button> Join </button>
+    </td>
+  </ng-container>
+  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+</table>
+<mat-card style="padding: 0" class="paginator">
+  <div class="stranky">
+    <label> počet zápusů na stránce:   </label>
+    <mat-form-field>
+      <mat-select (valueChange)="selectedValueChnaged($event)">
+        <mat-option *ngFor="let option of pageSizeOptions" [value]="option">
+          {{option}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+    <button mat-icon-button [disabled]="prevButtonDisenabled" (click)="prev()">
+      <mat-icon> navigate_before </mat-icon>
+    </button>
+    <button mat-icon-button [disabled]="nextButtonDisenabled" (click)="next()">
+      <mat-icon> navigate_next </mat-icon>
+    </button>
+  </div>
+
+</mat-card>

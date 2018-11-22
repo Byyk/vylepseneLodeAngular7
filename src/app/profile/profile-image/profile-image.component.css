@@ -1,0 +1,35 @@
+.profile-image{
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+.profile-image img{
+    position: absolute;
+    top: 50%;
+    right: 50%;
+    transform: translate(50%, -50%);
+}
+
+.profile-image-edit{
+    display: none;
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+}
+
+.profile-image:hover .profile-image-edit{
+    display: inline;
+}
+
+.profile-image-edit-mobile{
+    dispaly: inline;
+}
+
+.progress-spinner{
+    position: absolute;
+    top: 50%;
+    right: 50%;
+    transform: translate(50%, -50%);
+    width: 1000px;
+}

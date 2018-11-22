@@ -1,0 +1,14 @@
+.table {
+    width: 100%;
+}
+
+.paginator {
+    position: relative;
+    height: 60px;
+}
+
+.stranky {
+    position: absolute;
+    right: 10px;
+}
+

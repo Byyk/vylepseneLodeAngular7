@@ -1,0 +1,20 @@
+<mat-card
+        class="ext-container"
+        [ngClass]="{
+        'ext-container-handset': (isHandset$ | async),
+        'ext-container-small': (isSmall$ | async),
+        'ext-container-medium': (isMedium$ | async),
+        'ext-container-large': (isLarge$ | async)
+        }">
+    <app-create-game></app-create-game>
+</mat-card>
+<mat-card
+        class="ext-container"
+        [ngClass]="{
+    'ext-container-handset': (isHandset$ | async),
+    'ext-container-small': (isSmall$ | async),
+    'ext-container-medium': (isMedium$ | async),
+    'ext-container-large': (isLarge$ | async)
+    }">
+    <app-join-game></app-join-game>
+</mat-card>

@@ -1,0 +1,57 @@
+<mat-card
+  [ngClass]="{
+   'ext-container-handset': (isHandset$ | async),
+   'ext-container-small': (isSmall$ | async),
+   'ext-container-medium': (isMedium$ | async),
+   'ext-container-large': (isLarge$ | async) || (isWeb$ | async)
+  }">
+  <mat-grid-list [cols]="12" rowHeight="2:1">
+    <mat-grid-tile
+    [colspan]=" (isSmall$ | async) ? 6 : (isHandset$ | async) ? 12 : 4"
+    [rowspan]=" (isSmall$ | async) ? 12: (isHandset$ | async) ? 24 : 8"
+    style="background-color: #EEE">
+        <app-profile-image
+                style="width: 100%; height: 100%;"
+                (uploadStateChange)="SetChange($event)">
+        </app-profile-image>
+    </mat-grid-tile>
+      <mat-grid-tile [ngClass]="{
+        'nadpis-handset': (isHandset$ | async),
+        'nadpis-small': (isSmall$ | async)
+      }"
+      [colspan]=6 [rowspan]= "(isHandset$ | async) ? 2 : 1">
+        <p>Osobní údaje</p>
+      </mat-grid-tile>
+      <mat-grid-tile
+        [colspan]= "(isSmall$ | async) ? 6 : (isHandset$ | async) ? 12 : 4"
+        [rowspan]= "(isSmall$ | async) ? 4 : (isHandset$ | async) ? 6 : 2">
+            <mat-form-field [ngClass]="{
+              'inputs': (isHandset$ | async),
+              'inputs-small': (isSmall$ | async)
+            }">
+              <input tabindex="1" matInput placeholder="First name" (change)="profileChanged()" [(ngModel)]="nameGroup.FirstName"/>
+            </mat-form-field>
+      </mat-grid-tile>
+      <mat-grid-tile
+          [colspan]= "(isSmall$ | async) ? 6 : (isHandset$ | async) ? 12 : 3"
+          [rowspan]= "(isSmall$ | async) ? 4 : (isHandset$ | async) ? 5 : 2"
+          [ngClass]="{'form-field': true}">
+          <mat-form-field [ngClass]="{
+            'inputs': (isHandset$ | async),
+            'inputs-small': (isSmall$ | async)
+          }">
+            <input tabindex="2" matInput placeholder="Last name" (change)="profileChanged()" [(ngModel)]="nameGroup.LastName">
+          </mat-form-field>
+      </mat-grid-tile>
+  </mat-grid-list>
+    <mat-card-actions style="text-align: right">
+        <app-circle-button
+                style="position: absolute; bottom: 15px; right: 40px; max-height: 36px"
+                [disabled]="SaveButtonClicked"
+                tabindex="3"
+                text="Save"
+                (click)="Save()">
+
+        </app-circle-button>
+    </mat-card-actions>
+</mat-card>

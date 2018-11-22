@@ -1,0 +1,15 @@
+<div class="profile-image" *ngIf="!uploadingImage">
+  <img src="{{ photo }}">
+  <input (change)="uploadProfileImage($event)" type="file" accept="image/*" style="display: none" #imageEdit>
+  <button (click)="imageEdit.click()" mat-mini-fab color="primary" class="profile-image-edit">
+    <mat-icon>edit</mat-icon>
+  </button>
+</div>
+<div #imageLoad *ngIf="uploadingImage">
+    <mat-progress-spinner class="progress-spinner"
+            *ngIf="(uploadProgress | async) as progress"
+            color="primary"
+            mode="determinate"
+            [value]="progress">
+    </mat-progress-spinner>
+</div>
