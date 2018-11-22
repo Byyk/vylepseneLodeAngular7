@@ -66,8 +66,9 @@ export class MatchMakingService {
     }
     createMatch(roomName: string, password: string, groupType: string, callback: () => void){
         const ref = this.afs.collection<Match>('Matches');
+        const uid = this.afs.createId();
         this.afa.user.subscribe(user => {
-            ref.add({
+            ref.doc(uid).set({
                 roomName: roomName,
                 password: password,
                 groupType: groupType,
@@ -75,19 +76,16 @@ export class MatchMakingService {
                 ended: false,
                 inLobby: true,
                 oponentUid: "",
-                uid: this.afs.createId()
-            }).then(doc => {
-                this.afs.collection<Hrac>('Users', refe => refe.where('uid', '==', user.uid)).get().subscribe((quarrySnapshot => {
-                    quarrySnapshot.forEach((document) => {
-                        document.ref.update({lastMatch: { lastMatchRef: `Matches/${doc.id}`, creator: true }}).then(callback);
-                    });
-                }));
-            });
+                uid: uid
+            }).then(() => {
+                this.afs.collection<Hrac>('Users').doc(user.uid)
+                  .update({lastMatch: { lastMatchRef: `Matches/${uid}`, creator: true }}).then(callback);
+            }); // Todo přidat catch
         });
     }
-    async joinMatch(matchUid: string, password? : string) {
+    joinMatch(matchUid: string, password? : string) {
         this.afa.idToken.subscribe((idToken) => {
-            this.http.get(`https://us-central1-lode-1835e.cloudfunctions.net/matches/${idToken}`).subscribe(data => {
+            this.http.get(`https://us-central1-lode-1835e.cloudfunctions.net/matches/joinGame/${idToken}`).subscribe(data => {
                 console.log(data);
             });
         });
