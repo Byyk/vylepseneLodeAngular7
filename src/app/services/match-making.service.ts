@@ -7,6 +7,9 @@ import { Hrac } from "../model/hrac.model";
 import { Injectable } from '@angular/core';
 import { map } from "rxjs/operators";
 import {HttpClient} from "@angular/common/http";
+import {UserInfo} from 'firebase';
+import {LoginService} from './login.service';
+import {environment} from '../../environments/environment';
 
 //
 // zdroje:
@@ -28,6 +31,7 @@ export class MatchMakingService {
     constructor(
         public afs: AngularFirestore,
         public afa: AngularFireAuth,
+        public ls: LoginService,
         public http: HttpClient
     ) {}
 
@@ -38,6 +42,7 @@ export class MatchMakingService {
         const ref = this.getCollection('Matches', refe =>
             refe.limit(limit + 1)
                 .where('inLobby', '==', true)
+                .where('isPublic', '==', true)
         ).subscribe((data: Array<any>) => {
             const ret = this.download_isFull(data, limit);
             this.download_setLastEntry(limit);
@@ -68,26 +73,20 @@ export class MatchMakingService {
         const ref = this.afs.collection<Match>('Matches');
         const uid = this.afs.createId();
         this.afa.user.subscribe(user => {
-            ref.doc(uid).set({
-                roomName: roomName,
-                password: password,
-                groupType: groupType,
-                creatorUid: user.uid,
-                ended: false,
-                inLobby: true,
-                oponentUid: "",
-                uid: uid
-            }).then(() => {
-                this.afs.collection<Hrac>('Users').doc(user.uid)
-                  .update({lastMatch: { lastMatchRef: `Matches/${uid}`, creator: true }}).then(callback);
-            }); // Todo přidat catch
+            const userDataDoc = this.afs.collection<Hrac>('Users').doc(user.uid);
+                userDataDoc.get().subscribe(() => {
+                    const data = this.createMatchData(roomName, groupType, user, password, uid);
+                    console.log(data);
+                    ref.doc(uid).set(data
+                    ).then(
+                        this.createDataAndUpdateUser(groupType, uid, password, userDataDoc)
+                    ).then(callback).catch(); // Todo přidat try catch logiku
+                });
         });
     }
-    joinMatch(matchUid: string, password? : string) {
+    joinMatch(matchUid: string, password? : string, callback?: () => void) {
         this.afa.idToken.subscribe((idToken) => {
-            this.http.get(`https://us-central1-lode-1835e.cloudfunctions.net/matches/joinGame/${idToken}`).subscribe(data => {
-                console.log(data);
-            });
+            this.http.get(`${environment.urlBase}/matches/joinGame/${idToken}/${matchUid}/${password === undefined ? '' : password}`).subscribe(callback);
         });
     }
     private getCollection(ref, quarryFn?): Observable<any>{
@@ -126,6 +125,7 @@ export class MatchMakingService {
             refe.startAfter(this.allData[this.lastEntry].doc)
                 .limit(limit + 1)
                 .where('inLobby', '==', true)
+                .where('isPublic', '==', true)
         )
             .subscribe((data: any[]) => {
                 const ret = this.download_isFull(data, limit);
@@ -145,5 +145,28 @@ export class MatchMakingService {
         }
 
         this._data.next({data: data, prvnistranka: false, poslednistranka: this.lastEntry === this.allData.length - 1});
+    }
+    private createDataAndUpdateUser(groupType: string, uid: string, password: string, userDataDoc: any){
+        const promises = [];
+        if(groupType === 'Veřejná')
+            promises.push(this.afs.collection('Matches_private_data')
+                .doc(uid).set({uid: uid, password: password}));
+        promises.push(userDataDoc.update({lastMatch: {lastMatchRef: `Matches/${uid}`, creator: true}}));
+        return () => Promise.all(promises);
+    }
+    private createMatchData(roomName: string, groupType: string, user: UserInfo, password: string, uid: string){
+        return {
+            uid: uid,
+            roomName: roomName,
+            groupType: groupType,
+            creatorUid: user.uid,
+            creatorsNickName: this.ls.userData.nickName,
+            oponentUid: "",
+            opopenentsNickName: '',
+            ended: false,
+            inLobby: true,
+            isPublic: groupType !== 'Jen na pozvání',
+            havepassword: password !== '' && groupType === 'Veřejná'
+        };
     }
 }

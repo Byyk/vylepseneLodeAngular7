@@ -1,15 +1,20 @@
-import { Observable } from 'rxjs';
 import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { auth } from 'firebase';
 import {NameGroup} from "../model/nameGroup.model";
+import {Hrac} from '../model/hrac.model';
+import {Observable} from 'rxjs';
+import {map} from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
 })
 export class LoginService {
-  private logginedIn: boolean;
+    public userDataObservable: Observable<Hrac>;
+    public userData: Hrac;
+
+    private logginedIn: boolean;
   get LogginedIn(): boolean{
       return this.logginedIn;
   }
@@ -20,6 +25,11 @@ export class LoginService {
     ) {
       this.afa.user.subscribe((res) => {
           this.logginedIn = res !== null;
+          if(this.logginedIn){
+              this.userDataObservable = this.afs.collection<Hrac>('Users', ref => ref.where('uid', '==', res.uid)).valueChanges()
+                  .pipe(map((user) => user[0]));
+              this.userDataObservable.subscribe((userData) => this.userData = userData);
+          }
       });
   }
 
@@ -39,6 +49,7 @@ export class LoginService {
 
   public loginWithGoogle = () => this.afa.auth.signInWithPopup(new auth.GoogleAuthProvider());
   public loginWithFacebook = () => this.afa.auth.signInWithPopup(new auth.FacebookAuthProvider());
+  public loginWithTwitter = () => this.afa.auth.signInWithPopup(new auth.TwitterAuthProvider());
   public login = (email: string, password: string) => this.afa.auth.signInWithEmailAndPassword(email, password);
   public getUserObservable = () => this.afa.user;
   public resetPassword = (email: string) => this.afa.auth.sendPasswordResetEmail(email);

@@ -1,6 +1,6 @@
 export const environment = {
     production: false,
-    urlBase: "",
+    urlBase: "http://localhost:5000/lode-1835e/us-central1",
     firebase: {
         apiKey: "AIzaSyBBxIazBl-e3HDdq8Com0EsteDyhsRBglE",
         authDomain: "lode-1835e.firebaseapp.com",

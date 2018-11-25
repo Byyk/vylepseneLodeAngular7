@@ -1,6 +1,6 @@
 export const environment = {
     production: false,
-    urlBase: "",
+    urlBase: "https://us-central1-lode-1835e.cloudfunctions.net",
     firebase: {
         apiKey: "AIzaSyBBxIazBl-e3HDdq8Com0EsteDyhsRBglE",
         authDomain: "lode-1835e.firebaseapp.com",

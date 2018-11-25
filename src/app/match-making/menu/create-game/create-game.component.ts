@@ -26,7 +26,7 @@ export class CreateGameComponent implements OnInit {
     this.formGroup = this.fb.group({
         RoomName:  [this.afa.auth.currentUser.displayName + ' - room', Validators.required],
         GroupType: ['Veřejná', Validators.required],
-        Password: ['ja jsem heslo :)', [Validators.required, Validators.minLength(4)]]
+        Password: ['ja jsem heslo :)']
       });
   }
 
