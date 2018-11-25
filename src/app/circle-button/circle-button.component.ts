@@ -15,6 +15,9 @@ export class CircleButtonComponent{
   @Input()
   public click: () => void;
 
+  @Input()
+  public fullWidth: boolean;
+
   constructor() {
     this.click = () => {};
   }

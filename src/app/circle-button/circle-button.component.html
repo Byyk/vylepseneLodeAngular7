@@ -2,7 +2,8 @@
         (click)="click()"
         [disabled]="disabled"
         color="primary"
-        class="circular-progress-button">
+        class="circular-progress-button"
+        [ngStyle]="{'width': fullWidth ? '100%' : ''}">
     {{ disabled ? '' : text }}
     <span *ngIf="disabled" class="spinner-container">
         <mat-progress-spinner
