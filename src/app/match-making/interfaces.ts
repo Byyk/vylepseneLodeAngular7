@@ -5,13 +5,3 @@ export interface MatchListData {
     poslednistranka: boolean;
     prvnistranka: boolean;
 }
-
-export interface UserMatch {
-    matches: Match[];
-    user: HracDTO[];
-}
-
-export interface HracDTO {
-    uid:  string;
-    nickName: string;
-}

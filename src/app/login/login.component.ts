@@ -6,13 +6,37 @@ import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
 import { BreakpointObserver} from '@angular/cdk/layout';
 import { Breakpointy} from "../model/breakpoints.model";
 import { UserModel } from '../model/user.model';
+import {animate, sequence, state, style, transition, trigger} from '@angular/animations';
+
 
 import * as formGroups from './formGroups';
 
 @Component({
-  selector: 'app-login',
-  templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css']
+    selector: 'app-login',
+    templateUrl: './login.component.html',
+    styleUrls: ['./login.component.scss'],
+    animations: [
+        trigger('hideShow', [
+            state('hiddenLeft', style({
+                left: '0',
+                transform: 'translate(-100%, -50%)'
+            })),
+            state('shown', style({
+                left: '50%',
+                transform: 'translate(-50%, -50%)'
+            })),
+            state('hiddenRight', style({
+                left: '100%',
+                transform: 'translate(0, -50%)'
+            })),
+            transition('shown <=> hiddenRight', [
+                animate('0.3s')
+            ]),
+            transition('shown <=> hiddenLeft', [
+                animate('0.3s')
+            ])
+        ]),
+    ]
 })
 export class LoginComponent extends Breakpointy implements OnInit {
     RGroup: FormGroup;
@@ -23,7 +47,29 @@ export class LoginComponent extends Breakpointy implements OnInit {
     FacebookLoginClicked = false;
     loginError = false;
 
+    loginDisabledLeft = false;
+    registerDisabled = true;
+    resetDiabled = true;
+
     public step: number;
+
+    public loginState = 'shown';
+    public registerState = 'hiddenRight';
+    public resetState = 'hiddenLeft';
+
+    LoginRegisterToggle(prepinac: boolean){
+        this.loginState = prepinac ? 'hiddenLeft' : 'shown';
+        this.registerState = prepinac ? 'shown' : 'hiddenRight';
+        setTimeout(() => this.registerDisabled = !prepinac,  !prepinac ? 300 : 0);
+        setTimeout(() => this.loginDisabledLeft = prepinac, prepinac ? 300 : 0);
+    }
+
+    LoginResetToggle(prepinac: boolean){
+        this.loginState = prepinac ? 'hiddenRight' : 'shown';
+        this.resetState = prepinac ? 'shown' : 'hiddenLeft';
+        setTimeout(() => this.resetDiabled = !prepinac,  !prepinac ? 300 : 0);
+        setTimeout(() => this.loginDisabledLeft = prepinac, prepinac ? 300 : 0);
+    }
 
     constructor(
         public LService: LoginService,
@@ -99,6 +145,7 @@ export class LoginComponent extends Breakpointy implements OnInit {
     resetPassword =      () => this.LService.resetPassword(this.user.resetEmail).then(() => this.setStep(3));
     loginWhitFacebook =  () => this.LService.loginWithFacebook();
     loginWhitGoogle =    () => this.LService.loginWithGoogle();
+    loginWhitTwitter =   () => this.LService.loginWithTwitter();
     emailRequired =      () : boolean => this.RGroup.get('email').hasError('required');
     emailNotValid =      () : boolean => this.RGroup.get('email').hasError('email') && !this.RGroup.get('email').hasError('required');
     passwordRequired =   () : boolean => this.RGroup.get('password').hasError('required');

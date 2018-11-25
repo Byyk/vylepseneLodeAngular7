@@ -28,7 +28,7 @@
       <span *ngIf="user$ | async as user">
         <a *ngIf="!(isHandset | async)" mat-button routerLink="/profile" routerLinkActive="active"> {{user.email}} </a>
           <button mat-button routerLink="matchmaking"> hrát </button>
-        <button mat-button (click)="logout()"> Logout </button>
+        <button mat-button (click)="logout()" [tabindex]="-1"> Logout </button>
       </span>
       <button mat-button *ngIf="!(user$ | async)" style="margin-right: 10px" routerLink="/Login" routerLinkActive="active">Login</button>
     </mat-toolbar>

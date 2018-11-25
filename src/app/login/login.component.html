@@ -1,115 +1,102 @@
-<div
-[ngClass]="{
-  'ext-container-large': ((isLarge$ | async) || (isWeb$ | async)),
-  'ext-container-medium': (isMedium$ | async),
-  'ext-container-small': ((isSmall$ | async)),
-  'ext-container-handset': ((isHandset$ | async))
-  }">
-  <span ></span>
-  <mat-accordion displayMode="default" [hideToggle]="false">
-    <!--login-->
-
-    <mat-expansion-panel [expanded]="step === 0" (opened)="setStep(0)">
-        <mat-expansion-panel-header>Přihlášení</mat-expansion-panel-header>
-          <div>
-            <mat-form-field>
-              <input matInput placeholder="Email" [(ngModel)]="user.email"/>
-            </mat-form-field>
-            <br/>
-            <mat-form-field>
-              <input matInput placeholder="Heslo" type="password" [(ngModel)]="user.password"/>
-            </mat-form-field>
-          </div>
-          <mat-error *ngIf="loginError">
-            Špatné jméno nebo heslo.
-          </mat-error>
-          <a (click)="setStep(2)"> Reset password </a>
-          <div style="margin-top: 8px; width: 200px" *ngIf="(isHandset$ | async) || (isSmall$ | async)">
-              <button [ngClass]="{'block': true}" style="background-color: salmon;" mat-raised-button (click)="loginWhitGoogle()"> Přihlásit pomocí google</button>
-              <br/>
-              <button [ngClass]="{'block': true}" style="background-color: #5696ff;" mat-raised-button (click)="loginWhitFacebook()"> Přihlásit pomocí facebook</button>
-          </div>
-        <mat-action-row>
-            <button [ngStyle]="{'margin-right.px': (isHandset$ | async) ? 5 : 0}" mat-raised-button (click)="setStep(1)" color="secondary">Create new</button>
-            <button *ngIf="!(isHandset$ | async) && !(isSmall$ | async)" style="margin: 0 10px; background-color: salmon;" mat-raised-button (click)="loginWhitGoogle()"> Přihlásit přes google</button>
-            <button *ngIf="!(isHandset$ | async) && !(isSmall$ | async)" style="margin-right: 10px; background-color: #5696ff;" mat-raised-button (click)="loginWhitFacebook()"> Přihlásit přes facebook</button>
-            <button mat-raised-button color="primary" [disabled]="loginButtonClicked" (click)="login()">Login</button>
-        </mat-action-row>
-    </mat-expansion-panel>
-    <!--registrace-->
-    <mat-expansion-panel [expanded]="step === 1" (opened)="setStep(1)">
-        <mat-expansion-panel-header>Registracion</mat-expansion-panel-header>
-            <div [formGroup]="RGroup">
-              <mat-form-field>
-                <input matInput placeholder="Email" type="email" formControlName="email" required email/>
-                <mat-error *ngIf="emailRequired()">
-                  Email je <strong>požádován</strong>!
-                </mat-error>
-                <mat-error *ngIf="emailNotValid()">
-                  <strong>Neplatná</strong> emalová adresa
-                </mat-error>
-              </mat-form-field>
-              <br/>
-              <mat-form-field>
-                <input matInput placeholder="Heslo" type="password" formControlName="password" required/>
-                <mat-error *ngIf="passwordRequired()">
-                  Heslo je <strong>požadováno</strong>
-                </mat-error>
-                <mat-error *ngIf="passwordLength()">
-                  Heslo musí mít <strong>alespoň 6 znaků</strong>!
-                </mat-error>
-              </mat-form-field>
-              <br/>
-              <mat-form-field>
-                <input matInput placeholder="Ověření hesla" type="password" formControlName="repassword" required/>
-                <mat-error *ngIf="passwordsDontMatch()">
-                  Hesla se <strong>neshodují</strong>
-                </mat-error>
-                <mat-error *ngIf="repasswordRequired()">
-                  Ověření hesla je <strong>požadováno</strong>
-                </mat-error>
-              </mat-form-field>
-            </div>
-        <mat-action-row>
-          <button mat-raised-button color="secondary" (click)="setStep(0)">I have account</button>
-          <button style="margin-left: 10px" mat-raised-button color="primary" [disabled]="!RGroup.valid" (click)="register()">Register</button>
-        </mat-action-row>
-    </mat-expansion-panel>
-    <!--reset hesla-->
-    <mat-expansion-panel [expanded]="step === 2" (opened)="setStep(2)">
-        <mat-expansion-panel-header>
-            <mat-panel-title> Reset password </mat-panel-title>
-        </mat-expansion-panel-header>
+<div id="login-container">
+    <!-- Todo add to craditials: https://stmed.net/wallpaper-224361 -->
+    <img class="img img-background" src="https://stmed.net/sites/default/files/world-of-warships-hd-wallpapers-33918-130881.jpg" width="" height="" alt="stala se chyba :(" />
+    <mat-card id="login" [@hideShow]="loginState">
+        <mat-card-header>
+            <mat-card-title> Přihlášení </mat-card-title>
+        </mat-card-header>
         <mat-form-field>
-          <input matInput placeholder="your email here" [(ngModel)]="user.resetEmail" required/>
+            <input matInput="" type="email" placeholder="Email"
+                   [(ngModel)]="user.email" [disabled]="loginDisabledLeft" [tabindex]="!loginDisabledLeft ? 1 : -1"/>
         </mat-form-field>
-        <mat-action-row>
-          <button mat-raised-button color="primary" (click)="resetPassword()"> Send email</button>
-        </mat-action-row>
-    </mat-expansion-panel>
-    <!--potvrzení resetu hesla-->
-    <mat-expansion-panel [expanded]="step === 3" (opened)="setStep(3)">
-        <mat-expansion-panel-header>
-        <mat-panel-title> Confirm reset password </mat-panel-title>
-        </mat-expansion-panel-header>
-          <span [formGroup]="RPGroup">
-            <mat-form-field>
-              <input matInput placeholder="your code here" formControlName="code" required/>
-            </mat-form-field>
-            <br/>
-            <mat-form-field>
-              <input matInput placeholder="password" type="password" formControlName="password" required/>
-            </mat-form-field>
-            <br/>
-            <mat-form-field>
-              <input matInput placeholder="password again" type="password" formControlName="repassword" required/>
-            </mat-form-field>
-          </span>
-        <mat-action-row>
-          <button mat-raised-button color="primary" (click)="confirmReset()" [disabled]="!RPGroup.valid"> Reset </button>
-        </mat-action-row>
-    </mat-expansion-panel>
-  </mat-accordion>
-</div>
+        <mat-form-field>
+            <input matInput="" type="password" placeholder="Heslo"
+                   [(ngModel)]="user.password" [disabled]="loginDisabledLeft" [tabindex]="!loginDisabledLeft ? 2 : -1"/>
+        </mat-form-field>
 
-<a style="display: none" routerLink="/profile" #NavigateOut></a>
+        <mat-grid-list [cols]="3" rowHeight="1:1" id="login-providers">
+            <mat-grid-tile>
+                <button mat-icon-button="" id="facebook" [tabindex]="!loginDisabledLeft ? 4 : -1"
+                        (click)="loginWhitFacebook()" [disabled]="loginDisabledLeft">
+                    <fa-icon size="5x" [icon]="['fab', 'facebook']"></fa-icon>
+                </button>
+            </mat-grid-tile>
+            <mat-grid-tile>
+                <button mat-icon-button="" id="google" [tabindex]="!loginDisabledLeft ? 5 : -1"
+                        (click)="loginWhitGoogle()" [disabled]="loginDisabledLeft">
+                    <fa-icon size="5x" [icon]="['fab', 'google']"></fa-icon>
+                </button>
+            </mat-grid-tile>
+            <mat-grid-tile>
+                <button mat-icon-button="" id="twitter" [tabindex]="!loginDisabledLeft ? 6 : -1"
+                        (click)="loginWhitTwitter()" [disabled]="loginDisabledLeft">
+                    <fa-icon size="5x" [icon]="['fab', 'twitter']"></fa-icon>
+                </button>
+            </mat-grid-tile>
+        </mat-grid-list>
+        <button mat-button="" color="primary" (click)="LoginRegisterToggle(true)" id="nav-register"
+                [disabled]="loginDisabledLeft" tabindex="-1">
+            Vytvořit nový účet
+        </button>
+        <button mat-button="" color="primary" class="login-navigation" (click)="LoginResetToggle(true)" id="nav-reset"
+                [disabled]="loginDisabledLeft" tabindex="-1">
+            Zapomenuté heslo?
+        </button>
+        <mat-card-actions>
+            <button mat-flat-button="" (click)="login()" color="primary" [disabled]="loginDisabledLeft"
+                    class="submit" [tabindex]="!loginDisabledLeft ? 3 : -1"> Přihlásit se </button>
+        </mat-card-actions>
+    </mat-card>
+
+    <mat-card id="register" [@hideShow]="registerState">
+        <mat-card-header>
+            <mat-card-title> Registrace </mat-card-title>
+        </mat-card-header>
+        <mat-form-field class="input-half" style="margin-right: 2%">
+            <input matInput="" type="email" placeholder="email"
+                   [disabled]="registerDisabled" [tabindex]="!registerDisabled ? 1 : -1"/>
+        </mat-form-field>
+        <mat-form-field class="input-half" style="margin-left: 2%">
+            <input matInput="" type="text" placeholder="přezdívka"
+                   [disabled]="registerDisabled" [tabindex]="!registerDisabled ? 2 : -1"/>
+        </mat-form-field>
+        <mat-form-field>
+            <input matInput="" type="password" placeholder="heslo"
+                   [disabled]="registerDisabled" [tabindex]="!registerDisabled ? 3 : -1"/>
+        </mat-form-field>
+        <mat-form-field>
+            <input matInput="" type="password" placeholder="Heslo ještě jednou"
+                   [disabled]="registerDisabled" tabindex="-1"/>
+        </mat-form-field>
+        <button mat-button="" color="primary" (click)="LoginRegisterToggle(false)"
+                [disabled]="registerDisabled" tabindex="-1">
+            Mám již založený účet!
+        </button>
+        <mat-card-actions>
+            <button mat-flat-button="" color="primary" class="submit"
+                    [disabled]="registerDisabled" [tabindex]="!registerDisabled ? 5 : -1">
+                Zaregistrovat se
+            </button>
+        </mat-card-actions>
+    </mat-card>
+
+    <mat-card id="reset" [@hideShow]="resetState">
+        <mat-card-header>
+            <mat-card-title> Obnovení hesla </mat-card-title>
+        </mat-card-header>
+        <mat-form-field>
+            <input matInput="" type="email" placeholder="email"
+                    [disabled]="resetDiabled" [tabindex]="!resetDiabled ? 1 : -1" />
+        </mat-form-field>
+        <button mat-button="" color="primary" (click)="LoginResetToggle(false)"
+                    [disabled]="resetDiabled" [tabindex]="!resetDiabled ? 3 : -1">
+            Znám své heslo
+        </button>
+        <mat-card-actions>
+            <button mat-flat-button="" color="primary" class="submit"
+                    [disabled]="resetDiabled" [tabindex]="!resetDiabled ? 2 : -1">
+                Odeslat email
+            </button>
+        </mat-card-actions>
+    </mat-card>
+</div>
