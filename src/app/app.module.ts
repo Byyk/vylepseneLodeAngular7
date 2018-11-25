@@ -30,6 +30,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { AppRoutingModule } from './modules/app-routing.module';
 import { MaterialModule } from './modules/material.module';
 import {MatDialog} from '@angular/material';
+import {AppFontAwesomeModule} from './modules/app-font-awesome.module';
 
 @NgModule({
     declarations: [
@@ -57,7 +58,8 @@ import {MatDialog} from '@angular/material';
         AngularFireModule.initializeApp(environment.firebase),
         AngularFirestoreModule,
         AngularFireAuthModule,
-        AngularFireStorageModule
+        AngularFireStorageModule,
+        AppFontAwesomeModule
     ],
     providers: [
         CanDeactivateGuard,
