@@ -19,8 +19,6 @@ import { CanDeactivateGuard } from "./guards/can-deactivate.guard";
 import { DiscardDialogComponent } from './discard-dialog/discard-dialog.component';
 import { MatchMakingComponent } from './match-making/match-making.component';
 import { MatchMakingService } from "./services/match-making.service";
-import { CanNotActivateGuard } from "./guards/can-not-activate.guard";
-import { CanActivateGuard } from './guards/can-activate.guard';
 import { ProfileImageComponent } from './profile/profile-image/profile-image.component';
 import { LobbyComponent } from './match-making/lobby/lobby.component';
 import { MenuComponent } from './match-making/menu/menu.component';
