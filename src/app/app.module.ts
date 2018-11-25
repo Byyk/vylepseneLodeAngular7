@@ -31,6 +31,7 @@ import { AppRoutingModule } from './modules/app-routing.module';
 import { MaterialModule } from './modules/material.module';
 import {MatDialog} from '@angular/material';
 import {AppFontAwesomeModule} from './modules/app-font-awesome.module';
+import { ConfirmResetComponent } from './confirm-reset/confirm-reset.component';
 
 @NgModule({
     declarations: [
@@ -46,7 +47,8 @@ import {AppFontAwesomeModule} from './modules/app-font-awesome.module';
         MenuComponent,
         CreateGameComponent,
         JoinGameComponent,
-        CircleButtonComponent
+        CircleButtonComponent,
+        ConfirmResetComponent
     ],
     imports: [
         BrowserModule,
