@@ -32,6 +32,7 @@ import { MaterialModule } from './modules/material.module';
 import {MatDialog} from '@angular/material';
 import {AppFontAwesomeModule} from './modules/app-font-awesome.module';
 import { ConfirmResetComponent } from './confirm-reset/confirm-reset.component';
+import { PasswordDialogComponent } from './password-dialog/password-dialog.component';
 
 @NgModule({
     declarations: [
@@ -48,7 +49,8 @@ import { ConfirmResetComponent } from './confirm-reset/confirm-reset.component';
         CreateGameComponent,
         JoinGameComponent,
         CircleButtonComponent,
-        ConfirmResetComponent
+        ConfirmResetComponent,
+        PasswordDialogComponent
     ],
     imports: [
         BrowserModule,
@@ -69,7 +71,8 @@ import { ConfirmResetComponent } from './confirm-reset/confirm-reset.component';
         MatDialog
     ],
     entryComponents: [
-        DiscardDialogComponent
+        DiscardDialogComponent,
+        PasswordDialogComponent
     ],
     bootstrap: [AppComponent]
 })
