@@ -21,14 +21,16 @@ export class LoginService {
 
   constructor(
     public afa: AngularFireAuth,
-    public afs: AngularFirestore
+    public afs: AngularFirestore,
     ) {
       this.afa.user.subscribe((res) => {
           this.logginedIn = res !== null;
           if(this.logginedIn){
               this.userDataObservable = this.afs.collection<Hrac>('Users', ref => ref.where('uid', '==', res.uid)).valueChanges()
                   .pipe(map((user) => user[0]));
-              this.userDataObservable.subscribe((userData) => this.userData = userData);
+              this.userDataObservable.subscribe((userData) => {
+                  this.userData = userData;
+              });
           }
       });
   }

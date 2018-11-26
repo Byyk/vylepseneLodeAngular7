@@ -1,3 +1,5 @@
+import {stavyMatche} from '../match-making/match-making.component';
+
 export interface Hrac {
     uid: string;
     nickName: string;
@@ -6,5 +8,7 @@ export interface Hrac {
 
 export interface LastMatch {
     creator: boolean;
+    state: stavyMatche;
     lastMatchRef: any;
 }
+

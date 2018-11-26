@@ -5,11 +5,12 @@ import { BehaviorSubject, Observable } from "rxjs";
 import { Match } from "../model/match.model";
 import { Hrac } from "../model/hrac.model";
 import { Injectable } from '@angular/core';
-import { map } from "rxjs/operators";
+import {catchError, map} from 'rxjs/operators';
 import {HttpClient} from "@angular/common/http";
 import {UserInfo} from 'firebase';
 import {LoginService} from './login.service';
 import {environment} from '../../environments/environment';
+import {AngularFireStorage} from '@angular/fire/storage';
 
 //
 // zdroje:
@@ -31,6 +32,7 @@ export class MatchMakingService {
     constructor(
         public afs: AngularFirestore,
         public afa: AngularFireAuth,
+        public afstorage: AngularFireStorage,
         public ls: LoginService,
         public http: HttpClient
     ) {}
@@ -84,11 +86,13 @@ export class MatchMakingService {
                 });
         });
     }
-    joinMatch(matchUid: string, password? : string, callback?: () => void) {
+    joinMatch(matchUid: string, password? : string, callback?: (ok: boolean) => any) {
         this.afa.idToken.subscribe((idToken) => {
-            this.http.get(`${environment.urlBase}/matches/joinGame/${idToken}/${matchUid}/${password === undefined ? '' : password}`).subscribe(callback);
+            this.http.get(`${environment.urlBase}/matches/joinGame/${idToken}/${matchUid}/${password === undefined ? '' : password}`).subscribe();
         });
     }
+    public getMyMatch = () => this.afs.doc(this.ls.userData.lastMatch.lastMatchRef).valueChanges();
+    public qetProfileImageUrlByUid = (uid: string) => this.afstorage.ref(`users/${uid}/profileImage.jpg`).getDownloadURL();
     private getCollection(ref, quarryFn?): Observable<any>{
         return this.afs.collection(ref, quarryFn)
             .snapshotChanges().pipe(

@@ -2,6 +2,7 @@ import { MatchMakingService } from "../../../services/match-making.service";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { AngularFireAuth } from '@angular/fire/auth';
 import { Component, OnInit } from '@angular/core';
+import {LoginService} from '../../../services/login.service';
 
 @Component({
   selector: 'app-create-game',
@@ -19,12 +20,13 @@ export class CreateGameComponent implements OnInit {
   constructor(
       public afa: AngularFireAuth,
       public mms: MatchMakingService,
+      public ls: LoginService,
       private fb:  FormBuilder
   ) {
     this.modifiers = ['Veřejná', 'Privátní', 'Jen na pozvání'];
     this.needpassword = false;
     this.formGroup = this.fb.group({
-        RoomName:  [this.afa.auth.currentUser.displayName + ' - room', Validators.required],
+        RoomName:  [this.ls.userData.nickName + ' - room', Validators.required],
         GroupType: ['Veřejná', Validators.required],
         Password: ['ja jsem heslo :)']
       });

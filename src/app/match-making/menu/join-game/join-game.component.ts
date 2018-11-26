@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import {MatchMakingService} from "../../../services/match-making.service";
 import {HttpClient} from "@angular/common/http";
 import {Match} from '../../../model/match.model';
+import {MatDialog} from '@angular/material';
+import {PasswordDialogComponent} from '../../../password-dialog/password-dialog.component';
 
 @Component({
   selector: 'app-join-game',
@@ -18,7 +20,8 @@ export class JoinGameComponent implements OnInit {
 
     constructor(
         public mms: MatchMakingService,
-        public http: HttpClient
+        public http: HttpClient,
+        public md: MatDialog
     ) {}
 
     ngOnInit() {
@@ -39,8 +42,12 @@ export class JoinGameComponent implements OnInit {
         if(this.prevButtonDisenabled) return;
         this.mms.prev(this.pagelimit);
     }
-    join(uid: string){
-        this.mms.joinMatch(uid);
+    join(uid: string, havepassword: boolean){
+        if(havepassword)
+            this.md.open(PasswordDialogComponent, {width: '300px'}).afterClosed().subscribe(data =>{
+                this.mms.joinMatch(uid, data);
+            });
+        else this.mms.joinMatch(uid, '');
     }
     selectedValueChnaged = ($event) => this.pagelimit = $event;
 }

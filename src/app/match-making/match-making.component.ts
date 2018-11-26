@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import {BreakpointObserver} from "@angular/cdk/layout";
 import {Breakpointy} from "../model/breakpoints.model";
-import {MatchMakingService} from "../services/match-making.service";
+import {LoginService} from '../services/login.service';
 
-export enum stavyMatche { inLobby, inGame, inMenu, Joining }
+export enum stavyMatche { inLobby = 0, inGame = 1, inMenu = 2}
 
 @Component({
   selector: 'app-match-making',
@@ -15,10 +15,17 @@ export class MatchMakingComponent extends Breakpointy implements OnInit {
 
   constructor(
       public breakpointObserver: BreakpointObserver,
-      public mms: MatchMakingService
+      public ls: LoginService
   ) {
       super(breakpointObserver);
-      this.stavy = stavyMatche.inMenu;
+      if(this.ls.userData !== null)
+          if(this.ls.userData.lastMatch !== null)
+              this.stavy = this.ls.userData.lastMatch.state;
+      else this.stavy = 2;
+
+      this.ls.userDataObservable.subscribe(data =>{
+        this.stavy = data.lastMatch.state;
+      });
   }
   ngOnInit(){
 
