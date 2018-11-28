@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import {Component, EventEmitter, Input, Output} from '@angular/core';
 
 @Component({
   selector: 'app-circle-button',
@@ -12,13 +12,16 @@ export class CircleButtonComponent{
   @Input()
   public disabled: boolean;
 
-  @Input()
-  public click: () => void;
+  @Output()
+  public click = new EventEmitter();
 
   @Input()
   public fullWidth: boolean;
 
   constructor() {
-    this.click = () => {};
+  }
+
+  Click(){
+    this.click.emit(null);
   }
 }
