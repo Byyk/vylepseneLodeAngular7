@@ -48,32 +48,53 @@
         </mat-card-actions>
     </mat-card>
 
-    <mat-card id="register" [@hideShow]="registerState">
+    <mat-card id="register" [@hideShow]="registerState" [formGroup]="RGroup">
         <mat-card-header>
             <mat-card-title> Registrace </mat-card-title>
         </mat-card-header>
         <mat-form-field class="input-half" style="margin-right: 2%">
-            <input matInput="" type="email" placeholder="email"
+            <input matInput="" type="email" placeholder="email" formControlName="email" required=""
                    [disabled]="registerDisabled" [tabindex]="!registerDisabled ? 1 : -1"/>
+            <mat-error *ngIf="register_emailRequired()">
+              Email je <strong>požádován</strong>!
+            </mat-error>
+            <mat-error *ngIf="register_emailNotValid()">
+              <strong>Neplatná</strong> emalová adresa
+            </mat-error>
         </mat-form-field>
         <mat-form-field class="input-half" style="margin-left: 2%">
-            <input matInput="" type="text" placeholder="přezdívka"
+            <input matInput="" type="text" placeholder="přezdívka" formControlName="nick"
                    [disabled]="registerDisabled" [tabindex]="!registerDisabled ? 2 : -1"/>
+            <mat-error *ngIf="register_nickLength()">
+                nick musí mít alespoň 3 znaky!
+            </mat-error>
         </mat-form-field>
         <mat-form-field>
-            <input matInput="" type="password" placeholder="heslo"
+            <input matInput="" type="password" placeholder="heslo" formControlName="password" required=""
                    [disabled]="registerDisabled" [tabindex]="!registerDisabled ? 3 : -1"/>
+            <mat-error *ngIf="register_passwordRequired()">
+              Heslo je <strong>požadováno</strong>
+            </mat-error>
+            <mat-error *ngIf="register_passwordLength()">
+              Heslo musí mít <strong>alespoň 6 znaků</strong>!
+            </mat-error>
         </mat-form-field>
         <mat-form-field>
-            <input matInput="" type="password" placeholder="Heslo ještě jednou"
-                   [disabled]="registerDisabled" tabindex="-1"/>
+            <input matInput="" type="password" placeholder="Heslo ještě jednou" formControlName="rePassword" required=""
+                   [disabled]="registerDisabled" [tabindex]="!registerDisabled ? 4 : -1"/>
+            <mat-error *ngIf="register_passwordsDontMatch()">
+              Hesla se <strong>neshodují</strong>
+            </mat-error>
+            <mat-error *ngIf="register_rePasswordRequired()">
+              Ověření hesla je <strong>požadováno</strong>
+            </mat-error>
         </mat-form-field>
         <button mat-button="" color="primary" (click)="LoginRegisterToggle(false)"
-                [disabled]="registerDisabled" tabindex="-1">
+                [disabled]="registerDisabled" [tabindex]="!registerDisabled ? 6 : -1">
             Mám již založený účet!
         </button>
         <mat-card-actions>
-            <button mat-flat-button="" color="primary" class="submit"
+            <button mat-flat-button="" color="primary" class="submit" (click)="register()"
                     [disabled]="registerDisabled" [tabindex]="!registerDisabled ? 5 : -1">
                 Zaregistrovat se
             </button>
@@ -85,7 +106,7 @@
             <mat-card-title> Obnovení hesla </mat-card-title>
         </mat-card-header>
         <mat-form-field>
-            <input matInput="" type="email" placeholder="email"
+            <input matInput="" type="email" placeholder="email" [(ngModel)]="user.resetEmail"
                     [disabled]="resetDiabled" [tabindex]="!resetDiabled ? 1 : -1" />
         </mat-form-field>
         <button mat-button="" color="primary" (click)="LoginResetToggle(false)"
@@ -93,7 +114,7 @@
             Znám své heslo
         </button>
         <mat-card-actions>
-            <button mat-flat-button="" color="primary" class="submit"
+            <button mat-flat-button="" color="primary" class="submit" (click)="resetPassword()"
                     [disabled]="resetDiabled" [tabindex]="!resetDiabled ? 2 : -1">
                 Odeslat email
             </button>

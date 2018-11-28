@@ -40,7 +40,6 @@ import * as formGroups from './formGroups';
 })
 export class LoginComponent extends Breakpointy implements OnInit {
     RGroup: FormGroup;
-    RPGroup: FormGroup;
     user: UserModel;
     loginButtonClicked = false;
     GoogleLoginClicked = false;
@@ -50,8 +49,6 @@ export class LoginComponent extends Breakpointy implements OnInit {
     loginDisabledLeft = false;
     registerDisabled = true;
     resetDiabled = true;
-
-    public step: number;
 
     public loginState = 'shown';
     public registerState = 'hiddenRight';
@@ -75,33 +72,11 @@ export class LoginComponent extends Breakpointy implements OnInit {
         public LService: LoginService,
         public fb: FormBuilder,
         public breakpointObserver: BreakpointObserver,
-        private router: Router,
-        private route: ActivatedRoute,)
-    {
+        private router: Router
+    ) {
         super(breakpointObserver);
         this.user = new UserModel();
         this.RGroup = formGroups.RegistrationFormGroup(fb);
-        this.RPGroup = formGroups.ResetPasswordFormGroup(fb);
-        this.route.queryParams.subscribe(params => {
-            this.RPGroup.get('code').setValue(params['oobCode']);
-            this.step = isNaN(params['step']) ? 0 : Number.parseInt(params['step'], 10);
-            if (params['oobCode'] !== null) this.step = 3;
-        });
-    }
-
-    setStep(step: number) {
-        if (step === this.step) return;
-        this.step = step;
-        const quarryParams = Object.assign({}, this.route.snapshot.queryParams);
-        quarryParams['step'] = step;
-        return this.router.navigate(['/Login'], {queryParams: quarryParams});
-    }
-
-    confirmReset() {
-        return this.LService.confirmReset(
-            this.RPGroup.get('code').value,
-            this.RPGroup.get('password').value
-        );
     }
 
     register() {
@@ -128,28 +103,23 @@ export class LoginComponent extends Breakpointy implements OnInit {
     }
 
     ngOnInit() {
-        this.router.events.subscribe(event => {
-            if (event instanceof NavigationEnd) {
-                this.route.queryParams.subscribe(res => {
-                    const step = Number.parseInt(res['step'], 10);
-                    this.step = !isNaN(step) ? step : 0;
-                });
-            }
-        });
-        this.step = 0;
         this.LService.afa.user.subscribe((user) => {
            if(user) return this.router.navigate(['./profile']);
         });
     }
 
-    resetPassword =      () => this.LService.resetPassword(this.user.resetEmail).then(() => this.setStep(3));
+    resetPassword =      () => this.LService.resetPassword(this.user.resetEmail).then(()=>this.router.navigate(['/resetpassword']));
     loginWhitFacebook =  () => this.LService.loginWithFacebook();
     loginWhitGoogle =    () => this.LService.loginWithGoogle();
     loginWhitTwitter =   () => this.LService.loginWithTwitter();
-    emailRequired =      () : boolean => this.RGroup.get('email').hasError('required');
-    emailNotValid =      () : boolean => this.RGroup.get('email').hasError('email') && !this.RGroup.get('email').hasError('required');
-    passwordRequired =   () : boolean => this.RGroup.get('password').hasError('required');
-    passwordLength =     () : boolean => this.RGroup.get('password').hasError('minlength');
-    repasswordRequired = () : boolean => this.RGroup.get('repassword').hasError('required');
-    passwordsDontMatch = (): boolean => this.RGroup.get('repassword').hasError('passwordNoMatch') && !this.RGroup.get('repassword').hasError('required');
+
+    // Registrace
+
+    register_emailRequired =      () : boolean => this.RGroup.get('email').hasError('required');
+    register_emailNotValid =      () : boolean => this.RGroup.get('email').hasError('email') && !this.RGroup.get('email').hasError('required');
+    register_passwordRequired =   () : boolean => this.RGroup.get('password').hasError('required');
+    register_passwordLength =     () : boolean => this.RGroup.get('password').hasError('minlength');
+    register_rePasswordRequired = () : boolean => this.RGroup.get('rePassword').hasError('required');
+    register_passwordsDontMatch = () : boolean => this.RGroup.get('rePassword').hasError('passwordNoMatch') && !this.RGroup.get('rePassword').hasError('required');
+    register_nickLength =         () : boolean => this.RGroup.get('nick').hasError('minlength');
 }
