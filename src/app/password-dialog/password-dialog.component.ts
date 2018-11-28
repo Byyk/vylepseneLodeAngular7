@@ -11,7 +11,7 @@ export class PasswordDialogComponent implements OnInit {
   public password: string;
 
   constructor(
-      private dialogRef: MatDialogRef
+      private dialogRef: MatDialogRef<PasswordDialogComponent>
   ) { }
 
   ngOnInit() {
