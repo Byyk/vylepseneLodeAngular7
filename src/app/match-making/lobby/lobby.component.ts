@@ -26,12 +26,12 @@ export class LobbyComponent extends Breakpointy implements OnInit {
         public mms: MatchMakingService
     ) {
         super(bpo);
-        this.match$ = this.mms.getMyMatch();
+        this.match$ = this.mms.getMyMatch() as Observable<Match>;
         this.hrac$ = this.ls.userDataObservable;
         this.match$.subscribe((data) => {
             if(data.oponentUid !== "")
             {
-                this.souper$ = this.ls.afs.doc(`Users/${data.oponentUid}`).valueChanges();
+                this.souper$ = this.ls.afs.doc<Hrac>(`Users/${data.oponentUid}`).valueChanges();
                 console.log(this.ls.userData.uid);
                 console.log(data.creatorUid);
                 console.log(data.creatorUid === this.ls.userData.uid);
