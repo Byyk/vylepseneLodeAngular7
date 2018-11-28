@@ -1,21 +1,40 @@
 <div id="container">
   <!-- Todo add to craditials: https://stmed.net/wallpaper-224361 -->
   <img class="img img-background" src="https://stmed.net/sites/default/files/world-of-warships-hd-wallpapers-33918-130881.jpg" width="" height="" alt="stala se chyba :(" />
-  <mat-card>
+  <mat-card [formGroup]="RPGroup">
     <mat-card-header>
       <mat-card-title> Potvrdit reset hesla </mat-card-title>
     </mat-card-header>
+
     <mat-form-field>
-      <input matInput="" type="text" placeholder="kód" tabindex="1" [(ngModel)]="oobCode"/>
+      <input matInput="" type="text" placeholder="kód" tabindex="1" formControlName="code"/>
+      <mat-error *ngIf="reset_codeRequired()">
+        code je <strong> povinný! </strong>
+      </mat-error>
     </mat-form-field>
+
     <mat-form-field>
-      <input matInput="" type="password" placeholder="heslo" tabindex="2"/>
+      <input matInput="" type="password" placeholder="heslo" tabindex="2" formControlName="password"/>
+      <mat-error *ngIf="reset_passwordRequired()">
+        heslo je <strong> povinné! </strong>
+      </mat-error>
+      <mat-error *ngIf="reset_passwordLength()">
+        heslo musí mít <strong> alespoň 6 znaků </strong>!
+      </mat-error>
     </mat-form-field>
+
     <mat-form-field>
-      <input matInput="" type="password" placeholder="heslo znovu" tabindex="3"/>
+      <input matInput="" type="password" placeholder="heslo znovu" tabindex="3" formControlName="rePassword"/>
+      <mat-error *ngIf="reset_rePasswordRequired()">
+        Ověření hesla je <strong>požadováno</strong>
+      </mat-error>
+      <mat-error *ngIf="reset_rePasswordMatch()">
+        hesla se <strong> musí shodovat! </strong>
+      </mat-error>
     </mat-form-field>
+
     <mat-card-actions>
-      <app-circle-button text="změnit heslo" fullWidth="true" class="submit">  </app-circle-button>
+      <app-circle-button text="změnit heslo" fullWidth="true" class="submit" (click)="confirmReset()">  </app-circle-button>
     </mat-card-actions>
   </mat-card>
 </div>
