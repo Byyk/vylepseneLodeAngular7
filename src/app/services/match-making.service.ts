@@ -155,7 +155,7 @@ export class MatchMakingService {
         if(groupType === 'Veřejná')
             promises.push(this.afs.collection('Matches_private_data')
                 .doc(uid).set({uid: uid, password: password}));
-        promises.push(userDataDoc.update({lastMatch: {lastMatchRef: `Matches/${uid}`, creator: true}}));
+        promises.push(userDataDoc.update({lastMatch: {lastMatchRef: `Matches/${uid}`, creator: true, state: 0}}));
         return () => Promise.all(promises);
     }
     private createMatchData(roomName: string, groupType: string, user: UserInfo, password: string, uid: string){

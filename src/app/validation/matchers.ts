@@ -4,7 +4,7 @@ export const PasswordMatcher = (control: AbstractControl) : {[key: string]: bool
     if(control.parent === undefined || control.parent === null)
         return null;
     const password = control.parent.get('password');
-    const repassword = control.parent.get('repassword');
+    const repassword = control.parent.get('rePassword');
     if(!password || !repassword) return null;
     return password.value === repassword.value ? null : { passwordNoMatch: true };
 };
