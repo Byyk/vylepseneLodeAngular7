@@ -18,6 +18,11 @@ export function Matches() {
                 res.status(401).send();
                 return null;
             }
+            await admin.firestore().doc(`Matches/${req.params.matchUid}`).update(
+            {
+                oponentUid: token.uid,
+                opopenentsNickName: (await admin.firestore().doc(`Users/${token.uid}`).get()).data().nickName
+            });
             await admin.firestore().collection('Users').doc(token.uid).update({
                 lastMatch: { creator: false, state: 0, lastMatchRef: `Matches/${req.params.matchUid}` }
             })
