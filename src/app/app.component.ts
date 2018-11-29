@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import {MessagingService} from './services/messaging.service';
 
 @Component({
   selector: 'app-root',
@@ -6,5 +7,12 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  title = 'vypseneLodeAngular7';
+  public message$;
+  constructor(
+    private messaging: MessagingService
+  ) {
+    messaging.getPermission();
+    messaging.receiveMessage();
+    this.message$ = messaging.currentMessage.asObservable();
+  }
 }
