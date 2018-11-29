@@ -82,7 +82,7 @@ export class MatchMakingService {
                     ref.doc(uid).set(data
                     ).then(
                         this.createDataAndUpdateUser(groupType, uid, password, userDataDoc)
-                    ).then(callback).catch(); // Todo přidat try catch logiku
+                    ).then(callback).catch(callback); // Todo přidat try catch logiku
                 });
         });
     }
