@@ -34,10 +34,6 @@ import { MatDialog } from '@angular/material';
 import { AppFontAwesomeModule } from './modules/app-font-awesome.module';
 import { ConfirmResetComponent } from './confirm-reset/confirm-reset.component';
 import { PasswordDialogComponent } from './password-dialog/password-dialog.component';
-import {LoginService} from './services/login.service';
-import {MessagingService} from './services/messaging.service';
-import {UploadFileService} from './services/upload-file.service';
-import { ServiceWorkerModule } from '@angular/service-worker';
 
 @NgModule({
     declarations: [
@@ -69,15 +65,11 @@ import { ServiceWorkerModule } from '@angular/service-worker';
         AngularFireAuthModule,
         AngularFireStorageModule,
         AngularFireMessagingModule,
-        AppFontAwesomeModule,
-        ServiceWorkerModule.register('../firebase-messaging-sw.js', { enabled: environment.production }) // Todo https://angularfirebase.com/snippets/how-to-use-a-firebase-fcm-service-worker-with-angular-s-ngsw-service-worker/
+        AppFontAwesomeModule
     ],
     providers: [
         CanDeactivateGuard,
         MatchMakingService,
-        LoginService,
-        MessagingService,
-        UploadFileService,
         MatDialog
     ],
     entryComponents: [
