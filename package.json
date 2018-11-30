@@ -4,10 +4,11 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build",
+    "build": "ng build --prod && npm run fcm",
     "test": "ng test",
     "lint": "ng lint",
-    "e2e": "ng e2e"
+    "e2e": "ng e2e",
+    "fcm": "concat dist/ngsw-worker.js src/fcm.js -o dist/combined-worker.js"
   },
   "private": true,
   "dependencies": {
@@ -40,11 +41,12 @@
     "@angular-devkit/build-angular": "~0.10.0",
     "@angular/cli": "~7.0.6",
     "@angular/compiler-cli": "~7.0.0",
-    "@types/node": "~8.9.4",
     "@angular/language-service": "~7.0.0",
     "@types/jasmine": "~2.8.8",
     "@types/jasminewd2": "~2.0.3",
+    "@types/node": "~8.9.4",
     "codelyzer": "~4.5.0",
+    "concat": "^1.0.3",
     "jasmine-core": "~2.99.1",
     "jasmine-spec-reporter": "~4.2.1",
     "karma": "~3.0.0",
