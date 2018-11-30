@@ -70,7 +70,7 @@ import { ServiceWorkerModule } from '@angular/service-worker';
         AngularFireStorageModule,
         AngularFireMessagingModule,
         AppFontAwesomeModule,
-        ServiceWorkerModule.register('/combined-worker.js', { enabled: environment.production }) // Todo https://angularfirebase.com/snippets/how-to-use-a-firebase-fcm-service-worker-with-angular-s-ngsw-service-worker/
+        ServiceWorkerModule.register('../firebase-messaging-sw.js', { enabled: environment.production }) // Todo https://angularfirebase.com/snippets/how-to-use-a-firebase-fcm-service-worker-with-angular-s-ngsw-service-worker/
     ],
     providers: [
         CanDeactivateGuard,

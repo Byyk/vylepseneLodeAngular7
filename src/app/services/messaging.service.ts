@@ -8,8 +8,8 @@ import {AngularFirestore} from '@angular/fire/firestore';
   providedIn: 'root'
 })
 export class MessagingService {
-    messaging = firebase.messaging();
-    currentMessage = new BehaviorSubject(null);
+    messaging = firebase.messaging()
+    currentMessage = new BehaviorSubject(null)
 
     constructor(private afs: AngularFirestore, private afAuth: AngularFireAuth) { }
 
