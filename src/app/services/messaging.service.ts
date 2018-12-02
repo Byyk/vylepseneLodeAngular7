@@ -4,6 +4,12 @@ import {AngularFireAuth} from "@angular/fire/auth";
 import {AngularFirestore} from "@angular/fire/firestore";
 import * as firebase from 'firebase';
 
+
+/*
+*
+* Credit https://angularfirebase.com/lessons/send-push-notifications-in-angular-with-firebase-cloud-messaging/
+*
+* */
 @Injectable({
   providedIn: 'root'
 })
