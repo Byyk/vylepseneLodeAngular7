@@ -14,3 +14,7 @@
 #navbar {
   z-index: 5000;
 }
+
+mat-toolbar {
+    background: #0000 !important;
+}

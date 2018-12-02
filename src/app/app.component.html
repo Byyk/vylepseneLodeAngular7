@@ -1,5 +1,23 @@
-<app-navbar>
+<app-navbar *ngIf="isCookiesEnabled$ | async">
   <router-outlet></router-outlet>
   <app-message-container></app-message-container>
 </app-navbar>
+
+<div id="cookie-banner" *ngIf="!(isCookiesEnabled$ | async)">
+    <mat-card>
+        <mat-card-title> Cookies </mat-card-title>
+        <mat-card-content>
+            <p>
+                Tato stránka pro svou funkčnost potřebuje soubory cookies. Pro vstup dále nastránku musíte povolit cookies!
+                V případě potřeby můžete toto kdykoli cookies smazat. (doporučuje se na veřejných počítačích)
+            </p>
+        </mat-card-content>
+        <mat-card-actions>
+            <button mat-button="" color="primary" (click)="enableCookies()"> povolit cookies! </button>
+            <button mat-button="" color="warn" (click)="deleteAllCookiesAndNavigateToBlank()"> zakázat cookies </button>
+        </mat-card-actions>
+    </mat-card>
+    <img src="http://www.fullhdwpp.com/wp-content/uploads/Chocolate_Chip_Cookies.jpg">
+</div>
+
 
