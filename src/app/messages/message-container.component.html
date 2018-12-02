@@ -1,0 +1,9 @@
+<div id="messenger">
+  <app-message
+      *ngFor="let message of messages.slice(0,3); let i = index"
+      [ngStyle]="{'bottom.px': (i * 105) + 10}"
+      (closed)="closed($event)"
+      [id]="i"
+      [data]="message">
+  </app-message>
+</div>

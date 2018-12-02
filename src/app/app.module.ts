@@ -34,6 +34,8 @@ import { MatDialog } from '@angular/material';
 import { AppFontAwesomeModule } from './modules/app-font-awesome.module';
 import { ConfirmResetComponent } from './confirm-reset/confirm-reset.component';
 import { PasswordDialogComponent } from './password-dialog/password-dialog.component';
+import { MessageContainerComponent } from './messages/message-container.component';
+import { MessageComponent } from './messages/message/message.component';
 
 @NgModule({
     declarations: [
@@ -51,7 +53,9 @@ import { PasswordDialogComponent } from './password-dialog/password-dialog.compo
         JoinGameComponent,
         CircleButtonComponent,
         ConfirmResetComponent,
-        PasswordDialogComponent
+        PasswordDialogComponent,
+        MessageContainerComponent,
+        MessageComponent
     ],
     imports: [
         BrowserModule,
