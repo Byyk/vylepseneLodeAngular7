@@ -13,6 +13,9 @@ export class AppComponent {
   ){
     ms.getPermission();
     ms.receiveMessage();
-    this.message = ms.currentMessage;
+    this.message = ms.currentMessage.asObservable();
+    this.message.subscribe((data) => {console.log(data);});
   }
 }
+
+
