@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import {BehaviorSubject} from "rxjs";
-import {AngularFireAuth} from "@angular/fire/auth";
-import {AngularFirestore} from "@angular/fire/firestore";
+import { BehaviorSubject } from "rxjs";
+import { AngularFireAuth } from "@angular/fire/auth";
+import { AngularFirestore } from "@angular/fire/firestore";
 import * as firebase from 'firebase';
 
 
@@ -16,6 +16,7 @@ import * as firebase from 'firebase';
 export class MessagingService {
     messaging = firebase.messaging();
     currentMessage = new BehaviorSubject(null);
+    token: string;
 
     constructor(private afs: AngularFirestore, private afAuth: AngularFireAuth) { }
 
@@ -23,7 +24,8 @@ export class MessagingService {
     updateToken(token) {
         this.afAuth.user.subscribe(user => {
             if (!user) return;
-            this.afs.doc(`Users/${user.uid}`).update({messagingToken: token});
+                this.afs.doc(`Users/${user.uid}`).update({messagingToken: token});
+                this.token = token;
         });
     }
 

@@ -5,12 +5,13 @@ import { BehaviorSubject, Observable } from "rxjs";
 import { Match } from "../model/match.model";
 import { Hrac } from "../model/hrac.model";
 import { Injectable } from '@angular/core';
-import {catchError, map} from 'rxjs/operators';
-import {HttpClient} from "@angular/common/http";
-import {UserInfo} from 'firebase';
-import {LoginService} from './login.service';
-import {environment} from '../../environments/environment';
-import {AngularFireStorage} from '@angular/fire/storage';
+import { map } from 'rxjs/operators';
+import { HttpClient } from "@angular/common/http";
+import { UserInfo } from 'firebase';
+import { LoginService } from './login.service';
+import { environment } from '../../environments/environment';
+import { AngularFireStorage } from '@angular/fire/storage';
+import { MessagingService } from "./messaging.service";
 
 //
 // zdroje:
@@ -34,7 +35,8 @@ export class MatchMakingService {
         public afa: AngularFireAuth,
         public afstorage: AngularFireStorage,
         public ls: LoginService,
-        public http: HttpClient
+        public http: HttpClient,
+        public ms: MessagingService
     ) {}
 
     init(limit: number){
@@ -152,9 +154,12 @@ export class MatchMakingService {
     }
     private createDataAndUpdateUser(groupType: string, uid: string, password: string, userDataDoc: any){
         const promises = [];
-        if(groupType === 'Veřejná')
+        const private_data = {uid: uid, creatorsToken: this.ms.token, password: ''};
+        if(groupType === 'Veřejná') private_data.password = password;
             promises.push(this.afs.collection('Matches_private_data')
-                .doc(uid).set({uid: uid, password: password}));
+                .doc(uid).set(private_data));
+
+
         promises.push(userDataDoc.update({lastMatch: {lastMatchRef: `Matches/${uid}`, creator: true, state: 0}}));
         return () => Promise.all(promises);
     }

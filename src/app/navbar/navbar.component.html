@@ -14,7 +14,7 @@
     </mat-nav-list>
   </mat-sidenav>
   <mat-sidenav-content>
-    <mat-toolbar id="navbar" color="primary">
+    <mat-toolbar id="navbar" color="primary" [ngClass]="{'navbar-transparent': transparentNavbar}">
       <button
         type="button"
         aria-label="Toggle sidenav"

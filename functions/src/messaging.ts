@@ -19,7 +19,7 @@ export function Messaging(){
                 title: "titul",
                 body: "telo"
             },
-            token: "d_3PFuTiiSU:APA91bGKO6Dz1fAds5z8bO5oiOIYiAw7atc3vrTXP3SPYsw4vjfx-ipS1-Jgtl9eZSCA4JA0IvMUfzWIIYt4h5S6uKmf1ZhSIiJcmMg1DA_NdalnT6wzmGiUVnC61Qdrb3c1xzYn8qsT"
+            token: "cmqA1OiLGAc:APA91bF1kfvjwgYjNL4KPMuysXJ1J-Osssuu_DO1Q8qee6FmWZxU6ZOZyT6yhA0Ue3kWMazMcxHD6hivhy84LhyLmvdved6NGr7l6uCLoHBN6YN90vmHq2V6tFE5lnu4mFWgpk5Bn1LW"
           }
         ).then(() => {
             res.status(200).send("odeslano");

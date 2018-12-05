@@ -5,7 +5,7 @@ import * as admin from 'firebase-admin';
 
 export function Matches() {
     const app = express();
-    app.use(cors({origin: true}));
+    app.use(cors({origin: false}));
     app.use(express.json());
     app.use(express.urlencoded({extended: true}));
 
@@ -13,19 +13,33 @@ export function Matches() {
         const idToken = req.params.token;
         try{
         const token = await admin.auth().verifyIdToken(idToken);
-        const matchPrivateData = await admin.firestore().collection('Matches_private_data').doc(req.params.matchUid).get()
-            if(matchPrivateData.data().password !== req.params.password && matchPrivateData.data().password !== ''){
-                res.status(401).send();
-                return null;
-            }
-            await admin.firestore().doc(`Matches/${req.params.matchUid}`).update(
+        const matchPrivateData = await admin.firestore().doc(`Matches_private_data/${req.params.matchUid}`).get()
+        const matchData = await admin.firestore().doc(`Matches/${req.params.matchUid}`).get();
+        if(matchPrivateData.data().password !== req.params.password && matchPrivateData.data().password !== ''){
+            res.status(401).send();
+            return null;
+        }
+        if(matchData.data().groupType === 'Privátní'){
+            res.status(201).send();
+            return null;
+        }
+        const nickName = (await admin.firestore().doc(`Users/${token.uid}`).get()).data().nickName
+        await admin.firestore().doc(`Matches/${req.params.matchUid}`).update(
             {
                 oponentUid: token.uid,
-                opopenentsNickName: (await admin.firestore().doc(`Users/${token.uid}`).get()).data().nickName
-            });
-            await admin.firestore().collection('Users').doc(token.uid).update({
-                lastMatch: { creator: false, state: 0, lastMatchRef: `Matches/${req.params.matchUid}` }
-            })
+                opopenentsNickName: nickName
+        });
+        await admin.firestore().collection('Users').doc(token.uid).update({
+                lastMatch: {creator: false, state: 0, lastMatchRef: `Matches/${req.params.matchUid}` }
+        })
+        const message = {
+                notification: {
+                    title: 'player joined to your game!',
+                    body: `player ${nickName} joined to game`
+                },
+                token: matchPrivateData.data().creatorsToken
+        }
+            admin.messaging().send(message);
             res.status(200).send();
         }
         catch(err)

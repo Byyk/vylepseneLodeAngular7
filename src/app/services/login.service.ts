@@ -33,6 +33,11 @@ export class LoginService {
               });
           }
       });
+
+      this.afa.auth.onAuthStateChanged(user => {
+          if(user === null) this.logginedIn = false;
+          else this.logginedIn = true;
+      });
   }
 
   public editDisplayName(name: NameGroup){
