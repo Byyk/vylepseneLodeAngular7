@@ -38,6 +38,9 @@ export class NavbarComponent implements OnInit {
             }
           }
       });
+      this.LService.afa.idToken.subscribe((token) =>{
+          console.log(token);
+      });
   }
 
   logout(){

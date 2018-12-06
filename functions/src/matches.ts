@@ -57,21 +57,23 @@ export function Matches() {
         const matchUid = req.body.matchUid;
 
         try{
-            if((await admin.firestore().doc(`Matches/${matchUid}`).get()).data().groupType === 'Privátní')
+            if((await admin.firestore().doc(`Matches/${matchUid}`).get()).data().groupType !== 'Privátní')
             {
                 res.status(400).send('Dobrej pokus o vtip vtipálku :)');
                 return null;
             }
 
             const token = await admin.auth().verifyIdToken(idToken);
-            const nickName =
+            const nickName = (await admin.firestore().doc(`Users/${token.uid}`).get()).data().nickName;
 
             const match = {};
             match[admin.database().ref().push().key] = {
                 uid: matchUid,
-                usersToken: token
+                usersUid: token.uid,
+                usersNickName: nickName
             }
-            admin.firestore().doc(`Matches_requests/${matchUid}`)
+            await admin.firestore().doc(`Matches_requests/${matchUid}`).update(match);
+            res.status(201).send();
         }
         catch(err)
         {
@@ -80,6 +82,10 @@ export function Matches() {
         }
     });
     return app;
+
+    app.post('/createMatch', async(req, res) =>{
+
+    });
 }
 
 export const matchDeleted = functions.firestore
