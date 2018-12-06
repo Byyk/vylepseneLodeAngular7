@@ -14,7 +14,7 @@
   <ng-container matColumnDef="actions">
     <th mat-header-cell *matHeaderCellDef> Akce </th>
     <td mat-cell *matCellDef="let element">
-      <button color="primary" (click)="join(element.uid, element.havepassword)" mat-button> Join </button>
+      <button color="primary" (click)="join(element.uid, element.havepassword, element.groupType)" mat-button> Join </button>
     </td>
   </ng-container>
   <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>

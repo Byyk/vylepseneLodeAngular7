@@ -42,12 +42,12 @@ export class JoinGameComponent implements OnInit {
         if(this.prevButtonDisenabled) return;
         this.mms.prev(this.pagelimit);
     }
-    join(uid: string, havepassword: boolean){
-        if(havepassword)
+    join(uid: string, havepassword: boolean, groupType: string){
+        if(havepassword && groupType === 'Veřejná')
             this.md.open(PasswordDialogComponent, {width: '300px'}).afterClosed().subscribe(data =>{
                 this.mms.joinMatch(uid, data);
             });
-        else this.mms.joinMatch(uid, '');
+        else this.mms.joinMatch(uid, '', groupType);
     }
     selectedValueChnaged = ($event) => this.pagelimit = $event;
 }

@@ -88,9 +88,17 @@ export class MatchMakingService {
                 });
         });
     }
-    joinMatch(matchUid: string, password? : string, callback?: (ok: boolean) => any) {
+    joinMatch(matchUid: string, password? : string, groupType?: string) {
         this.afa.idToken.subscribe((idToken) => {
-            this.http.get(`${environment.urlBase}/matches/joinGame/${idToken}/${matchUid}/${password === undefined ? '' : password}`).subscribe();
+            const body = {
+                token: idToken,
+                matchUid: matchUid,
+                password: password === undefined ? '' : password
+            }
+            if(groupType === 'Veřejná')
+                this.http.post(`${environment.urlBase}/matches/joinGame/public`, body).subscribe();
+            if(groupType === 'Privátní')
+                this.http.post(`${environment.urlBase}/matches/joinGame/sendRequest`, body).subscribe();
         });
     }
     public getMyMatch = () => this.afs.doc(this.ls.userData.lastMatch.lastMatchRef).valueChanges();
