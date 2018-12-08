@@ -7,4 +7,13 @@ export interface Match {
     isPublic: boolean;
     creatorUid: string;
     oponentUid: string;
+    creatorsNickName: string;
+    oponentsNickName: string;
+    havepassword: boolean;
+}
+
+export class MatchPrivateData {
+    uid: string;
+    password: string;
+    creatorsToken: string;
 }

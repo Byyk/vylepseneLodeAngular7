@@ -5,6 +5,7 @@ import {ActivatedRoute, NavigationEnd, Router, Event} from '@angular/router';
 import { map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import { User } from 'firebase';
+import {MessagingService} from "../services/messaging.service";
 
 
 @Component({
@@ -23,7 +24,8 @@ export class NavbarComponent implements OnInit {
   constructor(
       private breakpointObserver: BreakpointObserver,
       public LService: LoginService,
-      public router: Router
+      public router: Router,
+      private mms: MessagingService
   ) {}
 
   ngOnInit(): void {
@@ -37,6 +39,10 @@ export class NavbarComponent implements OnInit {
               this.transparentNavbar = false;
             }
           }
+      });
+      this.LService.afa.idToken.subscribe(token =>{
+        console.log(token);
+        console.log(this.mms.token);
       });
   }
 
