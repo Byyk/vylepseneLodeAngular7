@@ -4,6 +4,7 @@ import * as functions from 'firebase-functions';
 import * as admin from 'firebase-admin';
 import { Match, MatchPrivateData } from '../../src/app/model/match.model'
 
+
 export function Matches() {
     const app = express();
     app.use(cors({origin: false}));
@@ -51,7 +52,7 @@ export function Matches() {
                     body: `player ${nickName} joined to game`
                 },
                 token: matchPrivateData.data().creatorsToken
-            }
+            };
 
             admin.messaging().send(message);
             res.status(200).send();
@@ -127,6 +128,10 @@ export function Matches() {
 
 
     return app;
+
+    app.post('/createMatch', async(req, res) =>{
+
+    });
 }
 
 const isPublic = (type: string) => type !== 'Jen na pozvání';

@@ -3,13 +3,13 @@
   "scripts": {
     "lint": "tslint --project tsconfig.json",
     "build": "tsc",
-    "serve": "npm run build && cd .. && firebase serve --only functions -p 5001 && cd functions",
+    "serve": "npm run build && firebase serve --only functions -p 5001",
     "shell": "npm run build && firebase functions:shell",
     "start": "npm run shell",
     "deploy": "firebase deploy --only functions",
     "logs": "firebase functions:log"
   },
-  "main": "lib/vylepseneLodeAngular7/functions/src/index.js",
+  "main": "lib/vypseneLodeAngular7/functions/src/index.js",
   "dependencies": {
     "cors": "^2.8.5",
     "express": "^4.16.4",
