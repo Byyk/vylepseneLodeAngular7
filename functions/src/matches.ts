@@ -176,5 +176,8 @@ const isPrivate = (type: string) => type === 'Privátní';
 export const matchDeleted = functions.firestore
     .document('Matches/{matchId}')
     .onDelete((snap, context) => {
-        return admin.firestore().doc(`Matches_private_data/${snap.id}`).delete();
+        return Promise.all([
+            admin.firestore().doc(`Matches_private_data/${snap.id}`).delete(),
+            admin.firestore().doc(`Match_requests/${snap.id}`).delete()
+        ]);
     });
