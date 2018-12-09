@@ -5,7 +5,7 @@ import { BehaviorSubject, Observable } from "rxjs";
 import { Match } from "../model/match.model";
 import { Hrac } from "../model/hrac.model";
 import { Injectable } from '@angular/core';
-import { map } from 'rxjs/operators';
+import {first, map} from 'rxjs/operators';
 import { HttpClient } from "@angular/common/http";
 import { UserInfo } from 'firebase';
 import { LoginService } from './login.service';
@@ -74,18 +74,16 @@ export class MatchMakingService {
         this._data.next({data: data, poslednistranka: false, prvnistranka: this.lastfirstEntry === 0});
     }
     createMatch(roomName: string, password: string, groupType: string, callback: () => void){
-        const ref = this.afs.collection<Match>('Matches');
-        const uid = this.afs.createId();
-        this.afa.user.subscribe(user => {
-            const userDataDoc = this.afs.collection<Hrac>('Users').doc(user.uid);
-                userDataDoc.get().subscribe(() => {
-                    const data = this.createMatchData(roomName, groupType, user, password, uid);
-                    console.log(data);
-                    ref.doc(uid).set(data
-                    ).then(
-                        this.createDataAndUpdateUser(groupType, uid, password, userDataDoc)
-                    ).then(callback).catch(callback); // Todo přidat try catch logiku
-                });
+        this.afa.idToken.pipe(first())
+            .subscribe((token) => {
+
+            this.http.post(`${environment.urlBase}/matches/createGame`, {
+                token: token,
+                type: groupType,
+                name: roomName,
+                password: password
+            }).subscribe(callback);
+
         });
     }
     joinMatch(matchUid: string, password? : string, groupType?: string) {
@@ -93,12 +91,14 @@ export class MatchMakingService {
             const body = {
                 token: idToken,
                 matchUid: matchUid,
-                password: password === undefined ? '' : password
-            }
+                password: password === undefined ? '' : password,
+                messagingToken: this.ms.token,
+                message: ''
+            };
             if(groupType === 'Veřejná')
                 this.http.post(`${environment.urlBase}/matches/joinGame/public`, body).subscribe();
             if(groupType === 'Privátní')
-                this.http.post(`${environment.urlBase}/matches/joinGame/sendRequest`, body).subscribe();
+                this.http.post(`${environment.urlBase}/matches/joinGame/private/send`, body).subscribe();
         });
     }
     public getMyMatch = () => this.afs.collection('Matches').doc(this.ls.userData.lastMatch.lastMatchUid).valueChanges();
@@ -159,31 +159,5 @@ export class MatchMakingService {
         }
 
         this._data.next({data: data, prvnistranka: false, poslednistranka: this.lastEntry === this.allData.length - 1});
-    }
-    private createDataAndUpdateUser(groupType: string, uid: string, password: string, userDataDoc: any){
-        const promises = [];
-        const private_data = {uid: uid, creatorsToken: this.ms.token, password: ''};
-        if(groupType === 'Veřejná') private_data.password = password;
-            promises.push(this.afs.collection('Matches_private_data')
-                .doc(uid).set(private_data));
-
-
-        promises.push(userDataDoc.update({lastMatch: {lastMatchRef: `Matches/${uid}`, creator: true, state: 0}}));
-        return () => Promise.all(promises);
-    }
-    private createMatchData(roomName: string, groupType: string, user: UserInfo, password: string, uid: string){
-        return {
-            uid: uid,
-            roomName: roomName,
-            groupType: groupType,
-            creatorUid: user.uid,
-            creatorsNickName: this.ls.userData.nickName,
-            oponentUid: "",
-            opopenentsNickName: '',
-            ended: false,
-            inLobby: true,
-            isPublic: groupType !== 'Jen na pozvání',
-            havepassword: password !== '' && groupType === 'Veřejná'
-        };
     }
 }
