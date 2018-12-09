@@ -64,6 +64,39 @@ export function Matches() {
         }
     });
 
+    app.post('/joinGame/private/send', async (req, res) => {
+        const idToken = req.body.token;
+        const matchUid = req.body.matchUid;
+        const message = req.body.message;
+        try {
+            const AuthData = await admin.auth().verifyIdToken(idToken);
+            const nickName = (await admin.firestore().doc(`Users/${AuthData.uid}`).get()).data().nickName;
+            const matchData : Match = (await admin.firestore().doc(`Matches/${matchUid}`).get()).data() as Match;
+            const matchPrivateData = (await admin.firestore().doc(`Matches_private_data/${matchUid}`).get()).data();
+
+            if(!isPrivate(matchData.groupType) || matchData.creatorUid === AuthData.uid) {
+                res.status(418).send('Dobrej pokus :)')
+                return null;
+            }
+
+            await admin.firestore().doc(`Match_requests/${matchUid}`).collection('requests').doc(AuthData.uid).set({uid: AuthData.uid, message: message});
+
+            await admin.messaging().send({
+                notification: {
+                    title: `Hráč ${nickName} se chce připojit!`,
+                    body: message
+                },
+                token: matchPrivateData.creatorsToken
+            });
+
+            res.status(201).send();
+        }
+        catch(err) {
+            console.log(err);
+            res.status(404).send();
+        }
+    });
+
     app.post('/createGame', async (req, res) => {
         const idToken = req.body.token;
         const groupType = req.body.type;
