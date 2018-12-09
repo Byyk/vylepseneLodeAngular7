@@ -102,6 +102,7 @@ export function Matches() {
         const groupType = req.body.type;
         const name = req.body.name;
         const password = req.body.password;
+        const messagingToken = req.body.messagingToken;
 
         try{
             const authUid = (await admin.auth().verifyIdToken(idToken));
@@ -110,7 +111,7 @@ export function Matches() {
 
             const matchDoc = admin.firestore().collection('Matches').doc();
             const private_matchDoc = admin.firestore().collection(`Matches_private_data`).doc(matchDoc.id);
-            const matchRequestsDoc = admin.firestore().collection('MatchRequests').doc(matchDoc.id);
+            const matchRequestsDoc = admin.firestore().collection('Match_requests').doc(matchDoc.id);
 
             const promises = [];
 
@@ -127,24 +128,28 @@ export function Matches() {
                 uid: matchDoc.id,
                 havepassword: password !== '' && groupType === 'Veřejná'
             };
+            // Create Match
             promises[0] = matchDoc.set(match);
 
+            // Create private data
             promises[1] = private_matchDoc.set({
-                creatorsToken: '',
+                creatorsToken: messagingToken,
                 password: password,
                 uid: private_matchDoc.id
             });
 
-            const matchRequests = {
-                uid: matchRequestsDoc.id,
-                requests: {}
+            // Create doc for request (private match only)
+            if(isPrivate(groupType)){
+                const matchRequests = {
+                    uid: matchRequestsDoc.id,
+                }
+                promises[2] =  matchRequestsDoc.set(matchRequests);
             }
-            promises[2] =  matchRequestsDoc.set(matchRequests);
 
-
+            // Update creators doc
             promises[3] =  creatorsDoc.update({
                 lastMatch: {
-                    lastMatchRef: `Matches/${matchDoc.id}`,
+                    lastMatchUid: matchDoc.id,
                     creator: true,
                     state: 0
                 }
@@ -161,13 +166,11 @@ export function Matches() {
 
 
     return app;
-
-    app.post('/createMatch', async(req, res) =>{
-
-    });
 }
 
 const isPublic = (type: string) => type !== 'Jen na pozvání';
+const isPrivate = (type: string) => type === 'Privátní';
+
 
 export const matchDeleted = functions.firestore
     .document('Matches/{matchId}')
