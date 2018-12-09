@@ -1,13 +1,14 @@
+import { messaging } from './index';
 import * as express from 'express';
 import * as cors from 'cors';
 import * as functions from 'firebase-functions';
 import * as admin from 'firebase-admin';
-import { Match, MatchPrivateData } from '../../src/app/model/match.model'
+import { Match } from '../../src/app/model/match.model'
 
 
 export function Matches() {
     const app = express();
-    app.use(cors({origin: false}));
+    app.use(cors({origin: true}));
     app.use(express.json());
     app.use(express.urlencoded({extended: true}));
 
@@ -21,17 +22,17 @@ export function Matches() {
             const matchDoc = admin.firestore().doc(`Matches/${matchUid}`);
             const matchData = (await matchDoc.get()).data();
 
-            if(matchPrivateData.data().password !== password && matchPrivateData.data().password !== ''){
-                res.status(401).send('špatné heslo!');
-                return null;
-            }
-
-            if(matchData.groupType !== 'Veřejný'){
+            if(matchData.groupType !== 'Veřejná') {
                 res.status(418).send('dobrej pokus :)');
                 return null;
             }
 
-            if(matchData.oponentUid === '' ){
+            if(matchPrivateData.data().password !== password) {
+                res.status(401).send('špatné heslo!');
+                return null;
+            }
+
+            if(matchData.oponentUid !== '') {
                 res.status(410).send('k zápasu je již někdo připojen!');
                 return null;
             }
@@ -43,13 +44,13 @@ export function Matches() {
             });
 
             await admin.firestore().collection('Users').doc(token.uid).update({
-                lastMatch: {creator: false, state: 0, lastMatchRef: `Matches/${matchUid}` }
+                lastMatch: {creator: false, state: 0, lastMatchUid: matchUid }
             })
 
             const message = {
                 notification: {
-                    title: 'player joined to your game!',
-                    body: `player ${nickName} joined to game`
+                    title: 'Hrač se připojil do tvé hry!',
+                    body: `Hráč ${nickName} se připojil do tvé hry.`
                 },
                 token: matchPrivateData.data().creatorsToken
             };
