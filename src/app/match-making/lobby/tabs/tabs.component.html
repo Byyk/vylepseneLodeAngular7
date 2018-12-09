@@ -1,0 +1,12 @@
+<mat-card>
+    <mat-card-header>
+        <app-tabs-nav (stateChanged)="stateChanged($event)"></app-tabs-nav>
+    </mat-card-header>
+    <mat-card-content>
+        <app-tabs-container>
+            <app-chat *ngIf="state === 1"></app-chat>
+            <app-requests *ngIf="state === 2"></app-requests>
+
+        </app-tabs-container>
+    </mat-card-content>
+</mat-card>

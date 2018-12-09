@@ -37,6 +37,13 @@ import { PasswordDialogComponent } from './password-dialog/password-dialog.compo
 import { MessageContainerComponent } from './messages/message-container.component';
 import { MessageComponent } from './messages/message/message.component';
 import {CookieService} from 'ngx-cookie-service';
+import { TabsContainerComponent } from './match-making/lobby/tabs/tabs-container/tabs-container.component';
+import { TabsComponent } from './match-making/lobby/tabs/tabs.component';
+import { TabsNavComponent } from './match-making/lobby/tabs/tabs-nav/tabs-nav.component';
+import { TabComponent } from './match-making/lobby/tabs/tabs-nav/tab/tab.component';
+import { SliderComponent } from './match-making/lobby/tabs/tabs-nav/slider/slider.component';
+import { ChatComponent } from './match-making/lobby/tabs/chat/chat.component';
+import { RequestsComponent } from './match-making/lobby/tabs/requests/requests.component';
 
 @NgModule({
     declarations: [
@@ -56,7 +63,14 @@ import {CookieService} from 'ngx-cookie-service';
         ConfirmResetComponent,
         PasswordDialogComponent,
         MessageContainerComponent,
-        MessageComponent
+        MessageComponent,
+        TabsContainerComponent,
+        TabsComponent,
+        TabsNavComponent,
+        TabComponent,
+        SliderComponent,
+        ChatComponent,
+        RequestsComponent
     ],
     imports: [
         BrowserModule,

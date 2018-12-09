@@ -1,0 +1,13 @@
+mat-card {
+    margin: 10px 20% 0;
+
+    app-tabs-nav {
+        width: 100%;
+        box-sizing: border-box;
+        margin-right: 32px;
+    }
+
+    mat-card-content{
+        margin: 5px 32px;
+    }
+}

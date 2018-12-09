@@ -1,0 +1,19 @@
+nav {
+    border-bottom: 1px solid #2224;
+    display: block;
+    width: 100%;
+    position: relative;
+
+    app-tab {
+        display: inline-block;
+    }
+
+    app-slider {
+        width: 139px;
+        height: 2px;
+        position: absolute;
+        top: 48px;
+        left: 0px;
+        background: #4267b2;
+    }
+}
