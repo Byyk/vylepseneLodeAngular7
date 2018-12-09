@@ -101,7 +101,7 @@ export class MatchMakingService {
                 this.http.post(`${environment.urlBase}/matches/joinGame/sendRequest`, body).subscribe();
         });
     }
-    public getMyMatch = () => this.afs.doc(this.ls.userData.lastMatch.lastMatchRef).valueChanges();
+    public getMyMatch = () => this.afs.collection('Matches').doc(this.ls.userData.lastMatch.lastMatchUid).valueChanges();
     public qetProfileImageUrlByUid = (uid: string) => this.afstorage.ref(`users/${uid}/profileImage.jpg`).getDownloadURL();
     private getCollection(ref, quarryFn?): Observable<any>{
         return this.afs.collection(ref, quarryFn)

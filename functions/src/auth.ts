@@ -8,7 +8,7 @@ export const userRegistred = functions.auth.user()
         const hrac : Hrac = {
             uid: user.uid,
             nickName: 'honzík :)',
-            lastMatch: {state: 2, creator: false, lastMatchRef: ''}
+            lastMatch: {state: 2, creator: false, lastMatchUid: ''}
         };
         return admin.firestore().collection('Users').doc(user.uid).set(hrac);
 });

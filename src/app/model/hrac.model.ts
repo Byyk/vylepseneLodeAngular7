@@ -9,6 +9,6 @@ export interface Hrac {
 export interface LastMatch {
     creator: boolean;
     state: stavyMatche;
-    lastMatchRef: any;
+    lastMatchUid: any;
 }
 
