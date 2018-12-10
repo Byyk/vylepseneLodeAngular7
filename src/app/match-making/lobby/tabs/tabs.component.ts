@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
+import {BehaviorSubject} from "rxjs";
 
 @Component({
   selector: 'app-tabs',
@@ -9,7 +10,11 @@ import {ActivatedRoute, Router} from '@angular/router';
 export class TabsComponent implements OnInit {
 
     state = 1;
+    public Stav = new BehaviorSubject(this.state);
+
     set State(value: number){
+        this.state = value;
+        this.Stav.next(value);
         this.router.navigate([], {
             relativeTo: this.route,
             queryParams: {

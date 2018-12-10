@@ -4,9 +4,8 @@
     </mat-card-header>
     <mat-card-content>
         <app-tabs-container>
-            <app-chat *ngIf="state === 1"></app-chat>
-            <app-requests *ngIf="state === 2"></app-requests>
-
+            <app-chat *ngIf="(Stav.asObservable() | async) === 1"></app-chat>
+            <app-requests *ngIf="(Stav.asObservable() | async) === 2"></app-requests>
         </app-tabs-container>
     </mat-card-content>
 </mat-card>
