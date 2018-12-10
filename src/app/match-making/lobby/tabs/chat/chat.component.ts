@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import {faComment} from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-chat',
@@ -6,6 +7,7 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./chat.component.scss']
 })
 export class ChatComponent implements OnInit {
+    faComment = faComment;
 
   constructor() { }
 
