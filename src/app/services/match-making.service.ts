@@ -81,7 +81,8 @@ export class MatchMakingService {
                 token: token,
                 type: groupType,
                 name: roomName,
-                password: password
+                password: password,
+                messagingToken: this.ms.token
             }).subscribe(callback);
 
         });
