@@ -10,16 +10,19 @@ export function Messaging(){
     app.use(express.urlencoded({extended: true}));
 
     app.post('/sendMessage', (req, res) => {
-        //const body = req.body;
+        const receiveToken = req.body.token;
 
         admin.messaging().send(
-          {
-            notification:
             {
-                title: "titul",
-                body: "telo"
-            },
-            token: "cmqA1OiLGAc:APA91bF1kfvjwgYjNL4KPMuysXJ1J-Osssuu_DO1Q8qee6FmWZxU6ZOZyT6yhA0Ue3kWMazMcxHD6hivhy84LhyLmvdved6NGr7l6uCLoHBN6YN90vmHq2V6tFE5lnu4mFWgpk5Bn1LW"
+                notification:
+                {
+                    title: "titul",
+                    body: "telo"
+                },
+                token: "cmqA1OiLGAc:APA91bF1kfvjwgYjNL4KPMuysXJ1J-Osssuu_DO1Q8qee6FmWZxU6ZOZyT6yhA0Ue3kWMazMcxHD6hivhy84LhyLmvdved6NGr7l6uCLoHBN6YN90vmHq2V6tFE5lnu4mFWgpk5Bn1LW",
+                data: {
+                    type: "message"
+                }
           }
         ).then(() => {
             res.status(200).send("odeslano");

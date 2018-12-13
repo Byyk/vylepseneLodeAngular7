@@ -52,7 +52,10 @@ export function Matches() {
                     title: 'Hrač se připojil do tvé hry!',
                     body: `Hráč ${nickName} se připojil do tvé hry.`
                 },
-                token: matchPrivateData.data().creatorsToken
+                token: matchPrivateData.data().creatorsToken,
+                data: {
+                    type: 'match-request'
+                }
             };
 
             admin.messaging().send(message);
@@ -87,7 +90,10 @@ export function Matches() {
                     title: `Hráč ${nickName} se chce připojit!`,
                     body: message
                 },
-                token: matchPrivateData.creatorsToken
+                token: matchPrivateData.creatorsToken,
+                data: {
+                    type: 'match-request'
+                }
             });
 
             res.status(201).send();

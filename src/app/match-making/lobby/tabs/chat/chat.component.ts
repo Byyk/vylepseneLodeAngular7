@@ -3,7 +3,7 @@ import {faComment} from '@fortawesome/free-solid-svg-icons';
 
 export interface Message {
     own: boolean;
-
+    message: string;
 }
 
 @Component({
@@ -15,6 +15,7 @@ export class ChatComponent implements OnInit {
     faComment = faComment;
     @ViewChild('chat')
     private scrollContainer: ElementRef;
+    public messages: Message[];
 
     constructor() { }
 
@@ -22,6 +23,10 @@ export class ChatComponent implements OnInit {
         try {
             this.scrollContainer.nativeElement.scrollTop = this.scrollContainer.nativeElement.scrollHeight;
         } catch (e) { console.log(e); }
+    }
+
+    init(){
+
     }
 
 }
