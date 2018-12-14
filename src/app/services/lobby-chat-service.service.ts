@@ -3,7 +3,7 @@ import { AngularFirestore } from "@angular/fire/firestore";
 import { BehaviorSubject, Observable } from "rxjs";
 import { Message } from "../match-making/lobby/tabs/chat/chat.component";
 import { HttpClient } from "@angular/common/http";
-import {environment} from "../../environments/environment.prod";
+import { environment } from "../../environments/environment.prod";
 
 @Injectable({
   providedIn: 'root'
