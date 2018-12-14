@@ -10,9 +10,8 @@ export function Messaging(){
     app.use(express.urlencoded({extended: true}));
 
     app.post('/sendMessage', (req, res) => {
-        const receiveToken = req.body.token;
-        const message = req.body.message;
-        const type = req.body.type;
+        const receiveToken = req.body.messagingToken;
+
 
         admin.messaging().send(
             {

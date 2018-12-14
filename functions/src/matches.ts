@@ -171,6 +171,21 @@ export function Matches() {
         }
     });
 
+    app.post('/sendMessage', async (req, res) => {
+        const matchUid = req.body.matchUid;
+        const message = req.body.message;
+        const SessionToken = req.body.token;
+
+        try {
+            const token = await admin.auth().verifyIdToken(SessionToken);
+            const privateMatchDoc = admin.firestore().doc(`Matches_private_data/${token.uid}`);
+        }
+        catch(err){
+            console.log(err);
+            res.status(404).send();
+        }
+
+    });
 
     return app;
 }
