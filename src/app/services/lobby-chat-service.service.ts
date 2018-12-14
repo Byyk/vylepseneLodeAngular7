@@ -3,7 +3,8 @@ import { AngularFirestore } from "@angular/fire/firestore";
 import { BehaviorSubject, Observable } from "rxjs";
 import { Message } from "../match-making/lobby/tabs/chat/chat.component";
 import { HttpClient } from "@angular/common/http";
-import { environment } from "../../environments/environment.prod";
+import {environment} from "../../environments/environment.prod";
+import {MatchMakingService} from './match-making.service';
 
 @Injectable({
   providedIn: 'root'
@@ -15,14 +16,17 @@ export class LobbyChatServiceService {
 
   constructor(
       public afs: AngularFirestore,
-      public http: HttpClient
+      public http: HttpClient,
+      public mms: MatchMakingService
   ) {
     this.lobbyChatMessage = this._lobbyChatMessage.asObservable();
   }
 
   sendMessage(message: string){
     this.http.post(`${environment.urlBase}/messaging/sendMessage`, {
-      
+        token: this.mms.,
+        message: '',
+        type: ''
     });
   }
 
