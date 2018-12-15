@@ -19,11 +19,11 @@ export function Messaging(){
                 notification:
                 {
                     title: "titul",
-                    body: "telo"
+                    body: message
                 },
-                token: "cmqA1OiLGAc:APA91bF1kfvjwgYjNL4KPMuysXJ1J-Osssuu_DO1Q8qee6FmWZxU6ZOZyT6yhA0Ue3kWMazMcxHD6hivhy84LhyLmvdved6NGr7l6uCLoHBN6YN90vmHq2V6tFE5lnu4mFWgpk5Bn1LW",
+                token: receiveToken,
                 data: {
-                    type: "message"
+                    type: type
                 }
           }
         ).then(() => {
