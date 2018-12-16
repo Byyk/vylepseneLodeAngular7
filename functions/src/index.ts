@@ -4,6 +4,7 @@ import * as admin from "firebase-admin";
 import * as authtriggers from './auth';
 import * as matchtriggers from './matches'
 import { Messaging } from './messaging';
+
 const Matches = matchtriggers.Matches;
 
 admin.initializeApp();

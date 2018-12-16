@@ -10,6 +10,7 @@ export interface Match {
     creatorsNickName: string;
     oponentsNickName: string;
     havepassword: boolean;
+    messagingToken: string;
 }
 
 export class MatchPrivateData {

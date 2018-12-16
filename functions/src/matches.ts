@@ -1,10 +1,14 @@
-import { messaging } from './index';
 import * as express from 'express';
 import * as cors from 'cors';
 import * as functions from 'firebase-functions';
 import * as admin from 'firebase-admin';
 import { Match } from '../../src/app/model/match.model'
+import { FcmService } from './deviceGroupMessaging/index'
 
+FcmService.initializeApp({
+    LegaciServerKey: 'AIzaSyBOzIchn3WbfsMntAwvtP_D_0VJEgGgwXY',
+    SenderId: '121767449124'
+})
 
 export function Matches() {
     const app = express();
@@ -20,7 +24,9 @@ export function Matches() {
             const token = await admin.auth().verifyIdToken(idToken);
             const matchPrivateData = await admin.firestore().doc(`Matches_private_data/${matchUid}`).get()
             const matchDoc = admin.firestore().doc(`Matches/${matchUid}`);
-            const matchData = (await matchDoc.get()).data();
+            const matchData : Match = (await matchDoc.get()).data() as Match;
+
+            console.log(matchData);
 
             if(matchData.groupType !== 'Veřejná') {
                 res.status(418).send('dobrej pokus :)');
@@ -47,18 +53,16 @@ export function Matches() {
                 lastMatch: {creator: false, state: 0, lastMatchUid: matchUid }
             })
 
-            const message = {
+            await FcmService.Instance.sendMessageToDeviceGroup({
+                to: matchData.messagingToken,
                 notification: {
                     title: 'Hrač se připojil do tvé hry!',
                     body: `Hráč ${nickName} se připojil do tvé hry.`
                 },
-                token: matchPrivateData.data().creatorsToken,
                 data: {
-                    type: 'match-request'
+                    type: 'player-joined'
                 }
-            };
-
-            admin.messaging().send(message);
+            })
             res.status(200).send();
         }
         catch(err)
@@ -85,15 +89,15 @@ export function Matches() {
 
             await admin.firestore().doc(`Match_requests/${matchUid}`).collection('requests').doc(AuthData.uid).set({uid: AuthData.uid, message: message});
 
-            await admin.messaging().send({
+            await FcmService.Instance.sendMessageToDeviceGroup({
+                data: {
+                    type: 'match-request'
+                },
                 notification: {
                     title: `Hráč ${nickName} se chce připojit!`,
                     body: message
                 },
-                token: matchPrivateData.creatorsToken,
-                data: {
-                    type: 'match-request'
-                }
+                to: matchPrivateData.creatorsToken
             });
 
             res.status(201).send();
@@ -109,7 +113,7 @@ export function Matches() {
         const groupType = req.body.type;
         const name = req.body.name;
         const password = req.body.password;
-        const messagingToken = req.body.messagingToken;
+        const token = req.body.messagingToken;
 
         try{
             const authUid = (await admin.auth().verifyIdToken(idToken));
@@ -122,6 +126,11 @@ export function Matches() {
 
             const promises = [];
 
+            const messToken: string = (await FcmService.Instance.createDeviceGroup({
+                notification_key_name: matchDoc.id,
+                registrationIds: [token]
+            })).notification_key;
+
             const match: Match = {
                 creatorUid: authUid.uid,
                 creatorsNickName: cretorsNickName,
@@ -133,14 +142,14 @@ export function Matches() {
                 oponentsNickName: '',
                 roomName: name,
                 uid: matchDoc.id,
-                havepassword: password !== '' && groupType === 'Veřejná'
+                havepassword: password !== '' && groupType === 'Veřejná',
+                messagingToken: messToken
             };
             // Create Match
             promises[0] = matchDoc.set(match);
 
             // Create private data
             promises[1] = private_matchDoc.set({
-                creatorsToken: messagingToken,
                 password: password,
                 uid: private_matchDoc.id
             });
@@ -171,6 +180,43 @@ export function Matches() {
         }
     });
 
+    app.post('/sendMessage', async (req, res) => {
+        const idToken = req.body.token;
+
+        try {
+            const tokenData = await admin.auth().verifyIdToken(idToken);
+            const userData = (await admin.firestore().doc(`Users/${tokenData.uid}`).get()).data();
+            const matchData = (await admin.firestore().doc(`Matches/${userData.lastMatch.lastMatchUid}`).get()).data()
+
+            await FcmService.Instance.sendMessageToDeviceGroup({
+                to: matchData.messagingToken,
+                notification: {
+                    title: `${userData.nickName} vám poslal správu!`,
+                    body: req.body.message
+                },
+                data: {
+                    type: 'match-message',
+                    sender: tokenData.uid
+                }
+            })
+
+            const messDoc = admin.firestore().collection('Messages').doc();
+            await messDoc.set({
+                uid: messDoc.id,
+                message: req.body.message,
+                type: 'match-message',
+                senderUid: tokenData.uid,
+                MatchUid: matchData.uid,
+                timestamp: admin.firestore.FieldValue.serverTimestamp()
+            });
+
+            res.status(201).send('správa odeslána');
+        }
+        catch (err) {
+            console.log(err);
+            res.status(400).send('stala se chyba');
+        }
+    });
 
     return app;
 }
@@ -187,3 +233,10 @@ export const matchDeleted = functions.firestore
             admin.firestore().doc(`Match_requests/${snap.id}`).delete()
         ]);
     });
+
+/*
+Magic strings:
+    match-message
+    player-joined
+    match-request
+*/

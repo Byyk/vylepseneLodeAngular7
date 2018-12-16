@@ -2,13 +2,19 @@
     <div id="messaeges" #chat>
         <div>
             <div>
-                <app-chat-message *ngFor="">  </app-chat-message>
+                <app-chat-message
+                    *ngFor="let mess of messages"
+                    [ngClass]="{
+                        'my-message': mess.own,
+                        'oponents-message': !mess.own
+                    }">
+                    {{ mess.message }} </app-chat-message>
             </div>
         </div>
     </div>
     <div id="inputs">
         <mat-form-field>
-            <textarea matInput>
+            <textarea matInput [(ngModel)]="messageTextBox"  (keypress)="enterSendMessage($event)">
 
             </textarea>
         </mat-form-field>

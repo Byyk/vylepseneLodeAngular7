@@ -44,6 +44,7 @@ export class MessagingService {
     receiveMessage() {
         this.messaging.onMessage((payload) => {
             this.currentMessage.next(payload);
+            console.log(payload);
         });
     }
 }

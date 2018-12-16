@@ -21,7 +21,7 @@
                     display: block;
                     max-width: 300px;
 
-                    &.my-message {
+                    &.oponents-message {
                         background: #4444;
                         color: black;
                         float: right;
@@ -29,7 +29,7 @@
                         border-radius: 10px 10px 0 10px;
                     }
 
-                    &.oponents-message {
+                    &.my-message {
                         background: #4267b2;
                         color: white;
                         float: left;
