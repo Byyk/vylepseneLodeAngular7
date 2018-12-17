@@ -9,12 +9,14 @@
     "deploy": "firebase deploy --only functions",
     "logs": "firebase functions:log"
   },
-  "main": "lib/vylepseneLodeAngular7/functions/src/index.js",
+  "main": "lib/vypseneLodeAngular7/functions/src/index.js",
   "dependencies": {
     "cors": "^2.8.5",
     "express": "^4.16.4",
     "firebase-admin": "~6.0.0",
-    "firebase-functions": "^2.1.0"
+    "firebase-functions": "^2.1.0",
+    "request": "^2.88.0",
+    "request-promise-native": "^1.0.5"
   },
   "devDependencies": {
     "tslint": "^5.11.0",

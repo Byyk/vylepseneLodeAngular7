@@ -24,7 +24,6 @@ export class LobbyChatServiceService {
 
   sendMessage(message: string){
     this.http.post(`${environment.urlBase}/messaging/sendMessage`, {
-        token: this.mms.,
         message: '',
         type: ''
     });

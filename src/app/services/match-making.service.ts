@@ -12,6 +12,7 @@ import { LoginService } from './login.service';
 import { environment } from '../../environments/environment';
 import { AngularFireStorage } from '@angular/fire/storage';
 import { MessagingService } from "./messaging.service";
+import {MessageModel} from '../model/message.model';
 
 //
 // zdroje:
@@ -23,6 +24,7 @@ import { MessagingService } from "./messaging.service";
 })
 export class MatchMakingService {
     private _data: BehaviorSubject<MatchListData>;
+
     private lastpagelength: number;
     private lastfirstEntry = 0;
     private lastEntry: number;
@@ -30,13 +32,15 @@ export class MatchMakingService {
 
     public data: Observable<MatchListData>;
 
+
+
     constructor(
         public afs: AngularFirestore,
         public afa: AngularFireAuth,
         public afstorage: AngularFireStorage,
         public ls: LoginService,
         public http: HttpClient,
-        public ms: MessagingService
+        public ms: MessagingService,
     ) {}
 
     init(limit: number){
@@ -94,7 +98,6 @@ export class MatchMakingService {
                 matchUid: matchUid,
                 password: password === undefined ? '' : password,
                 messagingToken: this.ms.token,
-                message: ''
             };
             if(groupType === 'Veřejná')
                 this.http.post(`${environment.urlBase}/matches/joinGame/public`, body).subscribe();
