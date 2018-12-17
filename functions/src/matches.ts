@@ -210,7 +210,7 @@ export function Matches() {
                 timestamp: admin.firestore.FieldValue.serverTimestamp()
             });
 
-            res.status(201).send('správa odeslána');
+            res.status(201).send(messDoc.id);
         }
         catch (err) {
             console.log(err);

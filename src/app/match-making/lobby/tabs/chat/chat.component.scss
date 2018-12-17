@@ -24,17 +24,17 @@
                     &.oponents-message {
                         background: #4444;
                         color: black;
-                        float: right;
+                        float: left;
                         clear: both;
-                        border-radius: 10px 10px 0 10px;
+                        border-radius: 10px 10px 10px 0;
                     }
 
                     &.my-message {
                         background: #4267b2;
                         color: white;
-                        float: left;
+                        float: right;
                         clear: both;
-                        border-radius: 10px 10px 10px 0;
+                        border-radius: 10px 10px 0 10px;
                     }
                 }
             }

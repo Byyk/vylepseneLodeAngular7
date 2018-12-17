@@ -1,7 +1,7 @@
 import {Component, ElementRef, OnInit, ViewChild, AfterViewChecked} from '@angular/core';
 import {faComment} from '@fortawesome/free-solid-svg-icons';
 import {MatchChatService} from '../../../../services/match-chat.service';
-import {map} from 'rxjs/operators';
+import {map, skip} from 'rxjs/operators';
 import {LoginService} from '../../../../services/login.service';
 import {MessageModel} from '../../../../model/message.model';
 
@@ -39,28 +39,23 @@ export class ChatComponent implements OnInit, AfterViewChecked{
         });
 
         this.mcs.newMessage.pipe(map(data => {
+            if(data == null) return;
             return {
                 message: data.message,
                 own: this.ls.userData.uid === data.senderUid,
                 uid: data.uid
             };
-        })).subscribe(mes => {
+        }), skip(1)).subscribe(mes => {
             if(mes == null) return;
-            if(this.messages.length !== 0){
-                if(this.messages[this.messages.length - 1].uid !== mes.uid)
-                    this.messages.push(mes);
-            } else this.messages.push(mes);
-        });
+                this.messages.push(mes);
+            }
+        );
     }
 
     ngAfterViewChecked(): void {
         try {
             this.scrollContainer.nativeElement.scrollTop = this.scrollContainer.nativeElement.scrollHeight;
         } catch (e) { console.error(e); }
-    }
-
-    init(){
-
     }
 
     mapFromMessageModelToMessage = map((data : MessageModel[]) => {
@@ -79,6 +74,17 @@ export class ChatComponent implements OnInit, AfterViewChecked{
     }
 
     sendMessage(){
-        
+        this.mcs.sendMessage(this.messageTextBox)
+            .then(() => {
+
+            })
+            .catch(() => {
+                alert('odeslání správy se nezdařilo!');
+            });
+        this.messageTextBox = "";
+    }
+
+    onChatScroll(event){
+        console.log(event);
     }
 }

@@ -11,7 +11,8 @@ export function Messaging(){
 
     app.post('/sendMessage', (req, res) => {
         const receiveToken = req.body.messagingToken;
-
+        const message = req.body.message;
+        const type = req.body.type;
 
         admin.messaging().send(
             {

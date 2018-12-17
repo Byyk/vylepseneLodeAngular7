@@ -4,6 +4,8 @@ import {MessageModel} from '../model/message.model';
 import {AngularFirestore} from '@angular/fire/firestore';
 import {LoginService} from './login.service';
 import {map} from 'rxjs/operators';
+import {HttpClient} from '@angular/common/http';
+import {environment} from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -18,8 +20,9 @@ export class MatchChatService {
     private lastEntry: any;
 
     constructor(
-        public afs: AngularFirestore,
-        public ls: LoginService
+        private afs: AngularFirestore,
+        private ls: LoginService,
+        private http: HttpClient
     ) { }
 
     init(){
@@ -44,6 +47,7 @@ export class MatchChatService {
                 this.lastEntry = data[data.length - 1];
                 data.splice(10,1);
             }
+            data.reverse();
             this._messages.next(data);
         });
 
@@ -58,5 +62,17 @@ export class MatchChatService {
                 return {uid, ...dat, doc};
             })
         ));
+    }
+
+    public sendMessage(message: string) : Promise<string> {
+        return new Promise((res, rej) => {
+            const ref = this.ls.afa.idToken.subscribe((token) => {
+                this.http.post(`${environment.urlBase}/matches/sendMessage`, {
+                    token: token,
+                    message: message
+                }, {responseType: 'text'}).subscribe(console.log, rej);
+                ref.unsubscribe();
+            });
+        });
     }
 }

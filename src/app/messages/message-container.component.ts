@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MessagingService } from '../services/messaging.service';
 import { Notification } from './message/message.component';
+import {AngularFireAuth} from '@angular/fire/auth';
 
 @Component({
   selector: 'app-message-container',
@@ -13,11 +14,14 @@ export class MessageContainerComponent implements OnInit {
     public messages: Notification[] = [];
 
     constructor(
-        public ms: MessagingService
+        private ms: MessagingService,
+        private afa: AngularFireAuth
     ) {
         this.ms.currentMessage.asObservable().subscribe(data =>{
-            if(data !== null)
-                this.messages.push(data.notification);
+            if(data == null) return;
+            if(data.data.sender === this.afa.auth.currentUser.uid) return;
+
+            this.messages.push(data.notification);
         });
     }
 
