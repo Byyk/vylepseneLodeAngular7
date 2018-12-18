@@ -1,9 +1,10 @@
-import {Component, ElementRef, OnInit, ViewChild, AfterViewChecked} from '@angular/core';
+import {Component, ElementRef, OnInit, ViewChild, AfterViewChecked, Input} from '@angular/core';
 import {faComment} from '@fortawesome/free-solid-svg-icons';
 import {MatchChatService} from '../../../../services/match-chat.service';
 import {map, skip} from 'rxjs/operators';
 import {LoginService} from '../../../../services/login.service';
 import {MessageModel} from '../../../../model/message.model';
+import {interval, Observable} from "rxjs";
 
 export interface Message {
     uid: string;
@@ -20,6 +21,18 @@ export class ChatComponent implements OnInit, AfterViewChecked{
     faComment = faComment;
     @ViewChild('chat')
     private scrollContainer: ElementRef;
+
+    @Input()
+    set ready(isReady: boolean){
+        if (isReady) this.pageLoaded();
+    }
+
+    pageLoaded(){
+        try {
+            this.scrollContainer.nativeElement.scrollTop = this.scrollContainer.nativeElement.scrollHeight;
+        } catch (e) { console.error(e); }
+    }
+
     public messages: Message[] = [];
 
     public messageTextBox: string;
@@ -50,12 +63,15 @@ export class ChatComponent implements OnInit, AfterViewChecked{
                 this.messages.push(mes);
             }
         );
+
+        setInterval(() => {
+            if(this.scrollContainer.nativeElement.scrollTop < 30) {
+                
+            }}, 500);
     }
 
     ngAfterViewChecked(): void {
-        try {
-            this.scrollContainer.nativeElement.scrollTop = this.scrollContainer.nativeElement.scrollHeight;
-        } catch (e) { console.error(e); }
+
     }
 
     mapFromMessageModelToMessage = map((data : MessageModel[]) => {

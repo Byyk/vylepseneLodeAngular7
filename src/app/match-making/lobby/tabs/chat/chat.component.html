@@ -4,6 +4,7 @@
             <div>
                 <app-chat-message
                     *ngFor="let mess of messages"
+                    [attr.ready]="last ? false : true"
                     [ngClass]="{
                         'my-message': mess.own,
                         'oponents-message': !mess.own
