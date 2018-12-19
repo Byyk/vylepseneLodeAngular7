@@ -45,6 +45,7 @@ import { SliderComponent } from './match-making/lobby/tabs/tabs-nav/slider/slide
 import { ChatComponent } from './match-making/lobby/tabs/chat/chat.component';
 import { RequestsComponent } from './match-making/lobby/tabs/requests/requests.component';
 import {ChatMessageComponent} from './match-making/lobby/tabs/chat/message/message.component';
+import { GameComponent } from './game/game.component';
 
 @NgModule({
     declarations: [
@@ -72,7 +73,8 @@ import {ChatMessageComponent} from './match-making/lobby/tabs/chat/message/messa
         SliderComponent,
         ChatComponent,
         RequestsComponent,
-        ChatMessageComponent
+        ChatMessageComponent,
+        GameComponent
     ],
     imports: [
         BrowserModule,
