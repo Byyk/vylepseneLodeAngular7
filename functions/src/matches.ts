@@ -143,7 +143,9 @@ export function Matches() {
                 roomName: name,
                 uid: matchDoc.id,
                 havepassword: password !== '' && groupType === 'Veřejná',
-                messagingToken: messToken
+                messagingToken: messToken,
+                creatorReady: false,
+                oponentReady: false
             };
             // Create Match
             promises[0] = matchDoc.set(match);
@@ -218,6 +220,64 @@ export function Matches() {
         }
     });
 
+    app.post('/userReady', async (req, res) =>{
+        const idToken = req.body.token;
+        const ready = req.body.ready;
+
+        try {
+            const token = await admin.auth().verifyIdToken(idToken);
+            const usedDoc = admin.firestore().doc(`Users/${token.uid}`);
+            const userData = (await usedDoc.get()).data();
+            const matchdoc = admin.firestore().doc(`Matches/${userData.lastMatch.lastMatchUid}`)
+            const matchData : Match = (await matchdoc.get()).data() as Match;
+            const oponentsUserDoc = admin.firestore().doc(`Users/${usedDoc.id === matchData.oponentUid ? matchData.creatorUid : matchData.oponentUid}`)
+            const oponentsUserData = (await oponentsUserDoc.get()).data();
+
+            if(!matchData.inLobby){
+                res.status(418).send('již nejste v lobby!');
+                return;
+            }
+
+            if(userData.lastMatch.creator) {
+                await matchdoc.update({creatorReady: ready});
+                matchData.creatorReady = ready;
+            }
+            else {
+                await matchdoc.update({oponentReady: ready});
+                matchData.oponentReady = ready;
+            }
+            
+            if(matchData.creatorReady && matchData.oponentReady) {
+                await usedDoc.update({lastMatch: {state: 1, creator: userData.lastMatch.creator, lastMatchUid: userData.lastMatch.lastMatchUid}});
+                await oponentsUserDoc.update({lastMatch: {state: 1, creator: oponentsUserData.lastMatch.creator, lastMatchUid: oponentsUserData.lastMatch.lastMatchUid }});
+                await matchdoc.update({ inLobby: false });
+                res.status(200).send('hra zacina!');
+                return;
+            }
+
+            res.status(200).send('jste pripraven');
+        }
+        catch(err){
+            console.log(err);
+            res.status(404).send('stala se chyba')
+        }
+    });
+
+    app.post('/startmatch', async (req, res) => {
+        const idToken = req.body.token;
+        try {
+            const token = await admin.auth().verifyIdToken(idToken);
+            const userData = (await admin.firestore().doc(`Users/${token.uid}`).get()).data();
+            const matchdoc = admin.firestore().doc(`Matches/${userData.lastMatch}`)
+
+            res.status(200).send();
+        }
+        catch(err){
+            console.log(err);
+            res.status(404).send('stala se chyba')
+        }
+    });
+
     return app;
 }
 
@@ -233,7 +293,6 @@ export const matchDeleted = functions.firestore
             admin.firestore().doc(`Match_requests/${snap.id}`).delete()
         ]);
     });
-
 /*
 Magic strings:
     match-message
