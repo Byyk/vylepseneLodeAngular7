@@ -13,6 +13,7 @@ import {map, skip} from 'rxjs/operators';
 import {Subscription, timer} from 'rxjs';
 import {LoginService} from '../../../../services/login.service';
 import {MessageModel} from '../../../../model/message.model';
+import {interval, Observable} from "rxjs";
 
 export interface Message {
     uid: string;
