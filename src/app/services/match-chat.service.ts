@@ -3,7 +3,7 @@ import {BehaviorSubject, Observable} from 'rxjs';
 import {MessageModel} from '../model/message.model';
 import {AngularFirestore} from '@angular/fire/firestore';
 import {LoginService} from './login.service';
-import {map} from 'rxjs/operators';
+import {map, skip} from 'rxjs/operators';
 import {HttpClient} from '@angular/common/http';
 import {environment} from '../../environments/environment';
 
@@ -12,59 +12,48 @@ import {environment} from '../../environments/environment';
 })
 export class MatchChatService {
 
-    private _messages: BehaviorSubject<MessageModel[]>;
-    public messages: Observable<MessageModel[]>;
+        private _messages: BehaviorSubject<MessageModel[]>;
+        public messages: Observable<MessageModel[]>;
 
-    public newMessage: Observable<MessageModel>;
+        private _end: BehaviorSubject<boolean>;
+        public end: Observable<boolean>;
 
-    private lastEntry: any;
+        public newMessage: Observable<MessageModel>;
 
-    constructor(
-        private afs: AngularFirestore,
-        private ls: LoginService,
-        private http: HttpClient
-    ) { }
+        private lastEntry: any = null;
 
-    init(){
-        this._messages = new BehaviorSubject(null);
-        this.messages = this._messages.asObservable();
+        constructor(
+            private afs: AngularFirestore,
+            private ls: LoginService,
+            private http: HttpClient
+        ) { }
 
-        this.newMessage = this.afs.collection<MessageModel>('Messages', quarry =>
-            quarry.orderBy('timestamp', 'desc')
-                .where('MatchUid', '==', this.ls.userData.lastMatch.lastMatchUid)
-                .where('type', '==', 'match-message')
-                .limit(1)
-        ).valueChanges().pipe(map(d => d[0]));
+        init(){
+            this._messages = new BehaviorSubject(null);
+            this.messages = this._messages.asObservable();
 
-        this.getCollection('Messages', quarry =>
-            quarry.orderBy('timestamp', 'desc')
-                .where('MatchUid', '==', this.ls.userData.lastMatch.lastMatchUid)
-                .where('type', '==', 'match-message')
-                .limit(11)
-        ).subscribe((data: []) => {
-            if(data == null) return;
-            if(data.length > 10) {
-                this.lastEntry = data[data.length - 1];
-                data.splice(10,1);
-            }
-            data.reverse();
-            this._messages.next(data);
-        });
+            this._end = new BehaviorSubject(false);
+            this.end = this._end.asObservable().pipe(skip(1));
 
-    }
+            this.newMessage = this.afs.collection<MessageModel>('Messages', quarry =>
+                quarry.orderBy('timestamp', 'desc')
+                    .where('MatchUid', '==', this.ls.userData.lastMatch.lastMatchUid)
+                    .where('type', '==', 'match-message')
+                    .limit(1)
+            ).valueChanges().pipe(map(d => d[0]));
 
-    private getCollection(ref, quarryFn?): Observable<any>{
-        return this.afs.collection(ref, quarryFn
-        ).get().pipe(map(data =>
-            data.docs.map(doc => {
-                const dat = doc.data();
-                const uid = doc.id;
-                return {uid, ...dat, doc};
-            })
-        ));
-    }
+            this.getCollection('Messages', quarry =>
+                quarry.orderBy('timestamp', 'desc')
+                    .where('MatchUid', '==', this.ls.userData.lastMatch.lastMatchUid)
+                    .where('type', '==', 'match-message')
+                    .limit(11)
+            ).pipe(map(this.resolveMatchList)).subscribe((data: []) => {
+                this._messages.next(data);
+            });
 
-    public sendMessage(message: string) : Promise<string> {
+        }
+
+        public sendMessage(message: string) : Promise<string> {
         return new Promise((res, rej) => {
             const ref = this.ls.afa.idToken.subscribe((token) => {
                 this.http.post(`${environment.urlBase}/matches/sendMessage`, {
@@ -75,4 +64,38 @@ export class MatchChatService {
             });
         });
     }
-}
+
+        public loadNext() {
+            this.getCollection('Messages', quarry =>
+                quarry.orderBy('timestamp', 'desc')
+                    .where('MatchUid', '==', this.ls.userData.lastMatch.lastMatchUid)
+                    .where('type', '==', 'match-message')
+                    .limit(11)
+                    .startAfter(this.lastEntry.doc)
+            ).pipe(map(this.resolveMatchList)).subscribe((data) => {
+                this._messages.next(data);
+            });
+        }
+
+        private getCollection(ref, quarryFn?): Observable<any>{
+            return this.afs.collection(ref, quarryFn
+            ).get().pipe(map(data =>
+                data.docs.map(doc => {
+                    const dat = doc.data();
+                    const uid = doc.id;
+                    return {uid, ...dat, doc};
+                })
+            ));
+        }
+        private resolveMatchList = (data: []) : [] => {
+            if(data == null) return;
+            if(data.length > 10) {
+                this.lastEntry = data[data.length - 1];
+                data.splice(10,1);
+            } else this._end.next(true);
+            data.reverse();
+            return data;
+        }
+
+    }
+

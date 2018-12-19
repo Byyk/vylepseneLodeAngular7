@@ -11,6 +11,8 @@ export interface Match {
     oponentsNickName: string;
     havepassword: boolean;
     messagingToken: string;
+    creatorReady: boolean;
+    oponentReady: boolean;
 }
 
 export class MatchPrivateData {

@@ -3,6 +3,7 @@
         <div>
             <div>
                 <app-chat-message
+                    #messa
                     *ngFor="let mess of messages"
                     [ngClass]="{
                         'my-message': mess.own,

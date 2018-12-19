@@ -105,6 +105,18 @@ export class MatchMakingService {
                 this.http.post(`${environment.urlBase}/matches/joinGame/private/send`, body).subscribe();
         });
     }
+    public startMatch(){
+
+    }
+
+    public ready(isReady: boolean){
+        let promise : Promise<any>;
+        if(this.ls.userData.lastMatch.creator)
+            promise =this.afs.doc('Matches').update({creatorReady: true});
+        else
+            promise = this.afs.doc('Matches').update({oponentReady: true});
+    }
+
     public getMyMatch = () => this.afs.collection('Matches').doc(this.ls.userData.lastMatch.lastMatchUid).valueChanges();
     public qetProfileImageUrlByUid = (uid: string) => this.afstorage.ref(`users/${uid}/profileImage.jpg`).getDownloadURL();
     private getCollection(ref, quarryFn?): Observable<any>{
