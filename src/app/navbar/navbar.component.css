@@ -18,3 +18,7 @@
 .navbar-transparent {
     background: #0000 !important;
 }
+
+app-match-making {
+    height: 100%;
+}

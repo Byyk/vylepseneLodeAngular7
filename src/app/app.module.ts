@@ -46,6 +46,9 @@ import { ChatComponent } from './match-making/lobby/tabs/chat/chat.component';
 import { RequestsComponent } from './match-making/lobby/tabs/requests/requests.component';
 import {ChatMessageComponent} from './match-making/lobby/tabs/chat/message/message.component';
 import { GameComponent } from './game/game.component';
+import { GameMenuComponent } from './game/game-menu/game-menu.component';
+import { OponentsBoardComponent } from './game/boards/oponents-board/oponents-board.component';
+import { MyBoardComponent } from './game/boards/my-board/my-board.component';
 
 @NgModule({
     declarations: [
@@ -74,7 +77,10 @@ import { GameComponent } from './game/game.component';
         ChatComponent,
         RequestsComponent,
         ChatMessageComponent,
-        GameComponent
+        GameComponent,
+        GameMenuComponent,
+        OponentsBoardComponent,
+        MyBoardComponent
     ],
     imports: [
         BrowserModule,

@@ -2,13 +2,19 @@ import * as express from 'express';
 import * as cors from 'cors';
 import * as functions from 'firebase-functions';
 import * as admin from 'firebase-admin';
-import { Match } from '../../src/app/model/match.model'
+import { Match } from './model/match.model';
+import { LodDoc } from './model/lod.model';
 import { FcmService } from './deviceGroupMessaging/index'
+import { Hrac } from './model/hrac.model';
 
 FcmService.initializeApp({
     LegaciServerKey: 'AIzaSyBOzIchn3WbfsMntAwvtP_D_0VJEgGgwXY',
     SenderId: '121767449124'
 })
+
+interface BackendDataLode {
+    [key: string] : { tier: number, osmismerna: boolean, povolenyPocet: number };
+}
 
 export function Matches() {
     const app = express();
@@ -46,7 +52,7 @@ export function Matches() {
             const nickName = (await admin.firestore().doc(`Users/${token.uid}`).get()).data().nickName
             await matchDoc.update({
                 oponentUid: token.uid,
-                opopenentsNickName: nickName
+                oponentsNickName: nickName
             });
 
             await admin.firestore().collection('Users').doc(token.uid).update({
@@ -68,7 +74,7 @@ export function Matches() {
         catch(err)
         {
           console.log(err);
-          res.status(404).send('neplatný token!')
+          res.status(404).send({ err : 'neplatný token!' })
         }
     });
 
@@ -178,7 +184,7 @@ export function Matches() {
         }
         catch(err){
             console.log(err);
-            res.status(404).send('stala se chyba :(')
+            res.status(404).send({err : 'stala se chyba :('})
         }
     });
 
@@ -212,17 +218,16 @@ export function Matches() {
                 timestamp: admin.firestore.FieldValue.serverTimestamp()
             });
 
-            res.status(201).send(messDoc.id);
+            res.status(201).send({uid : messDoc.id});
         }
         catch (err) {
             console.log(err);
-            res.status(400).send('stala se chyba');
+            res.status(400).send({err : 'stala se chyba'});
         }
     });
 
     app.post('/userReady', async (req, res) =>{
         const idToken = req.body.token;
-        const ready = req.body.ready;
 
         try {
             const token = await admin.auth().verifyIdToken(idToken);
@@ -234,17 +239,17 @@ export function Matches() {
             const oponentsUserData = (await oponentsUserDoc.get()).data();
 
             if(!matchData.inLobby){
-                res.status(418).send('již nejste v lobby!');
+                res.status(418).send({err: 'již nejste v lobby!'});
                 return;
             }
 
             if(userData.lastMatch.creator) {
-                await matchdoc.update({creatorReady: ready});
-                matchData.creatorReady = ready;
+                matchData.creatorReady = !matchData.creatorReady;
+                await matchdoc.update({creatorReady: matchData.creatorReady});
             }
             else {
-                await matchdoc.update({oponentReady: ready});
-                matchData.oponentReady = ready;
+                matchData.oponentReady = !matchData.oponentReady;
+                await matchdoc.update({oponentReady: matchData.oponentReady});
             }
             
             if(matchData.creatorReady && matchData.oponentReady) {
@@ -255,7 +260,7 @@ export function Matches() {
                 return;
             }
 
-            res.status(200).send('jste pripraven');
+            res.status(200).send({err: 'jste pripraven'});
         }
         catch(err){
             console.log(err);
@@ -263,20 +268,61 @@ export function Matches() {
         }
     });
 
-    app.post('/startmatch', async (req, res) => {
-        const idToken = req.body.token;
+    app.post('/startmatch', async (req, res) => { // Todo dodelat !!!
         try {
-            const token = await admin.auth().verifyIdToken(idToken);
-            const userData = (await admin.firestore().doc(`Users/${token.uid}`).get()).data();
-            const matchdoc = admin.firestore().doc(`Matches/${userData.lastMatch}`)
+            const token = await admin.auth().verifyIdToken(req.body.token);
+            const matchdoc = admin.firestore().doc(`Matches/
+            ${ (await admin.firestore().doc(`Users/${token.uid}`).get()).data().lastMatch }
+            `);
 
             res.status(200).send();
         }
         catch(err){
             console.log(err);
-            res.status(404).send('stala se chyba')
+            res.status(404).send({err: 'stala se chyba'})
         }
     });
+
+
+    // Todo smazat !!!
+    app.get('/lod', async (req, res) => {
+        admin.firestore().collection('Lode').doc().set({
+            uid: 'uid',
+            name: 'jmeno',
+            trida: 'trida',
+            casti: {
+                rovne: [
+                    {x: 0, y: 0}, {x: 1, y: 0}, {x: -1, y: -1},
+                    {x: 0, y: -1}, {x: 1, y: -1}, {x: -1, y: -2},
+                    {x: 0, y: -2}, {x: 1, y: -2}, {x: -1, y: -3},
+                    {x: 0, y: -3}, {x: 1, y: -3}, {x: -1, y: -4},
+                    {x: 0, y: -4}, {x: 1, y: -4}, {x: -1, y: -5},
+                    {x: 0, y: -5}, {x: 1, y: -5}, {x: -1, y: -5},
+                    {x: 0, y: -5}, {x: 1, y: -5}, {x: -1, y: -6},
+                    {x: 0, y: -6}, {x: 1, y: -6}, {x: 0, y: -7},
+                    {x: 1, y: -7},
+                ],
+                sikmo: [
+                    {x: 0, y: 0}, {x: 1, y: 0}, {x: 2, y: 0},
+                    {x: 0, y: -1}, {x: 1, y: -1}, {x: 2, y: -1},
+                    {x: 3, y: -1}, {x: 0, y: -2}, {x: 1, y: -2},
+                    {x: 2, y: -2}, {x: 3, y: -2}, {x: 4, y: -2},
+                    {x: 1, y: -3}, {x: 2, y: -3}, {x: 3, y: -3},
+                    {x: 4, y: -3}, {x: 2, y: -4}, {x: 3, y: -4},
+                    {x: 4, y: -4}, {x: 5, y: -4}, {x: 3, y: -5},
+                    {x: 4, y: -5}, {x: 5, y: -5}, {x: 6, y: -5},
+                    { x: 5, y: -6}
+                ]
+            },
+            posun: {
+                rovne: null,
+                sikmo: null
+            },
+            imgUrl: "https://firebasestorage.googleapis.com/v0/b/lode-1835e.appspot.com/o/Lode%2FletadlovaLod%20.svg?alt=media&token=1c323a75-39fb-4bcf-83f1-3b5e181bd9d4",
+            osmismerna: true,
+        });
+        res.send();
+    })
 
     return app;
 }

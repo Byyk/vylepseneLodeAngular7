@@ -1,4 +1,4 @@
-import {stavyMatche} from '../match-making/match-making.component';
+enum stavyMatche { inLobby = 0, inGame = 1, inMenu = 2}
 
 export interface Hrac {
     uid: string;

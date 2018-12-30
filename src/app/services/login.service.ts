@@ -4,13 +4,16 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import { auth } from 'firebase';
 import {NameGroup} from "../model/nameGroup.model";
 import {Hrac} from '../model/hrac.model';
-import {Observable} from 'rxjs';
+import {BehaviorSubject, Observable} from 'rxjs';
 import {map} from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
 })
 export class LoginService {
+    private _userLoaded = new BehaviorSubject<boolean>(false);
+    public userloaded: Observable<boolean>;
+
     public userDataObservable: Observable<Hrac>;
     public userData: Hrac;
 
@@ -23,6 +26,8 @@ export class LoginService {
     public afa: AngularFireAuth,
     public afs: AngularFirestore,
     ) {
+      this.userloaded = this._userLoaded.asObservable();
+
       this.afa.user.subscribe((res) => {
           this.logginedIn = res !== null;
           if(this.logginedIn){
@@ -30,7 +35,11 @@ export class LoginService {
                   .pipe(map((user) => user[0]));
               this.userDataObservable.subscribe((userData) => {
                   this.userData = userData;
+                  this._userLoaded.next(true);
               });
+          }
+          else {
+              this._userLoaded.next(false);
           }
       });
 

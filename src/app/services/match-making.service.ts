@@ -105,20 +105,29 @@ export class MatchMakingService {
                 this.http.post(`${environment.urlBase}/matches/joinGame/private/send`, body).subscribe();
         });
     }
-    public startMatch(){
 
-    }
-
-    public ready(isReady: boolean){
-        let promise : Promise<any>;
-        if(this.ls.userData.lastMatch.creator)
-            promise =this.afs.doc('Matches').update({creatorReady: true});
-        else
-            promise = this.afs.doc('Matches').update({oponentReady: true});
+    public ready(){
+        return new Promise((res, rej) => {
+            this.ls.afa.idToken.subscribe((idToken) => {
+                this.http.post(`${environment.urlBase}/matches/userReady`, {
+                    token: idToken
+                }).subscribe(res, rej);
+            });
+        });
     }
 
     public getMyMatch = () => this.afs.collection('Matches').doc(this.ls.userData.lastMatch.lastMatchUid).valueChanges();
-    public qetProfileImageUrlByUid = (uid: string) => this.afstorage.ref(`users/${uid}/profileImage.jpg`).getDownloadURL();
+    public qetProfileImageUrlByUid(uid: string) : Promise<string>{
+        return new Promise((res, rej) => {
+            this.afstorage.ref(`users/${uid}/profileImage.jpg`).getDownloadURL().subscribe((url) => {
+                res(url);
+            }, (err) => {
+                this.afstorage.ref('users/defaul-user.img.jpg').getDownloadURL().subscribe((url) => {
+                    res(url);
+                }, rej);
+            });
+        });
+    }
     private getCollection(ref, quarryFn?): Observable<any>{
         return this.afs.collection(ref, quarryFn)
             .snapshotChanges().pipe(

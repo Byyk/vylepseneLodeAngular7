@@ -1,3 +1,8 @@
-.ext-container{
-    margin: 10px 20% 0;
+app-game {
+    position: absolute;
+    top: 0;
+    height: 100%;
+    width: 100%;
+    padding: 64px 0 0 50px;
+    box-sizing: border-box;
 }

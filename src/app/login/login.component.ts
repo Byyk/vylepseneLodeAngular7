@@ -104,7 +104,7 @@ export class LoginComponent extends Breakpointy implements OnInit {
 
     ngOnInit() {
         this.LService.afa.user.subscribe((user) => {
-           if(user) return this.router.navigate(['./profile']);
+           if(user) return this.router.navigate(['./matchmaking']); // TODO Defaultni route pri prihlaseni
         });
     }
 

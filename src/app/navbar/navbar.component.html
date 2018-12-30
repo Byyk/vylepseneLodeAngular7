@@ -25,7 +25,7 @@
       </button>
       <span>Vylepsenelode</span>
       <span style="flex-grow: 1;"></span>
-      <span *ngIf="user$ | async as user">
+      <span *ngIf="(LService.userloaded | async) && user$ | async as user">
         <a *ngIf="!(isHandset | async)" mat-button routerLink="/profile" routerLinkActive="active"> {{user.email}} </a>
           <button mat-button routerLink="matchmaking"> hrát </button>
         <button mat-button (click)="logout()" [tabindex]="-1"> Logout </button>

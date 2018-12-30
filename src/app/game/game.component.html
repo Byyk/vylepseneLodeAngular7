@@ -1,3 +1,8 @@
-<p>
-  game works!
-</p>
+<div class="relative-container">
+    <app-game-menu>  </app-game-menu>
+    <div id="game">
+        <app-oponents-board style="overflow: hidden" [ngClass]="{'neviditelny': (gs.actualField | async) === 1}"></app-oponents-board>
+        <app-my-board style="overflow: hidden" [ngClass]="{'neviditelny': (gs.actualField | async) === 2}"></app-my-board>
+    </div>
+</div>
+

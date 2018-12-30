@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 import {
     AfterViewInit,
     ChangeDetectionStrategy,
@@ -8,15 +7,12 @@ import {
     OnInit, QueryList,
     ViewChild, ViewChildren
 } from '@angular/core';
-=======
-import {Component, ElementRef, OnInit, ViewChild, AfterViewChecked} from '@angular/core';
->>>>>>> parent of 393a4fe... matchLobby-chat
-import {faComment} from '@fortawesome/free-solid-svg-icons';
-import {MatchChatService} from '../../../../services/match-chat.service';
-import {map, skip} from 'rxjs/operators';
-import {Subscription, timer} from 'rxjs';
-import {LoginService} from '../../../../services/login.service';
-import {MessageModel} from '../../../../model/message.model';
+import { MatchChatService } from '../../../../services/match-chat.service';
+import { map, skip } from 'rxjs/operators';
+import { timer } from 'rxjs';
+import { LoginService } from '../../../../services/login.service';
+import { MessageModel } from '../../../../model/message.model';
+import {faRocketchat} from '@fortawesome/free-brands-svg-icons';
 
 export interface Message {
     uid: string;
@@ -31,17 +27,14 @@ export interface Message {
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ChatComponent implements OnInit, AfterViewInit{
-    faComment = faComment;
+    faRocketchat = faRocketchat;
 
     @ViewChild('chat')
     private scrollContainer: ElementRef;
-<<<<<<< HEAD
 
     @ViewChildren('messa')
     private mess: QueryList<any>;
 
-=======
->>>>>>> parent of 393a4fe... matchLobby-chat
     public messages: Message[] = [];
     public messageTextBox: string;
 
@@ -70,7 +63,6 @@ export class ChatComponent implements OnInit, AfterViewInit{
         }), skip(1)).subscribe(mes => {
             if(mes == null) return;
                 this.messages.push(mes);
-<<<<<<< HEAD
                 this.cdr.markForCheck();
             });
 
@@ -86,16 +78,6 @@ export class ChatComponent implements OnInit, AfterViewInit{
         this.mess.changes.subscribe(t => {
             this.handleForEnd();
         });
-=======
-            }
-        );
-    }
-
-    ngAfterViewChecked(): void {
-        try {
-            this.scrollContainer.nativeElement.scrollTop = this.scrollContainer.nativeElement.scrollHeight;
-        } catch (e) { console.error(e); }
->>>>>>> parent of 393a4fe... matchLobby-chat
     }
 
     mapFromMessageModelToMessage = map((data : MessageModel[]) => {

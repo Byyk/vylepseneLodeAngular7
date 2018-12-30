@@ -1,0 +1,32 @@
+#board-container {
+    position: relative;
+    height: 100%;
+    display: inline-block;
+    text-align: center;
+
+    mat-grid-list {
+        background: blue;
+
+        mat-grid-tile {
+            &:hover {
+                background: #fff5;
+            }
+        }
+    }
+
+    .sudy {
+        //background: red;
+    }
+
+    .lichy {
+        //background: blue;
+    }
+
+    .content {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+    }
+}

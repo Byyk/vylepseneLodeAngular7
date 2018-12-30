@@ -1,17 +1,23 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { library } from '@fortawesome/fontawesome-svg-core';
-import { faFacebook, faGoogle, faTwitter } from '@fortawesome/free-brands-svg-icons';
-import { faAngleLeft, faAngleRight, faComment } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import {faAngleLeft, faAngleRight, faBolt, faRocket} from '@fortawesome/free-solid-svg-icons';
+import {faFacebook, faGoogle, faTwitter, faRocketchat, faSuperpowers} from '@fortawesome/free-brands-svg-icons';
+import {faCompass, faLifeRing} from '@fortawesome/free-regular-svg-icons';
 
 library.add(
-    faFacebook,
     faGoogle,
+    faFacebook,
     faTwitter,
     faAngleLeft,
     faAngleRight,
-    faComment
+    faRocketchat,
+    faRocket,
+    faCompass,
+    faSuperpowers,
+    faLifeRing,
+    faBolt
 );
 
 @NgModule({
@@ -24,4 +30,8 @@ library.add(
         FontAwesomeModule
     ]
 })
-export class AppFontAwesomeModule { }
+export class AppFontAwesomeModule {
+    constructor(){
+
+    }
+}

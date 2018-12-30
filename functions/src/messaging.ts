@@ -27,10 +27,10 @@ export function Messaging(){
                 }
           }
         ).then(() => {
-            res.status(200).send("odeslano");
+            res.status(200).send();
         }).catch((err) => {
             console.log(err);
-            res.status(404).send("neodeslano");
+            res.status(404).send({err : "neodeslano"});
         })
 
     });

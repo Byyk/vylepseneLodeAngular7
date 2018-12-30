@@ -1,0 +1,53 @@
+#board-container {
+    position: relative;
+    height: 100%;
+    display: inline-block;
+    text-align: center;
+
+    mat-grid-list {
+        background: blue;
+
+        .lod {
+            background: red;
+        }
+
+        .chyba-pokladani {
+            background: #922f;
+        }
+    }
+
+    .content {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+    }
+}
+#container {
+    position: relative;
+    width: 0;
+    height: 0;
+    #lod {
+        position: absolute;
+        width: 100px;
+        z-index: 1000;
+        pointer-events: none;
+    }
+}
+
+.hoverer{
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 999;
+
+    text-align: center;
+
+    &:hover {
+        background: #fff7;
+        z-index: 1001;
+    }
+}

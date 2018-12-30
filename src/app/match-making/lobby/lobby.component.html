@@ -1,47 +1,46 @@
-<mat-card
-        class="ext-container"
-        [ngClass]="{
-    'ext-container-handset': (isHandset$ | async),
-    'ext-container-small': (isSmall$ | async),
-    'ext-container-medium': (isMedium$ | async),
-    'ext-container-large': (isLarge$ | async)
-    }">
-
-    <mat-grid-list [cols]="8" rowHeight="1:1">
-        <mat-grid-tile style="border-right: 1px solid #5696ff"
-                       [colspan]="3"
-                       [rowspan]="3">
-
-            <div *ngIf="true || (hrac$ | async) as hrac">
-                <img *ngIf="(ls.afa.user | async) as user" style="background-color: cadetblue" height="200px" width="200px" [src]="user.photoURL"/>
-                <p style="text-align: center"> {{ hrac.displayName }} </p>
-                <div style="text-align: center">
-                    <button mat-button> {{ hrac.ready ? 'Připraven' : 'Čeká se na tebe!' }} </button>
+<span *ngIf="ls.userloaded | async">
+    <span *ngIf="(match$ | async) as match">
+        <mat-card
+            class="ext-container"
+            [ngClass]="{
+            'ext-container-handset': (isHandset$ | async),
+            'ext-container-small': (isSmall$ | async),
+            'ext-container-medium': (isMedium$ | async),
+            'ext-container-large': (isLarge$ | async)
+            }">
+        <mat-grid-list [cols]="8" rowHeight="1:1.2">
+            <mat-grid-tile style="border-right: 1px solid #5696ff"
+                           [colspan]="3"
+                           [rowspan]="3">
+                <div *ngIf="ls.userData as hrac">
+                    <img *ngIf="(ls.afa.user | async) as user" style="background-color: cadetblue" height="200px" width="200px" [src]="user.photoURL"/>
+                    <p style="text-align: center"> {{ hrac.nickName }} </p>
+                    <div style="text-align: center">
+                        <button [ngStyle]="{'color': MyData(match).ready ? 'green' : 'red'}" mat-button (click)="ready()" > {{ MyData(match).ready ? 'Připraven' : 'Čeká se na tebe!' }} </button>
+                    </div>
                 </div>
-            </div>
-        </mat-grid-tile>
-        <mat-grid-tile
+            </mat-grid-tile>
+            <mat-grid-tile
                 [colspan]="2"
                 [rowspan]="3">
+                <h2> VS </h2>
+            </mat-grid-tile>
+            <mat-grid-tile style="border-left: 1px solid #5696ff"
+                           [colspan]="3"
+                           [rowspan]="3">
+                    <div *ngIf="(souper$ | async) as souper">
+                        <img *ngIf="(oponentsPhotoUrl$ | async) as photoUrl" alt="fff" style="background-color: cadetblue" height="200px" width="200px" [src]="photoUrl"/>
+                        <div *ngIf="!(oponentsPhotoUrl$ | async)" id="noImage" style="height: 204px; width: 200px"></div>
+                        <p style="text-align: center"> {{ souper.nickName ? souper.nickName : "???" }} </p>
+                        <div style="text-align: center"  disabled="true">
+                            <button [ngStyle]="{'color': OponentsData(match).ready ? 'green' : 'red'}" disabled mat-button> {{ OponentsData(match).ready ? 'Připraven' : 'Čeká se na hráče!' }} </button>
+                        </div>
+                    </div>
+                </mat-grid-tile>
+            </mat-grid-list>
+        </mat-card>
+        <app-tabs>
+        </app-tabs>
+    </span>
+</span>
 
-            <h2> VS </h2>
-        </mat-grid-tile>
-        <mat-grid-tile style="border-left: 1px solid #5696ff"
-                       [colspan]="3"
-                       [rowspan]="3">
-
-            <div *ngIf=" true || (souper$ | async) as souper">
-                <img *ngIf="(oponentsPhotoUrl$ | async) as photoUrl" style="background-color: cadetblue" height="200px" width="200px" [src]="photoUrl"/>
-                <div *ngIf="!(oponentsPhotoUrl$ | async)" id="noImage" style="height: 200px; width: 200px"></div>
-                <p style="text-align: center"> {{ souper.displayName }} </p>
-                <div style="text-align: center"  disabled="true">
-                    <button style="color: #000;" disabled mat-button> {{ souper.ready ? 'Připraven' : 'Čeká se na hráče!' }} </button>
-                </div>
-            </div>
-        </mat-grid-tile>
-    </mat-grid-list>
-</mat-card>
-
-<app-tabs>
-
-</app-tabs>

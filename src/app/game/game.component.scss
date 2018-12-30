@@ -1,0 +1,30 @@
+app-game-menu {
+    position: absolute;
+    left: -50px;
+    width: 50px;
+    height: 100%;
+    background: red;
+}
+
+app-oponents-board, app-my-board {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
+    padding: 10px;
+}
+
+.neviditelny {
+    display: none;
+}
+
+#game {
+    position: relative;
+    height: inherit;
+}
+
+.relative-container {
+    position: relative;
+    width: 100%;
+    height: inherit;
+}

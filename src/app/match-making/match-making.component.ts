@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {BreakpointObserver} from "@angular/cdk/layout";
 import {Breakpointy} from "../model/breakpoints.model";
 import {LoginService} from '../services/login.service';
+import {Hrac} from '../model/hrac.model';
 
 export enum stavyMatche { inLobby = 0, inGame = 1, inMenu = 2}
 
@@ -18,13 +19,12 @@ export class MatchMakingComponent extends Breakpointy implements OnInit {
       public ls: LoginService
   ) {
       super(breakpointObserver);
-      if(this.ls.userData !== null)
+      this.ls.userDataObservable.subscribe((data : Hrac) =>{
+          this.stavy = data.lastMatch.state;
+
           if(this.ls.userData.lastMatch !== null)
               this.stavy = this.ls.userData.lastMatch.state;
-      else this.stavy = 2;
-
-      this.ls.userDataObservable.subscribe(data =>{
-        this.stavy = data.lastMatch.state;
+          else this.stavy = 2;
       });
   }
   ngOnInit(){

@@ -1,0 +1,42 @@
+<div id="board-container" #cont>
+    <div id="container">
+        <img id="lod"
+             style="display: none"
+             [ngStyle]="{
+                'width' :  (2.5 * (cont.offsetHeight) / 21) + 'px',
+                'top' :  ( (7 - 3) * (cont.offsetHeight) / 21) + 'px',
+                'left' : ( (1 - 1) * (cont.offsetHeight) / 21) + 'px',
+                'transform': 'rotate(135deg) translateY(-50%)'
+             }"
+             src="https://firebasestorage.googleapis.com/v0/b/lode-1835e.appspot.com/o/Lode%2FletadlovaLod%20.svg?alt=media&token=1c323a75-39fb-4bcf-83f1-3b5e181bd9d4" alt="aa">
+    </div>
+    <mat-grid-list #list cols="21" class="content" gutterSize="0" [ngStyle]="{'width' : getHeight()}" rowHeight="1:1">
+        <mat-grid-tile *ngFor="let pole of poles" colspan="1" rowspan="1"
+                       (click)="poleclicked(pole)"
+                       (contextmenu)="poleRightClick(pole)"
+                       (mouseenter)="hover(pole.pozice)"
+                       [ngClass]="{
+                       'lod' : pole.state === 2,
+                       'chyba-pokladani': pole.state === 6
+                       }"
+                       style="overflow: visible">
+            <img *ngIf="lod.pozice.x === pole.pozice.x && lod.pozice.y === pole.pozice.y"
+                 style="z-index: 1001; pointer-events: none; position:absolute;"
+                 [ngStyle]="{
+                 'width' :  floor(1.3 * (cont.offsetHeight) / 210) * 10 + (lod.smer % 2) * 5 + 2 + 'px',
+                 'transform': 'rotate('+ lod.smer * 45 +'deg) translateY(-50%) translateX('+ lod.posun.vert +'px)'}"
+                 src="https://firebasestorage.googleapis.com/v0/b/lode-1835e.appspot.com/o/Lode%2Fkriznik-zkraceny.svg?alt=media&token=49a613e3-05c9-415a-9fb0-56e657332939" alt="aa">
+
+            <img *ngIf="pole.lod != null"
+                 style="z-index: 1000; pointer-events: none; position: absolute"
+                 [ngStyle]="{
+                 'width' :  floor(1.3 * (cont.offsetHeight) / 210) * 10 + (pole.lod.smer % 2) * 5 + 2 + 'px',
+                 'transform': 'rotate('+ pole.lod.smer * 45 +'deg) translateY(-50%) translateX('+ pole.lod.posun.vert +'px)'}"
+                 [src]="pole.lod.imgUrl" alt="aa">
+            <div
+                class="hoverer">
+                {{ pole.pozice.x + ':' + pole.pozice.y  }}
+            </div>
+        </mat-grid-tile>
+    </mat-grid-list>
+</div>
