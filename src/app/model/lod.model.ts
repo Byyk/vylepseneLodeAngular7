@@ -4,9 +4,10 @@ export class LodModel {
     public smer: Smer;
     constructor(
         public data: LodData,
-        public pozice: Point
+        public pozice: Point,
+        smer?: Smer
     ){
-        this.smer = Smer.Nahoru;
+        this.smer = smer != null ? smer : Smer.Nahoru;
     }
     get castiLode() : CastLode[] {
         const casti = [];
@@ -21,13 +22,21 @@ export class LodModel {
         return {
             imgUrl: this.data.imgUrl,
             smer: this.smer,
-            posun: this.posun
+            posun: this.posun,
+            width: this.data.width
         };
     }
     get posun() : {vert: number, hori: number}{
         const data = this.data.posun[this.smer % 2 === 0 ? 'rovne' : 'sikmo'];
         if(data == null) return {vert: 0, hori: 0};
         return data;
+    }
+    get doc() : LodDoc {
+        return {
+            LodDataUid: this.data.uid,
+            pozice: this.pozice,
+            smer: this.smer
+        };
     }
     public clone(): LodModel {
         const lod = new LodModel(this.data, this.pozice);
@@ -46,12 +55,15 @@ export class LodData {
         public casti: Casti,
         public posun: Posun,
         public imgUrl: string,
-        public osmismerna: boolean
+        public rank: number,
+        public osmismerna: boolean,
+        public width: number
     ){}
 }
 export interface LodViewData {
     imgUrl: string;
     smer: Smer;
+    width: number;
     posun: {vert: number, hori: number} | null;
 }
 export interface LodDoc {

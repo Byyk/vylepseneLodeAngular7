@@ -6,7 +6,7 @@
 
     mat-grid-list {
         background: blue;
-
+        cursor: none;
         mat-grid-tile {
             &:hover {
                 background: #fff5;

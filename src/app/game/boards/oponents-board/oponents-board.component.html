@@ -1,5 +1,5 @@
 <div id="board-container">
     <mat-grid-list #list cols="21" class="content" gutterSize="0" [ngStyle]="{'width' : getHeight()}" rowHeight="1:1">
-        <mat-grid-tile *ngFor="let pole of poles" colspan="1" rowspan="1" (click)="poleclicked(pole)"> {{ pole.pozice.x + ':' + pole.pozice.y }} </mat-grid-tile>
+        <mat-grid-tile *ngFor="let pole of poles" colspan="1" rowspan="1" (click)="poleclicked(pole)"> </mat-grid-tile>
     </mat-grid-list>
 </div>

@@ -13,6 +13,7 @@ export interface Match {
     messagingToken: string;
     creatorReady: boolean;
     oponentReady: boolean;
+    rozmisteno: boolean;
 }
 export class MatchPrivateData {
     uid: string;

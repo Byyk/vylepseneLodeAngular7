@@ -1,7 +1,60 @@
+#main-container {
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 50px;
+    background: #00aced;
+    z-index: 10;
+    box-shadow: 5px 0 #10A6DF;
+    box-sizing: border-box;
+}
+
+#secondary-container {
+    position: absolute;
+    left: 50px;
+    top: 0;
+    bottom: 0;
+    width: 205px;
+    padding: 5px 5px 0 5px;
+    background: #20A1D2;
+    z-index: 9;
+
+    .seznam {
+        padding-left: 5px;
+
+        .head {
+            line-height: 20px;
+            background: #18799E;
+            color: #E6E6E8;
+            cursor: default;
+        }
+
+        app-game-menu-item {
+            display: block;
+            position: relative;
+            width: calc(100% - 5px);
+            height: 50px;
+            line-height: 50px;
+            padding-left: 5px;
+            color: #3b3b44;
+            cursor: pointer;
+
+            &.active {
+                background: #1485B0;
+            }
+
+            &:hover {
+                background: #1C8DB8;
+            }
+        }
+    }
+}
 .action {
     position: relative;
     width: 50px;
     height: 50px;
+    cursor: pointer;
 
     fa-icon, img {
         position: absolute;
@@ -27,7 +80,6 @@
         background: #fff5;
     }
 }
-
 .separator {
     height: 10px;
     width: 50px;

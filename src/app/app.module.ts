@@ -49,6 +49,8 @@ import { GameComponent } from './game/game.component';
 import { GameMenuComponent } from './game/game-menu/game-menu.component';
 import { OponentsBoardComponent } from './game/boards/oponents-board/oponents-board.component';
 import { MyBoardComponent } from './game/boards/my-board/my-board.component';
+import { GameMenuItemComponent } from './game/game-menu/game-menu-item/game-menu-item.component';
+import { GameMenuItemTierComponent } from './game/game-menu/game-menu-item/game-menu-item-tier/game-menu-item-tier.component';
 
 @NgModule({
     declarations: [
@@ -80,7 +82,9 @@ import { MyBoardComponent } from './game/boards/my-board/my-board.component';
         GameComponent,
         GameMenuComponent,
         OponentsBoardComponent,
-        MyBoardComponent
+        MyBoardComponent,
+        GameMenuItemComponent,
+        GameMenuItemTierComponent
     ],
     imports: [
         BrowserModule,

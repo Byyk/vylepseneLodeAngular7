@@ -1,18 +1,20 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
-import {GameService} from '../../../services/game.service';
+import {ChangeDetectorRef, Component, OnInit, ViewChild} from '@angular/core';
+import {GameService, Mode} from '../../../services/game.service';
 import {Point, PoleModel, StavPole} from '../../../model/pole.model';
 import {LodModel} from '../../../model/lod.model';
-import {forEach} from '@angular/router/src/utils/collection';
 import {AngularFirestore} from '@angular/fire/firestore';
+import {BehaviorSubject} from 'rxjs';
 
 @Component({
-  selector: 'app-my-board',
-  templateUrl: './my-board.component.html',
-  styleUrls: ['./my-board.component.scss']
+    selector: 'app-my-board',
+    templateUrl: './my-board.component.html',
+    styleUrls: ['./my-board.component.scss'],
 })
 export class MyBoardComponent implements OnInit {
     public poles = new Array<PoleModel>();
     public lod: LodModel;
+    public boardEntered = new BehaviorSubject(false);
+    private shipsLoaded = new BehaviorSubject(false);
     private CanPolozit = false;
     private polozeneLode : LodModel[] = [];
 
@@ -20,69 +22,41 @@ export class MyBoardComponent implements OnInit {
     public list;
 
     constructor(
-        public gs: GameService,
-        public afs: AngularFirestore
-    ) {
-        for(let i = 0; i < 21; i++) {
-            for(let j = 0; j < 21; j++){
-                this.poles.push({pozice: {x: j, y: i}, state: StavPole.more});
-            }
-        }
-        this.lod = new LodModel({
-            uid: 'uid',
-            name: 'jmeno',
-            trida: 'trida',
-            casti: {
-                rovne: [
-                    {x: 0, y: 0},
-                    {x: 0, y: -1}, {x: 1, y: -1},
-                    {x: 0, y: -2}, {x: 1, y: -2},
-                    {x: 0, y: -3}, {x: 1, y: -3},
-                    {x: 0, y: -4}, {x: 1, y: -4},
-                    {x: 0, y: -5}
-                ],
-                sikmo: [
-                    {x: 0, y: -0}, {x: 1, y: 0},
-                    {x: 1, y: -1}, {x: 2, y: -1},
-                    {x: 2, y: -2}, {x: 3, y: -2},
-                    {x: 2, y: -3},{x: 3, y: -3}, {x: 4, y: -3},
-                    {x: 4, y: -4},
-                ]
-            },
-            posun: {
-                rovne: {
-                    hori: -10,
-                    vert: 5
-                },
-                sikmo: {
-                    hori: 0,
-                    vert: 10
-                }
-            },
-            imgUrl: "https://firebasestorage.googleapis.com/v0/b/lode-1835e.appspot.com/o/Lode%2Fkriznik-zkraceny.svg?alt=media&token=49a613e3-05c9-415a-9fb0-56e657332939",
-            osmismerna: true,
-        }, { x: 1, y: 1 });
-    }
+        public gs: GameService
+    ) {}
 
     getHeight(){
         return this.list._element.nativeElement.offsetHeight + 'px';
     }
     poleclicked(pole: PoleModel) {
-        if(!this.CanPolozit) return;
+        if(!this.CanPolozit || this.gs.Limits[this.lod.data.rank] === 0) return;
         this.polozeneLode.push(this.lod.clone());
+        this.gs.lodPolozina(this.lod.data.rank, this.polozeneLode.map(lod => lod.doc));
+        this.View();
     }
     poleRightClick(pole: PoleModel){
         this.lod.otocSe();
-        this.pokladaniView();
+        this.View();
         return false;
     }
     hover(point: Point){
-        this.lod.pozice = point;
-        this.pokladaniView();
+        if(this.lod != null)
+            this.lod.pozice = point;
+        this.View();
+    }
+    View(){
+        this.poles.forEach(pole => pole.state = 1);
+        if(this.gs.ActualMode === Mode.PlaceShips)
+            this.pokladaniView();
+        this.poles.forEach(pole => pole.lod = undefined);
+        this.polozeneLode.forEach(lod => {
+            this.poles[Point.toNumber(lod.pozice)].lod = lod.viewData;
+            lod.castiLode.forEach(cast => {
+                this.poles[Point.toNumber(cast.pozice)].state = StavPole.lod;
+            });
+        });
     }
     pokladaniView(){
-        this.poles.forEach(pole => pole.state = 1);
-        this.View();
         const casti = this.lod.castiLode;
         const spravne = [];
         casti.forEach(cast => {
@@ -112,18 +86,38 @@ export class MyBoardComponent implements OnInit {
         }
         return prekriv;
     }
-
-    View(){
-        this.poles.forEach(pole => pole.lod = undefined);
-        this.polozeneLode.forEach(lod => {
-            this.poles[Point.toNumber(lod.pozice)].lod = lod.viewData;
-            lod.castiLode.forEach(cast => {
-                this.poles[Point.toNumber(cast.pozice)].state = StavPole.lod;
-            });
-        });
+    boardLeaveEnter(entered: boolean) {
+        this.boardEntered.next(entered);
+        this.poles.forEach(pole => pole.state = 1);
+        this.View();
+    }
+    ZkotrolujPole(pole: PoleModel, lod: LodModel) : boolean     {
+        if(lod == null) return false;
+        return lod.pozice.x === pole.pozice.x && lod.pozice.y === pole.pozice.y;
     }
     ngOnInit() {
+        for(let i = 0; i < 21; i++) {
+            for(let j = 0; j < 21; j++){
+                this.poles.push({pozice: {x: j, y: i}, state: StavPole.more});
+            }
+        }
+        this.gs.shipSelected.subscribe(data => {
+            this.lod.data = data;
+        });
+        this.gs.ships$.subscribe(lode => {
+            this.lod = new LodModel(lode[0], { x: 1, y: 1 });
+            this.shipsLoaded.next(true);
+            this.gs.placedShips.subscribe(_lode => {
+                console.log(_lode);
+                this.polozeneLode = _lode.map(lod => new LodModel(lode.find(value => value.uid === lod.LodDataUid), lod.pozice, lod.smer));
+                for(const lod of this.polozeneLode) {
+                    this.gs.lodPolozina(lod.data.rank);
+                }
+            });
+        });
+        this.View();
     }
+
     floor = Math.floor;
 
 }

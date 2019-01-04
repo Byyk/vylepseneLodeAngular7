@@ -1,22 +1,34 @@
-<div class="action" matTooltip="Vystřilit z děla" (click)="gs.swapField()">
-    <img [ngClass]="{'neviditelny' : (gs.actualField | async) !== 1}"
-        src="https://firebasestorage.googleapis.com/v0/b/lode-1835e.appspot.com/o/attack.png?alt=media&token=3f8b4f23-dca7-4f8c-8287-cff9ea276420" alt="protivníkovo pole">
-    <img  [ngClass]="{'neviditelny' : (gs.actualField | async) !== 2}"
-          src="https://firebasestorage.googleapis.com/v0/b/lode-1835e.appspot.com/o/defenc.png?alt=media&token=033f27b8-6822-456e-aada-5f3daa9289ef" alt="moje pole">
+<div id="main-container">
+    <div class="action" matTooltip="Vystřilit z děla" (click)="gs.swapField()">
+        <img [ngClass]="{'neviditelny' : (gs.actualField | async) !== 1}"
+             src="https://firebasestorage.googleapis.com/v0/b/lode-1835e.appspot.com/o/attack.png?alt=media&token=3f8b4f23-dca7-4f8c-8287-cff9ea276420" alt="protivníkovo pole">
+        <img  [ngClass]="{'neviditelny' : (gs.actualField | async) !== 2}"
+              src="https://firebasestorage.googleapis.com/v0/b/lode-1835e.appspot.com/o/defenc.png?alt=media&token=033f27b8-6822-456e-aada-5f3daa9289ef" alt="moje pole">
+    </div>
+    <div class="separator"></div>
+    <div class="action" [ngClass]="{'active': (gs.actualMode | async) === 1}" matTooltip="Vystřilit z děla" (click)="gs.changeMode(1)">
+        <fa-icon [icon]="faRocket" size="2x"></fa-icon>
+    </div>
+    <div class="action" [ngClass]="{'active': (gs.actualMode | async) === 2}" matTooltip="Vystřelit z těžkého děla" (click)="gs.changeMode(2)">
+        <fa-icon [icon]="faBolt" size="2x"></fa-icon>
+    </div>
+    <div class="action" [ngClass]="{'active': (gs.actualMode | async) === 3}" matTooltip="Použít speciální schopnost kapitána" (click)="gs.changeMode(3)">
+        <fa-icon [icon]="faSuperPowers" size="2x"></fa-icon>
+    </div>
+    <div class="action" [ngClass]="{'active': (gs.actualMode | async) === 4}" matTooltip="Pohybovat loděmi" (click)="gs.changeMode(4)">
+        <fa-icon [icon]="faCompass" size="2x"></fa-icon>
+    </div>
+    <div class="action" [ngClass]="{'active': (gs.actualMode | async) === 5}" matTooltip="Zachránit posádku" (click)="gs.changeMode(5)">
+        <fa-icon [icon]="faLifeRing" size="2x"></fa-icon>
+    </div>
 </div>
-<div class="separator"></div>
-<div class="action" [ngClass]="{'active': (gs.actualMode | async) === 1}" matTooltip="Vystřilit z děla" (click)="gs.changeMode(1)">
-    <fa-icon [icon]="faRocket" size="2x"></fa-icon>
-</div>
-<div class="action" [ngClass]="{'active': (gs.actualMode | async) === 2}" matTooltip="Vystřelit z těžkého děla" (click)="gs.changeMode(2)">
-    <fa-icon [icon]="faBolt" size="2x"></fa-icon>
-</div>
-<div class="action" [ngClass]="{'active': (gs.actualMode | async) === 3}" matTooltip="Použít speciální schopnost kapitána" (click)="gs.changeMode(3)">
-    <fa-icon [icon]="faSuperPowers" size="2x"></fa-icon>
-</div>
-<div class="action" [ngClass]="{'active': (gs.actualMode | async) === 4}" matTooltip="Pohybovat loděmi" (click)="gs.changeMode(4)">
-    <fa-icon [icon]="faCompass" size="2x"></fa-icon>
-</div>
-<div class="action" [ngClass]="{'active': (gs.actualMode | async) === 5}" matTooltip="Zachránit posádku" (click)="gs.changeMode(5)">
-    <fa-icon [icon]="faLifeRing" size="2x"></fa-icon>
+<div id="secondary-container" *ngIf="!(gs.rozmisteno | async)">
+    <div *ngFor="let lode of (ships$ | async)" class="seznam">
+        <app-game-menu-item
+            *ngFor="let lod of lode"
+            (click)="gs.selectShip(lod)"
+            [rank]="lod.rank">
+            {{ lod.name }}
+        </app-game-menu-item>
+    </div>
 </div>

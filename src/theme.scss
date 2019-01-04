@@ -1,0 +1,41 @@
+@import '~@angular/material/theming';
+@include mat-core();
+
+$mat-my-blue: (
+    100: #DFF2FA,
+    200: #BFE5F5,
+    300: #9FD8F0,
+    400: #80CBEB,
+    500: #60BDE6,
+    600: #40B0E1,
+    700: #20A3DC,
+    800: #0096d7,
+    contrast: (
+        100: #5b5a70,
+        200: #5b5a70,
+        300: #5b5a70,
+    )
+);
+
+$mat-my-purple: (
+    100: #F5DFFA,
+    200: #EABFF5,
+    300: #E09FF0,
+    400: #D580EB,
+    500: #CB60E6,
+    600: #C140E1,
+    700: #B620DC,
+    800: #AC00D7,
+    contrast: (
+        100: #051B00,
+        200: #0B3600,
+        300: #105100,
+        400: #156C00,
+        500: #1B8600,
+        600: #20A100,
+        700: #26BC00,
+        800: #2BD700
+    )
+);
+
+$my-theme-primary: mat-palette($mat-my-blue);

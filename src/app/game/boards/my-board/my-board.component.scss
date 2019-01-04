@@ -6,6 +6,7 @@
 
     mat-grid-list {
         background: blue;
+        cursor: none;
 
         .lod {
             background: red;
@@ -23,16 +24,12 @@
         left: 0;
         right: 0;
     }
-}
-#container {
-    position: relative;
-    width: 0;
-    height: 0;
-    #lod {
-        position: absolute;
-        width: 100px;
-        z-index: 1000;
-        pointer-events: none;
+
+    #rozmistovaniMenu {
+        position: relative;
+        width: 200px;
+        height: 100%;
+        background: black;
     }
 }
 
@@ -43,7 +40,6 @@
     top: 0;
     left: 0;
     z-index: 999;
-
     text-align: center;
 
     &:hover {

@@ -2,7 +2,14 @@ import { Component, OnInit } from '@angular/core';
 import {faBolt, faRocket} from '@fortawesome/free-solid-svg-icons';
 import {faSuperpowers} from '@fortawesome/free-brands-svg-icons';
 import {faCompass, faLifeRing} from '@fortawesome/free-regular-svg-icons';
-import {GameService} from '../../services/game.service';
+import {GameService, Limits} from '../../services/game.service';
+import {LodData, LodDoc} from '../../model/lod.model';
+import {Observable} from 'rxjs';
+import {map} from 'rxjs/operators';
+
+export interface PlaceData {
+    [key: string] : LodDoc;
+}
 
 @Component({
   selector: 'app-game-menu',
@@ -16,9 +23,20 @@ export class GameMenuComponent implements OnInit {
     faCompass = faCompass;
     faLifeRing = faLifeRing;
 
+    ships$: Observable<[LodData[]]>;
+
     constructor(
         public gs: GameService
-    ) { }
+    ) {
+        this.ships$ = gs.ships$.pipe(map(lode => {
+            const _lode: [LodData[]] = [[]];
+            for(const lod of lode) {
+                if(_lode[lod.rank - 1] === undefined) _lode[lod.rank - 1] = [lod];
+                else _lode[lod.rank - 1].push(lod);
+            }
+            return _lode;
+        }));
+    }
 
     ngOnInit() {
     }
