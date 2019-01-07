@@ -1,0 +1,4 @@
+<img *ngIf="_icon == null; else icon" [src]="tab.icon" alt="aa"/>
+<ng-template #icon>
+    <fa-icon [icon]="_icon" size="2x"></fa-icon>
+</ng-template>

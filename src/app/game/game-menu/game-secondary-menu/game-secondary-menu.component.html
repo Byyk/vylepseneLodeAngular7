@@ -1,0 +1,9 @@
+<div class="container">
+    <app-game-secondary-menu-item
+        *ngFor="let item of docdata | async | keyvalue"
+        [tab]="item.value"
+        (click)="clicked(item.value)"
+        [matTooltip]="item.value.name">
+    </app-game-secondary-menu-item>
+</div>
+
