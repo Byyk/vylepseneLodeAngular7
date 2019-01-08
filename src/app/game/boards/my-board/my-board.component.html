@@ -17,7 +17,7 @@
                  [src]="lod.data.imgUrl" alt="aa">
 
             <img *ngIf="pole.lod != null"
-                 style="z-index: 1000; pointer-events: none; position: absolute"
+                 style="z-index: 1000; pointer-events: none; position: absolute; zoom: 90%"
                  [ngStyle]="{
                  'width' :  floor(pole.lod.width * (cont.offsetHeight) / 210) * 10 + (pole.lod.smer % 2) * 5 + 2 + 'px',
                  'transform': 'rotate('+ pole.lod.smer * 45 +'deg) translateY(-50%) translateX('+ pole.lod.posun.vert +'px)'}"

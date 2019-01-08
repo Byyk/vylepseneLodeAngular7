@@ -38,7 +38,6 @@ export class GameService {
     Limits: Limits;
 
     private _shipSelected = new BehaviorSubject<LodData>(null);
-    private SelectedShip: LodData;
     public shipSelected: Observable<LodData>;
 
     private _placedShips = new BehaviorSubject<LodDoc[]>([]);
@@ -113,7 +112,7 @@ export class GameService {
                 this._actualField.next(Field.enemyField);
                 break;
             case Mode.SpecAbility:
-                // Todo spec abi imp
+                // Todo spec abil. impl.
                 console.error('spec. abil. není implementována!');
                 break;
             case Mode.MoveShips:
