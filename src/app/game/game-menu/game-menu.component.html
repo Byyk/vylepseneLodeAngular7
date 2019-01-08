@@ -6,20 +6,15 @@
               src="https://firebasestorage.googleapis.com/v0/b/lode-1835e.appspot.com/o/defenc.png?alt=media&token=033f27b8-6822-456e-aada-5f3daa9289ef" alt="moje pole">
     </div>
     <div class="separator"></div>
-    <div class="action" [ngClass]="{'active': (gs.actualMode | async) === 1}" matTooltip="Vystřilit z děla" (click)="gs.changeMode(1)">
-        <fa-icon [icon]="faRocket" size="2x"></fa-icon>
-    </div>
-    <div class="action" [ngClass]="{'active': (gs.actualMode | async) === 2}" matTooltip="Vystřelit z těžkého děla" (click)="gs.changeMode(2)">
-        <fa-icon [icon]="faBolt" size="2x"></fa-icon>
-    </div>
-    <div class="action" [ngClass]="{'active': (gs.actualMode | async) === 3}" matTooltip="Použít speciální schopnost kapitána" (click)="gs.changeMode(3)">
-        <fa-icon [icon]="faSuperPowers" size="2x"></fa-icon>
-    </div>
-    <div class="action" [ngClass]="{'active': (gs.actualMode | async) === 4}" matTooltip="Pohybovat loděmi" (click)="gs.changeMode(4)">
-        <fa-icon [icon]="faCompass" size="2x"></fa-icon>
-    </div>
-    <div class="action" [ngClass]="{'active': (gs.actualMode | async) === 5}" matTooltip="Zachránit posádku" (click)="gs.changeMode(5)">
-        <fa-icon [icon]="faLifeRing" size="2x"></fa-icon>
+    <div *ngFor="let tab of menu.tabs; let i = index" #tabs class="action" [ngClass]="{'active': (gs.actualMode | async) === i + 1}">
+        <fa-icon [icon]="tab.icon" size="2x"></fa-icon>
+        <div class="hoverer" [matTooltip]="tab.toolTip"></div>
+        <app-game-secondary-menu
+            *ngIf="isNotNull(tab.doc)"
+            [menudoc]="tab.doc"
+            [index]="i"
+            (click)="secondaryMenuClicked()">
+        </app-game-secondary-menu>
     </div>
 </div>
 <div id="secondary-container" *ngIf="!(gs.rozmisteno | async)">

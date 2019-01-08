@@ -8,6 +8,7 @@ import {AngularFirestore} from '@angular/fire/firestore';
 import {map, skip} from 'rxjs/operators';
 import {HttpClient} from '@angular/common/http';
 import {environment} from '../../environments/environment';
+import {AbilityData} from '../model/my-board.model';
 
 export interface Limits {
     [key: number]: number;
@@ -43,12 +44,17 @@ export class GameService {
     private _placedShips = new BehaviorSubject<LodDoc[]>([]);
     public placedShips: Observable<LodDoc[]>;
 
+    private _actualWeapon = new BehaviorSubject<AbilityData>(null);
+    public actualWeapon: Observable<AbilityData>;
+
     constructor(
         public mms: MatchMakingService,
         private ls: LoginService,
         private afs: AngularFirestore,
-        private http: HttpClient
+        private http: HttpClient,
     ) {
+        this.actualWeapon = this._actualWeapon.asObservable();
+
         this.actualField = this._actualField.asObservable();
         this.actualField.subscribe((data) => this.ActualField = data);
 
@@ -151,6 +157,9 @@ export class GameService {
     }
     public selectShip(data:LodData) {
         this._shipSelected.next(data);
+    }
+    public setWeapon(wea: AbilityData){
+        this._actualWeapon.next(wea);
     }
 }
 

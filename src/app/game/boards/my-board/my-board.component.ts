@@ -1,8 +1,7 @@
-import {ChangeDetectorRef, Component, OnInit, ViewChild} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {GameService, Mode} from '../../../services/game.service';
 import {Point, PoleModel, StavPole} from '../../../model/pole.model';
 import {LodModel} from '../../../model/lod.model';
-import {AngularFirestore} from '@angular/fire/firestore';
 import {BehaviorSubject} from 'rxjs';
 
 @Component({
@@ -39,9 +38,16 @@ export class MyBoardComponent implements OnInit {
         this.View();
         return false;
     }
-    hover(point: Point){
+    hover(pole: PoleModel){
         if(this.lod != null)
-            this.lod.pozice = point;
+            this.lod.pozice = pole.pozice;
+        this.poles.forEach(_pole => _pole.hover = false);
+        if(pole.dalsicasti != null){
+            for(const cast of pole.dalsicasti) {
+                this.poles.find(_pole => Point.Equals(_pole.pozice, cast.pozice)).hover = true;
+            }
+        }
+        console.log('1');
         this.View();
     }
     View(){
@@ -51,8 +57,10 @@ export class MyBoardComponent implements OnInit {
         this.poles.forEach(pole => pole.lod = undefined);
         this.polozeneLode.forEach(lod => {
             this.poles[Point.toNumber(lod.pozice)].lod = lod.viewData;
-            lod.castiLode.forEach(cast => {
+            const castiLode = lod.castiLode;
+            castiLode.forEach(cast => {
                 this.poles[Point.toNumber(cast.pozice)].state = StavPole.lod;
+                this.poles[Point.toNumber(cast.pozice)].dalsicasti = castiLode;
             });
         });
     }
@@ -98,7 +106,7 @@ export class MyBoardComponent implements OnInit {
     ngOnInit() {
         for(let i = 0; i < 21; i++) {
             for(let j = 0; j < 21; j++){
-                this.poles.push({pozice: {x: j, y: i}, state: StavPole.more});
+                this.poles.push({pozice: {x: j, y: i}, state: StavPole.more, hover: false});
             }
         }
         this.gs.shipSelected.subscribe(data => {
@@ -115,43 +123,10 @@ export class MyBoardComponent implements OnInit {
                 }
             });
         });
+
         this.View();
     }
 
     floor = Math.floor;
 
 }
-
-/*
-*
-        {
-            uid: 'uid',
-            name: 'jmeno',
-            trida: 'trida',
-            casti: {
-                rovne: [
-                    {x: 0, y: 0}, {x: 1, y: 0}, {x: -1, y: -1},
-                    {x: 0, y: -1}, {x: 1, y: -1}, {x: -1, y: -2},
-                    {x: 0, y: -2}, {x: 1, y: -2}, {x: -1, y: -3},
-                    {x: 0, y: -3}, {x: 1, y: -3}, {x: -1, y: -4},
-                    {x: 0, y: -4}, {x: 1, y: -4}, {x: -1, y: -5},
-                    {x: 0, y: -5}, {x: 1, y: -5}, {x: -1, y: -5},
-                    {x: 0, y: -5}, {x: 1, y: -5}, {x: -1, y: -6},
-                    {x: 0, y: -6}, {x: 1, y: -6}, {x: 0, y: -7},
-                    {x: 1, y: -7},
-                ],
-                sikmo: [
-                    {x: 0, y: 0}, {x: 1, y: 0}, {x: 2, y: 0},
-                    {x: 0, y: -1}, {x: 1, y: -1}, {x: 2, y: -1},
-                    {x: 3, y: -1}, {x: 0, y: -2}, {x: 1, y: -2},
-                    {x: 2, y: -2}, {x: 3, y: -2}, {x: 4, y: -2},
-                    {x: 1, y: -3}, {x: 2, y: -3}, {x: 3, y: -3},
-                    {x: 4, y: -3}, {x: 2, y: -4}, {x: 3, y: -4},
-                    {x: 4, y: -4}, {x: 5, y: -4}, {x: 3, y: -5},
-                    {x: 4, y: -5}, {x: 5, y: -5}, {x: 6, y: -5},
-                    { x: 5, y: -6}
-                ]
-            },
-            imgUrl: "https://firebasestorage.googleapis.com/v0/b/lode-1835e.appspot.com/o/Lode%2FletadlovaLod%20.svg?alt=media&token=1c323a75-39fb-4bcf-83f1-3b5e181bd9d4",
-        }, { x: 1, y: 1 }
-* */

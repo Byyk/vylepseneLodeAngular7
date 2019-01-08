@@ -1,0 +1,18 @@
+.container {
+    display: inline-block;
+    height: 50px;
+    pointer-events: all;
+    background: #10A6DF;
+
+    app-game-secondary-menu-item {
+        width: 50px;
+        height: 50px;
+        display: inline-block;
+        position: relative;
+        color: #5b5a70;
+
+        &:hover {
+            background: #4CBCE7;
+        }
+    }
+}

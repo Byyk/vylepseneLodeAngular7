@@ -23,13 +23,12 @@ export class AppComponent implements AfterViewInit, OnInit{
      if(environment.production) setInterval(() => console.clear(), 1000);
   }
 
-    ngAfterViewInit(): void {
-      if(environment.production)
-          console.clear();
+  ngAfterViewInit(): void {
+        if(environment.production)
+            console.clear();
   }
 
-    ngOnInit(): void {
-
+    ngOnInit(){
     }
 
     isCookiesEnabled(): boolean {

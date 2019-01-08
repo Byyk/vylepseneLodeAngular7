@@ -1,9 +1,11 @@
-import {LodViewData} from './lod.model';
+import {CastLode, LodViewData} from './lod.model';
 
 export interface PoleModel {
     pozice: Point;
     state: StavPole;
+    dalsicasti?: CastLode[];
     lod?: LodViewData;
+    hover?: boolean;
 }
 
 export class Point {
