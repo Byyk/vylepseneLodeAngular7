@@ -1,6 +1,6 @@
 <div id="board-container" #cont>
     <mat-grid-list (mouseleave)="boardLeaveEnter(false)" (mouseenter)="boardLeaveEnter(true)" #list cols="21" class="content" gutterSize="0" [ngStyle]="{'width' : getHeight()}" rowHeight="1:1">
-        <mat-grid-tile *ngFor="let pole of poles" colspan="1" rowspan="1"
+        <mat-grid-tile *ngFor="let pole of poles" [colspan]="1" [rowspan]="1"
                        (click)="poleclicked(pole)"
                        (contextmenu)="poleRightClick(pole)"
                        (mouseenter)="hover(pole)"
