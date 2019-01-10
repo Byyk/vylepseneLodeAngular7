@@ -1,18 +1,8 @@
 #board-container {
     position: relative;
-    height: 100%;
-    display: inline-block;
+    height: inherit;
+    display: block;
     text-align: center;
-
-    mat-grid-list {
-        background: blue;
-        -webkit-touch-callout: none;
-        -webkit-user-select: none;
-        -khtml-user-select: none;
-        -moz-user-select: none;
-        -ms-user-select: none;
-        user-select: none;
-    }
 
     .content {
         position: absolute;
@@ -20,6 +10,18 @@
         bottom: 0;
         left: 0;
         right: 0;
+
+        background: blue;
+        -webkit-touch-callout: none;
+        -webkit-user-select: none;
+        -khtml-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+
+        .tile {
+            position: absolute;
+        }
     }
 }
 

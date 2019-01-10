@@ -47,7 +47,6 @@ export class MyBoardComponent implements OnInit {
                 this.poles.find(_pole => Point.Equals(_pole.pozice, cast.pozice)).hover = true;
             }
         }
-        console.log('1');
         this.View();
     }
     View(){
