@@ -8,7 +8,7 @@
     <div class="separator"></div>
     <div *ngFor="let tab of menu.tabs; let i = index" #tabs class="action" [ngClass]="{'active': (gs.actualMode | async) === i + 1}">
         <fa-icon [icon]="tab.icon" size="2x"></fa-icon>
-        <div class="hoverer" [matTooltip]="tab.toolTip"></div>
+        <div class="events-handler" [matTooltip]="tab.toolTip"></div>
         <app-game-secondary-menu
             *ngIf="isNotNull(tab.doc)"
             [menudoc]="tab.doc"

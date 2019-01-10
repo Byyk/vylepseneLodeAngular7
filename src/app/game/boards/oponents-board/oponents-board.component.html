@@ -1,27 +1,20 @@
 <div id="board-container">
-     <!-- <mat-grid-list
-             (mouseleave)="mouseout()"
-             #list cols="21" class="content"
-             gutterSize="0"
-             [ngStyle]="{'width' : getHeight()}"
-             rowHeight="1:1">
-        <mat-grid-tile *ngFor="let pole of poles" colspan="1" rowspan="1" (mouseover)="hover(pole)" (click)="poleclicked(pole)">
-            <div class="hoverer" [ngClass]="{'hover': pole.hover}"></div>
-        </mat-grid-tile>
-    </mat-grid-list> -->
-
-    <div (mouseleave)="mouseout()" #list
-         class="content" [ngStyle]="{'width' : getHeight()}"
-         (mousemove)="hover($event)">
+    <div #list
+         (click)="clicked($event)"
+         class="content" [style.width.px]="getHeight()">
         <div class="tile"
              *ngFor="let pole of poles"
-             [ngStyle]="{
-                'top': pole.pozice.y * getHeight() / 21,
-                'left': pole.pozice.x * getHeight() / 21,
-                'width': getHeight() / 21,
-                'height': getHeight() / 21
+             [style.top.px]="pole.pozice.y * 905 / 21"
+             [style.left.px]="pole.pozice.x * 905 / 21"
+             [style.width.px]="905 / 21"
+             [style.height.px]="905 / 21"
+             [ngClass]="{
+                'hover': pole.state === stavPole.hover,
+                'poskozenaLod':  pole.state === stavPole.poskozenaLod,
+                'zasazeneMore':  pole.state === stavPole.zasazeneMore,
+                'znicenaLod': pole.state === stavPole.znicenaLod
              }">
-
         </div>
     </div>
+    <div (mousemove)="hover($event)" (mouseleave)="mouseout()" class="events-handler" [style.width.px]="getHeight()">  </div>
 </div>

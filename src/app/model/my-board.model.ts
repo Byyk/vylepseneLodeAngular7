@@ -16,7 +16,6 @@ export interface MyBoardData {
     limits?: Limits;
     rozmisteno?: boolean;
 }
-
 export class MenuModel {
     constructor(
         public tabs: Tab[]
@@ -28,17 +27,14 @@ export interface Tab {
     subMenu?: Observable<DOCData>;
     doc?: string;
 }
-
 export interface DOCData {
     [key: string]: AbilityData | number;
     cooldown: number;
     type: number;
 }
-
 export interface OnlyDocData {
     [key: string]: AbilityData;
 }
-
 export interface AbilityData {
     cost: number;
     name: string;

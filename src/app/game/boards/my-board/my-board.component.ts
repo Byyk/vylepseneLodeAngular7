@@ -1,8 +1,9 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {GameService, Mode} from '../../../services/game.service';
 import {Point, PoleModel, StavPole} from '../../../model/pole.model';
 import {LodModel} from '../../../model/lod.model';
 import {BehaviorSubject} from 'rxjs';
+import {filter} from 'rxjs/operators';
 
 @Component({
     selector: 'app-my-board',
@@ -12,55 +13,61 @@ import {BehaviorSubject} from 'rxjs';
 export class MyBoardComponent implements OnInit {
     public poles = new Array<PoleModel>();
     public lod: LodModel;
+    public stavPole = StavPole;
     public boardEntered = new BehaviorSubject(false);
     private shipsLoaded = new BehaviorSubject(false);
     private CanPolozit = false;
     private polozeneLode : LodModel[] = [];
+    private pointLastHovered: Point = {x: -1, y: -1};
 
     @ViewChild('list')
-    public list;
+    public list: ElementRef<HTMLDivElement>;
 
     constructor(
         public gs: GameService
     ) {}
 
     getHeight(){
-        return this.list._element.nativeElement.offsetHeight + 'px';
+        return this.list.nativeElement.offsetHeight;
     }
-    poleclicked(pole: PoleModel) {
+    clicked(event: MouseEvent) {
         if(!this.CanPolozit || this.gs.Limits[this.lod.data.rank] === 0) return;
         this.polozeneLode.push(this.lod.clone());
         this.gs.lodPolozina(this.lod.data.rank, this.polozeneLode.map(lod => lod.doc));
         this.View();
     }
-    poleRightClick(pole: PoleModel){
+    poleRightClick(){
         this.lod.otocSe();
         this.View();
         return false;
     }
-    hover(pole: PoleModel){
+    hover(event: MouseEvent){
+        const x = Math.floor(event.offsetX / this.list.nativeElement.offsetHeight * 21);
+        const y = Math.floor(event.offsetY / this.list.nativeElement.offsetHeight * 21);
+
+        if (this.pointLastHovered.x === x && this.pointLastHovered.y === y ) return;
+        this.pointLastHovered.x = x;
+        this.pointLastHovered.y = y;
+
         if(this.lod != null)
-            this.lod.pozice = pole.pozice;
-        this.poles.forEach(_pole => _pole.hover = false);
-        if(pole.dalsicasti != null){
-            for(const cast of pole.dalsicasti) {
-                this.poles.find(_pole => Point.Equals(_pole.pozice, cast.pozice)).hover = true;
-            }
-        }
+            this.lod.pozice = {x: x, y: y};
         this.View();
+        return false;
     }
     View(){
-        this.poles.forEach(pole => pole.state = 1);
+        this.poles = [];
         if(this.gs.ActualMode === Mode.PlaceShips)
             this.pokladaniView();
-        this.poles.forEach(pole => pole.lod = undefined);
+
+        this.poles.push({state: StavPole.hover, pozice: {x: this.pointLastHovered.x, y: this.pointLastHovered.y}});
+
+
         this.polozeneLode.forEach(lod => {
-            this.poles[Point.toNumber(lod.pozice)].lod = lod.viewData;
             const castiLode = lod.castiLode;
             castiLode.forEach(cast => {
-                this.poles[Point.toNumber(cast.pozice)].state = StavPole.lod;
-                this.poles[Point.toNumber(cast.pozice)].dalsicasti = castiLode;
+                this.poles.push({pozice: cast.pozice, state: StavPole.lod, dalsicasti: castiLode});
             });
+            this.poles.push({state: StavPole.none, pozice: lod.pozice, lod: lod.viewData});
         });
     }
     pokladaniView(){
@@ -73,12 +80,13 @@ export class MyBoardComponent implements OnInit {
         });
         if(spravne.length !== casti.length || this.zjistiPrekriVy()) {
             this.CanPolozit = false;
-            spravne.forEach(spr => this.poles[Point.toNumber(spr)].state = StavPole.chybaPokladani);
+            spravne.forEach(spr => this.poles.push({state: StavPole.chybaPokladani, pozice: spr}));
         }
         else {
             this.CanPolozit = true;
-            spravne.forEach(spr => this.poles[Point.toNumber(spr)].state = StavPole.lod);
+            spravne.forEach(spr => this.poles.push({state: StavPole.lod, pozice: spr}));
         }
+        this.poles.push({pozice: this.lod.pozice, state: StavPole.none, lod: this.lod.viewData});
     }
     private zjistiPrekriVy() : boolean{
         let prekriv;
@@ -103,26 +111,19 @@ export class MyBoardComponent implements OnInit {
         return lod.pozice.x === pole.pozice.x && lod.pozice.y === pole.pozice.y;
     }
     ngOnInit() {
-        for(let i = 0; i < 21; i++) {
-            for(let j = 0; j < 21; j++){
-                this.poles.push({pozice: {x: j, y: i}, state: StavPole.more, hover: false});
-            }
-        }
         this.gs.shipSelected.subscribe(data => {
             this.lod.data = data;
         });
         this.gs.ships$.subscribe(lode => {
             this.lod = new LodModel(lode[0], { x: 1, y: 1 });
             this.shipsLoaded.next(true);
-            this.gs.placedShips.subscribe(_lode => {
-                console.log(_lode);
+            this.gs.placedShips.pipe(filter(_lode => _lode != null)).subscribe(_lode => {
                 this.polozeneLode = _lode.map(lod => new LodModel(lode.find(value => value.uid === lod.LodDataUid), lod.pozice, lod.smer));
                 for(const lod of this.polozeneLode) {
                     this.gs.lodPolozina(lod.data.rank);
                 }
             });
         });
-
         this.View();
     }
 

@@ -4,7 +4,13 @@
     display: inline-block;
     text-align: center;
 
-    mat-grid-list {
+    .content {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+
         background: blue;
         -webkit-touch-callout: none;
         -webkit-user-select: none;
@@ -13,21 +19,52 @@
         -ms-user-select: none;
         user-select: none;
 
-        .lod {
-            background: red;
-        }
+        .tile {
+            position: absolute;
+            z-index: 999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
 
-        .chyba-pokladani {
-            background: #922f;
+            &.lod {
+                background: red;
+            }
+
+            &.chyba-pokladani {
+                background: #922f;
+            }
+
+            &.hover {
+                background: #fff7;
+                z-index: 1001;
+            }
+
+            &.chybaPokladani {
+
+            }
+
+            &.poskozenaLod {
+
+            }
+
+            &.zasazeneMore {
+
+            }
+
+            &.znicenaLod {
+
+            }
         }
     }
 
-    .content {
+    .events-handler {
         position: absolute;
+        z-index: 1002;
         top: 0;
-        bottom: 0;
         left: 0;
+        bottom: 0;
         right: 0;
+        pointer-events: visible;
     }
 
     #rozmistovaniMenu {
@@ -36,24 +73,4 @@
         height: 100%;
         background: black;
     }
-}
-
-.hoverer{
-    width: 100%;
-    height: 100%;
-    position: absolute;
-    top: 0;
-    left: 0;
-    z-index: 999;
-    text-align: center;
-
-    &:hover {
-        background: #fff7;
-        z-index: 1001;
-    }
-}
-
-.hover {
-    background: #fff7;
-    z-index: 1001;
 }

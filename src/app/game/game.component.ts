@@ -1,4 +1,4 @@
-import {AfterViewChecked, ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
 import {GameService} from '../services/game.service';
 
 @Component({
@@ -7,7 +7,7 @@ import {GameService} from '../services/game.service';
     styleUrls: ['./game.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class GameComponent implements OnInit, AfterViewChecked {
+export class GameComponent implements OnInit {
 
     constructor(
         public gs: GameService

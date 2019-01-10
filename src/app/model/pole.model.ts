@@ -5,7 +5,7 @@ export interface PoleModel {
     state: StavPole;
     dalsicasti?: CastLode[];
     lod?: LodViewData;
-    hover?: boolean;
+    hover?: boolean; // Todo odebrat!
 }
 
 export class Point {
@@ -37,5 +37,7 @@ export enum StavPole {
     poskozenaLod = 3,
     znicenaLod = 4,
     zasazeneMore = 5,
-    chybaPokladani = 6
+    chybaPokladani = 6,
+    hover = 7,
+    none = 8,
 }
