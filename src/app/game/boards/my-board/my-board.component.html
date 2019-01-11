@@ -1,41 +1,14 @@
 <div id="board-container" #cont>
-    <!--<mat-grid-list (mouseleave)="boardLeaveEnter(false)" (mouseenter)="boardLeaveEnter(true)" #list cols="21" class="content" gutterSize="0" [ngStyle]="{'width' : getHeight()}" rowHeight="1:1">
-        <mat-grid-tile *ngFor="let pole of poles" [colspan]="1" [rowspan]="1"
-                       (click)="poleclicked(pole)"
-                       (contextmenu)="poleRightClick(pole)"
-                       (mouseenter)="hover(pole)"
-                       [ngClass]="{
-                       'lod' : pole.state === 2,
-                       'chyba-pokladani': pole.state === 6
-                       }"
-                       style="overflow: visible">
-            <img *ngIf="ZkotrolujPole(pole, lod) && (boardEntered | async) && (gs.actualMode | async) == 6"
-                 style="z-index: 1001; pointer-events: none; position:absolute;"
-                 [ngStyle]="{
-                'width' :  floor(lod.data.width * (cont.offsetHeight) / 210) * 10 + (lod.smer % 2) * 5 + 2 + 'px',
-                'transform': 'rotate('+ lod.smer * 45 +'deg) translateY(-50%) translateX('+ lod.posun.vert +'px)'}"
-                 [src]="lod.data.imgUrl" alt="aa">
-
-            <img *ngIf="pole.lod != null"
-                 style="z-index: 1000; pointer-events: none; position: absolute; zoom: 90%"
-                 [ngStyle]="{
-                 'width' :  floor(pole.lod.width * (cont.offsetHeight) / 210) * 10 + (pole.lod.smer % 2) * 5 + 2 + 'px',
-                 'transform': 'rotate('+ pole.lod.smer * 45 +'deg) translateY(-50%) translateX('+ pole.lod.posun.vert +'px)'}"
-                 [src]="pole.lod.imgUrl" alt="aa">
-            <div class="hoverer" [ngClass]="{ 'hover' : pole.hover }">  </div>
-        </mat-grid-tile>
-    </mat-grid-list>-->
-
     <div #list
          class="content" [style.width.px]="getHeight()">
         <div class="tile"
              *ngFor="let pole of poles"
-             [style.top.px]="pole.pozice.y * 905 / 21"
-             [style.left.px]="pole.pozice.x * 905 / 21"
-             [style.width.px]="905 / 21"
-             [style.height.px]="905 / 21"
+             [style.top.px]="pole.pozice.y * getHeight() / 21"
+             [style.left.px]="pole.pozice.x * getHeight() / 21"
+             [style.width.px]="getHeight() / 21"
+             [style.height.px]="getHeight() / 21"
              [ngClass]="{
-                'hover' : pole.state === stavPole.hover,
+                'hover' : pole.state === stavPole.hover && (boardEntered | async),
                 'lod': pole.state === stavPole.lod,
                 'chyba-pokladani': pole.state === stavPole.chybaPokladani,
                 'poskozenaLod':  pole.state === stavPole.poskozenaLod,
@@ -45,7 +18,7 @@
             <img *ngIf="pole.lod != null"
                  style="z-index: 1000; pointer-events: none; position: absolute; zoom: 90%"
                  [ngStyle]="{
-                 'width' :  floor(pole.lod.width * (cont.offsetHeight) / 210) * 10 + (pole.lod.smer % 2) * 5 + 2 + 'px',
+                 'width' : floor(pole.lod.width * getHeight() / 210) * 10 + (pole.lod.smer % 2) * 5 + 2 + 'px',
                  'transform': 'rotate('+ pole.lod.smer * 45 +'deg) translateY(-50%) translateX('+ pole.lod.posun.vert +'px)'}"
                  [src]="pole.lod.imgUrl" alt="aa">
         </div>
@@ -54,6 +27,8 @@
         (contextmenu)="poleRightClick()"
         (click)="clicked($event)"
         (mousemove)="hover($event)"
+        (mouseleave)="boardLeaveEnter(false)"
+        (mouseenter)="boardLeaveEnter(true)"
         class="events-handler" [style.width.px]="getHeight()">
     </div>
 </div>

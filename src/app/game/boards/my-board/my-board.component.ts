@@ -51,7 +51,9 @@ export class MyBoardComponent implements OnInit {
 
         if(this.lod != null)
             this.lod.pozice = {x: x, y: y};
+
         this.View();
+
         return false;
     }
     View(){
@@ -61,7 +63,6 @@ export class MyBoardComponent implements OnInit {
 
         this.poles.push({state: StavPole.hover, pozice: {x: this.pointLastHovered.x, y: this.pointLastHovered.y}});
 
-
         this.polozeneLode.forEach(lod => {
             const castiLode = lod.castiLode;
             castiLode.forEach(cast => {
@@ -69,6 +70,14 @@ export class MyBoardComponent implements OnInit {
             });
             this.poles.push({state: StavPole.none, pozice: lod.pozice, lod: lod.viewData});
         });
+
+        const pole = this.poles.find(_pole => _pole.pozice.x === this.pointLastHovered.x &&
+            _pole.pozice.y === this.pointLastHovered.y && _pole.state === StavPole.lod);
+
+        if(pole != null && pole.dalsicasti != null)
+            for(const cast of pole.dalsicasti) {
+                this.poles.push({pozice: Point.Sum(cast.pozice, pole.pozice), state: StavPole.hover});
+            }
     }
     pokladaniView(){
         const casti = this.lod.castiLode;
@@ -88,7 +97,7 @@ export class MyBoardComponent implements OnInit {
         }
         this.poles.push({pozice: this.lod.pozice, state: StavPole.none, lod: this.lod.viewData});
     }
-    private zjistiPrekriVy() : boolean{
+    zjistiPrekriVy() : boolean{
         let prekriv;
         for(let i = 0; i < this.polozeneLode.length; i++){
             const lod = this.polozeneLode[i];
@@ -103,8 +112,6 @@ export class MyBoardComponent implements OnInit {
     }
     boardLeaveEnter(entered: boolean) {
         this.boardEntered.next(entered);
-        this.poles.forEach(pole => pole.state = 1);
-        this.View();
     }
     ZkotrolujPole(pole: PoleModel, lod: LodModel) : boolean     {
         if(lod == null) return false;

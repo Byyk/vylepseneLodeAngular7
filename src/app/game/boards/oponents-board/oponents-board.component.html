@@ -4,10 +4,10 @@
          class="content" [style.width.px]="getHeight()">
         <div class="tile"
              *ngFor="let pole of poles"
-             [style.top.px]="pole.pozice.y * 905 / 21"
-             [style.left.px]="pole.pozice.x * 905 / 21"
-             [style.width.px]="905 / 21"
-             [style.height.px]="905 / 21"
+             [style.top.px]="pole.pozice.y * getHeight() / 21"
+             [style.left.px]="pole.pozice.x * getHeight() / 21"
+             [style.width.px]="getHeight() / 21"
+             [style.height.px]="getHeight() / 21"
              [ngClass]="{
                 'hover': pole.state === stavPole.hover,
                 'poskozenaLod':  pole.state === stavPole.poskozenaLod,
