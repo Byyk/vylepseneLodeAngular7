@@ -67,7 +67,8 @@ export class GameService {
             if(!data) this._actualMode.next(Mode.PlaceShips);
             else {
                 this.ls.userloaded.subscribe(loaded => {
-                    if(loaded) this.afs.doc(`Matches/${this.ls.userData.lastMatch.lastMatchUid}/Lode/${this.ls.userData.lastMatch.creator ? 'creator' : 'opponent'}`)
+                    if(loaded && this.ls.userData.lastMatch.lastMatchUid !== "")
+                        this.afs.doc(`Matches/${this.ls.userData.lastMatch.lastMatchUid}/Lode/${this.ls.userData.lastMatch.creator ? 'creator' : 'opponent'}`)
                         .get().pipe(map(lode => {
                             if(lode.data() == null) return null;
                             return lode.data().lode as LodDoc[];
@@ -94,7 +95,7 @@ export class GameService {
         this.shipSelected = this._shipSelected.asObservable().pipe(skip(1));
 
         ls.userloaded.subscribe((data: boolean) => {
-            if(data)
+            if(data && this.ls.userData.lastMatch.lastMatchUid !== "")
                 this.mms.getMyMatch().subscribe((match : Match) => {
                     if(this.Rozmisteno !== match.rozmisteno)
                         this._rozmisteno.next(match.rozmisteno);

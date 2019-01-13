@@ -22,15 +22,13 @@ export class Pozice {
     return this._x;
   }
   set x(value: number) {
-    value = Math.floor(value);
-    this._x = value;
+    this._x = Math.floor(value);
   }
   get y(): number {
     return this._y;
   }
   set y(value: number) {
-    value = Math.floor(value);
-    this._y = value;
+    this._y = Math.floor(value);
   }
 }
 

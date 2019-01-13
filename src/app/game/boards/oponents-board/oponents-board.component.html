@@ -16,5 +16,5 @@
              }">
         </div>
     </div>
-    <div (mousemove)="hover($event)" (mouseleave)="mouseout()" class="events-handler" [style.width.px]="getHeight()">  </div>
+    <div (mousemove)="hover($event)" (click)="clicked($event)" (mouseleave)="mouseout()" class="events-handler" [style.width.px]="getHeight()">  </div>
 </div>

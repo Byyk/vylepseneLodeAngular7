@@ -61,8 +61,6 @@ export class MyBoardComponent implements OnInit {
         if(this.gs.ActualMode === Mode.PlaceShips)
             this.pokladaniView();
 
-        this.poles.push({state: StavPole.hover, pozice: {x: this.pointLastHovered.x, y: this.pointLastHovered.y}});
-
         this.polozeneLode.forEach(lod => {
             const castiLode = lod.castiLode;
             castiLode.forEach(cast => {
@@ -76,8 +74,9 @@ export class MyBoardComponent implements OnInit {
 
         if(pole != null && pole.dalsicasti != null)
             for(const cast of pole.dalsicasti) {
-                this.poles.push({pozice: Point.Sum(cast.pozice, pole.pozice), state: StavPole.hover});
+                this.poles.push({pozice: cast.pozice, state: StavPole.hover});
             }
+        else this.poles.push({state: StavPole.hover, pozice: {x: this.pointLastHovered.x, y: this.pointLastHovered.y}});
     }
     pokladaniView(){
         const casti = this.lod.castiLode;

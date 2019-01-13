@@ -1,5 +1,5 @@
 <div id="main-container">
-    <div class="action" matTooltip="Vystřilit z děla" (click)="gs.swapField()">
+    <div class="action" [matTooltip]="(gs.actualField | async) === 1 ? 'Útok' : 'Obrana'" (click)="gs.swapField()">
         <img [ngClass]="{'neviditelny' : (gs.actualField | async) !== 1}"
              src="https://firebasestorage.googleapis.com/v0/b/lode-1835e.appspot.com/o/attack.png?alt=media&token=3f8b4f23-dca7-4f8c-8287-cff9ea276420" alt="protivníkovo pole">
         <img  [ngClass]="{'neviditelny' : (gs.actualField | async) !== 2}"

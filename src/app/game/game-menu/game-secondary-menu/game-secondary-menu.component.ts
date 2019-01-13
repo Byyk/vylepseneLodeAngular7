@@ -43,8 +43,10 @@ export class GameSecondaryMenuComponent implements OnInit, AfterViewInit {
         );
     }
 
-    clicked(data: AbilityData){
+    clicked(data: AbilityData, key: string){
         this.gs.changeMode(this.index + 1);
+        data.supTyp = key;
+        data.typ = key.split('-')[0];
         this.gs.setWeapon(data);
     }
 }

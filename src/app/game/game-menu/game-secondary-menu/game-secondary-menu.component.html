@@ -2,7 +2,7 @@
     <app-game-secondary-menu-item
         *ngFor="let item of docdata | async | keyvalue"
         [tab]="item.value"
-        (click)="clicked(item.value)"
+        (click)="clicked(item.value, item.key)"
         [matTooltip]="item.value.name">
     </app-game-secondary-menu-item>
 </div>

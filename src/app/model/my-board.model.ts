@@ -40,4 +40,6 @@ export interface AbilityData {
     name: string;
     icon: string;
     pattern: Point[];
+    typ: string;
+    supTyp: string;
 }
