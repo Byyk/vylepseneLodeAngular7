@@ -11,7 +11,7 @@
         left: 0;
         right: 0;
 
-        background: blue;
+        background: #fff5;
         -webkit-touch-callout: none;
         -webkit-user-select: none;
         -khtml-user-select: none;
@@ -27,7 +27,7 @@
             justify-content: center;
 
             &.lod {
-                background: red;
+                background: #00B303;
             }
 
             &.chyba-pokladani {
@@ -35,7 +35,7 @@
             }
 
             &.hover {
-                background: #fff7;
+                background: #fff4;
                 z-index: 1001;
             }
 

@@ -1,0 +1,58 @@
+.sidenav-container {
+  height: 100%;
+
+  .sidenav {
+    width: 200px;
+  }
+}
+
+.mat-toolbar.mat-primary {
+  position: sticky;
+  top: 0;
+}
+
+#navbar {
+  z-index: 5000;
+}
+
+.navbar-transparent {
+    background: #0000 !important;
+}
+
+mat-toolbar {
+  background: #0078CD !important;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+
+  button, a{
+    font-size: 1.05rem;
+    font-family: "Comic Sans MS", serif;
+    background: #00ABCD;
+    margin: 0 2px;
+
+    &#logout {
+      background: #CD2200;
+    }
+
+    &#hrat {
+      background: #45CD00;
+    }
+  }
+
+  #nadpis {
+    font-family: Vivaldi, serif;
+    font-size: 1.4rem !important;
+    cursor: pointer;
+    &:focus {
+      outline: 0;
+    }
+  }
+}
+
+app-match-making {
+  height: 100%;
+}

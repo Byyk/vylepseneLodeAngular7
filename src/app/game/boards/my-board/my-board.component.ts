@@ -112,7 +112,7 @@ export class MyBoardComponent implements OnInit {
     boardLeaveEnter(entered: boolean) {
         this.boardEntered.next(entered);
     }
-    ZkotrolujPole(pole: PoleModel, lod: LodModel) : boolean     {
+    ZkotrolujPole(pole: PoleModel, lod: LodModel) : boolean {
         if(lod == null) return false;
         return lod.pozice.x === pole.pozice.x && lod.pozice.y === pole.pozice.y;
     }
@@ -132,7 +132,5 @@ export class MyBoardComponent implements OnInit {
         });
         this.View();
     }
-
     floor = Math.floor;
-
 }

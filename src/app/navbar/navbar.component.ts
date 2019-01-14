@@ -11,7 +11,7 @@ import {MessagingService} from "../services/messaging.service";
 @Component({
   selector: 'app-navbar',
   templateUrl: './navbar.component.html',
-  styleUrls: ['./navbar.component.css']
+  styleUrls: ['./navbar.component.scss']
 })
 export class NavbarComponent implements OnInit {
   user$: Observable<User>;
@@ -25,6 +25,7 @@ export class NavbarComponent implements OnInit {
       private breakpointObserver: BreakpointObserver,
       public LService: LoginService,
       public router: Router,
+      private route: ActivatedRoute,
       private mms: MessagingService
   ) {}
 
@@ -33,11 +34,7 @@ export class NavbarComponent implements OnInit {
       this.router.events.subscribe((event: Event) => {
         if(event instanceof NavigationEnd)
           {
-            if(event.url === '/Login' || event.url === '/passwordreset'){
-              this.transparentNavbar = true;
-            } else {
-              this.transparentNavbar = false;
-            }
+            this.transparentNavbar = event.url === '/Login' || event.url === '/passwordreset';
           }
       });
       this.LService.afa.idToken.subscribe(token =>{
@@ -49,5 +46,8 @@ export class NavbarComponent implements OnInit {
   logout(){
     this.LService.logout();
     this.router.navigate(['/']);
+  }
+  goBack() {
+    window.history.back();
   }
 }
