@@ -3,7 +3,7 @@ import {GameService, Mode} from '../../../services/game.service';
 import {Point, PoleModel, StavPole} from '../../../model/pole.model';
 import {LodModel} from '../../../model/lod.model';
 import {BehaviorSubject} from 'rxjs';
-import {filter} from 'rxjs/operators';
+import {filter, first, last} from 'rxjs/operators';
 
 @Component({
     selector: 'app-my-board',
@@ -120,17 +120,20 @@ export class MyBoardComponent implements OnInit {
         this.gs.shipSelected.subscribe(data => {
             this.lod.data = data;
         });
-        this.gs.ships$.subscribe(lode => {
-            this.lod = new LodModel(lode[0], { x: 1, y: 1 });
-            this.shipsLoaded.next(true);
-            this.gs.placedShips.pipe(filter(_lode => _lode != null)).subscribe(_lode => {
-                this.polozeneLode = _lode.map(lod => new LodModel(lode.find(value => value.uid === lod.LodDataUid), lod.pozice, lod.smer));
-                for(const lod of this.polozeneLode) {
-                    this.gs.lodPolozina(lod.data.rank);
-                }
-            });
-        });
-        this.View();
+        if(this.gs.ships != null)
+            this.zpracujLode(this.gs.ships);
+        else this.gs.ships$.subscribe(this.zpracujLode);
     }
     floor = Math.floor;
+    private zpracujLode = lode => {
+        this.lod = new LodModel(lode[0], { x: 1, y: 1 });
+        this.shipsLoaded.next(true);
+        this.gs._placedShips.pipe(filter(_lode => _lode != null)).subscribe(_lode => {
+            this.polozeneLode = _lode.map(lod => new LodModel(lode.find(value => value.uid === lod.LodDataUid), lod.pozice, lod.smer));
+            for(const lod of this.polozeneLode) {
+                this.gs.lodPolozina(lod.data.rank);
+            }
+            this.View();
+        });
+    }
 }

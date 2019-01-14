@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild} from '@angular/core';
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild, AfterViewChecked} from '@angular/core';
 import {Point, PoleModel, StavPole} from '../../../model/pole.model';
 import {Field, GameService} from '../../../services/game.service';
 import {AbilityData} from '../../../model/my-board.model';
@@ -100,5 +100,4 @@ export class OponentsBoardComponent implements OnInit {
         this.poles = arr.concat(this.zasazenaPole);
         this.cdr.markForCheck();
     }
-
 }

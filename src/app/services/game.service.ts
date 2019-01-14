@@ -18,33 +18,33 @@ export interface Limits {
   providedIn: 'root'
 })
 export class GameService {
-    private _actualField = new BehaviorSubject<Field>(Field.playerField);
+    public _actualField = new BehaviorSubject<Field>(Field.playerField);
     public ActualField = Field.playerField;
     public actualField: Observable<Field>;
 
-    private _actualMode = new BehaviorSubject<Mode>(Mode.Nada);
+    public _actualMode = new BehaviorSubject<Mode>(Mode.Nada);
     public ActualMode = Mode.Nada;
     public actualMode: Observable<Mode>;
 
-    private _rozmisteno = new BehaviorSubject<boolean>(true);
+    public _rozmisteno = new BehaviorSubject<boolean>(true);
     public Rozmisteno = false;
     public rozmisteno: Observable<boolean>;
 
     ships$: Observable<LodData[]>;
     ships: LodData[];
 
-    private limits$: Observable<Limits>;
-    private _limits = new BehaviorSubject<Limits>({});
+    public limits$: Observable<Limits>;
+    public _limits = new BehaviorSubject<Limits>({});
     public limits: Observable<Limits>;
     Limits: Limits;
 
-    private _shipSelected = new BehaviorSubject<LodData>(null);
+    public _shipSelected = new BehaviorSubject<LodData>(null);
     public shipSelected: Observable<LodData>;
 
-    private _placedShips = new BehaviorSubject<LodDoc[]>([]);
+    public _placedShips = new BehaviorSubject<LodDoc[]>([]);
     public placedShips: Observable<LodDoc[]>;
 
-    private _actualWeapon = new BehaviorSubject<AbilityData>(null);
+    public _actualWeapon = new BehaviorSubject<AbilityData>(null);
     public actualWeapon: Observable<AbilityData>;
 
     constructor(
