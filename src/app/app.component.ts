@@ -3,6 +3,7 @@ import { MessagingService } from "./services/messaging.service";
 import { environment } from '../environments/environment';
 import {CookieService} from 'ngx-cookie-service';
 import {BehaviorSubject} from 'rxjs';
+import { detektorDevTools } from './model/devtools.event';
 
 @Component({
   selector: 'app-root',
@@ -17,10 +18,18 @@ export class AppComponent implements AfterViewInit, OnInit{
         public ms: MessagingService,
         public cs: CookieService
     ){
-    ms.getPermission();
-    ms.receiveMessage();
-    this.message = ms.currentMessage.asObservable();
-     if(environment.production) setInterval(() => console.clear(), 1000);
+        detektorDevTools();
+        ms.getPermission();
+        ms.receiveMessage();
+        this.message = ms.currentMessage.asObservable();
+        if(environment.production) setInterval(() => console.clear(), 1000);
+
+        window.addEventListener('devtoolschange', (e: any) => {
+            if(environment.production)
+                while (true){
+                    console.clear();
+                }
+        });
   }
 
   ngAfterViewInit(): void {

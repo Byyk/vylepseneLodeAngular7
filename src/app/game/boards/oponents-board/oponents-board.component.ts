@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild, AfterViewChecked} from '@angular/core';
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {Point, PoleModel, StavPole} from '../../../model/pole.model';
 import {Field, GameService} from '../../../services/game.service';
 import {AbilityData} from '../../../model/my-board.model';
@@ -6,6 +6,7 @@ import {filter, first} from 'rxjs/operators';
 import {HttpClient} from '@angular/common/http';
 import {environment} from '../../../../environments/environment';
 import {AngularFireAuth} from '@angular/fire/auth';
+import {LodDoc, LodModel} from '../../../model/lod.model';
 
 @Component({
     selector: 'app-oponents-board',
@@ -17,6 +18,7 @@ export class OponentsBoardComponent implements OnInit {
     public poles = new Array<PoleModel>();
     public stavPole = StavPole;
     public zasazenaPole: PoleModel[] = [];
+    private lode: LodModel[];
     private pointLastHovered: Point = {x: -1, y: -1};
     private showHover = false;
 
@@ -36,6 +38,14 @@ export class OponentsBoardComponent implements OnInit {
             filter(field => field === Field.enemyField),
             first()
         ).subscribe(() => this.cdr.markForCheck());
+        this.gs._enemyShips.subscribe((lode: LodDoc[]) => {
+            if(lode == null) return;
+            this.gs.ships$.subscribe(ships => {
+                this.lode = lode.map(lod => {
+                    return new LodModel(ships.find(ship => ship.uid === lod.LodDataUid), lod.pozice, lod.smer);
+                });
+            });
+        });
     }
     ngOnInit() {}
     getHeight(){
@@ -61,15 +71,23 @@ export class OponentsBoardComponent implements OnInit {
                 pozice: {x, y},
                 typ: this.actualRocket.typ,
                 subTyp: this.actualRocket.supTyp
-            }).subscribe((data: Point[]) => {
-                const zasahy = nezasazazena.map(point => ({pozice: point, state: StavPole.zasazeneMore}));
-                data.forEach(poskozenaCastLode => {
-                    zasahy.find((zasah => Point.Equals(zasah.pozice, poskozenaCastLode))).state = StavPole.poskozenaLod;
-                });
-                this.zasazenaPole = this.zasazenaPole.concat(zasahy);
-                this.view();
-            });
+            }).subscribe();
         });
+        this.zasazenaPole = this.zasazenaPole.concat(nezasazazena.map(pozice => {
+            let zasah = false;
+            this.lode.forEach(lod => {
+                lod.castiLode.forEach((cast) => {
+                    if(Point.Equals(cast.pozice, pozice)){
+                        zasah = true;
+                    }
+                });
+            });
+            if(zasah)
+                return {pozice: pozice, state: StavPole.poskozenaLod};
+            else
+                return {pozice: pozice, state: StavPole.zasazeneMore};
+        }));
+        this.view();
     }
     hover(event: MouseEvent) {
         const x = Math.floor(event.offsetX / this.list.nativeElement.offsetHeight * 21);

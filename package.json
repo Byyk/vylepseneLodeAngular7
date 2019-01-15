@@ -31,6 +31,7 @@
     "@fortawesome/free-regular-svg-icons": "^5.6.3",
     "@fortawesome/free-solid-svg-icons": "^5.6.3",
     "core-js": "^2.5.4",
+    "devtools-detect": "github:sindresorhus/devtools-detect",
     "firebase": "^5.5.9",
     "hammerjs": "^2.0.8",
     "ngx-cookie-service": "^2.0.2",
@@ -44,7 +45,7 @@
     "@angular/language-service": "~7.0.0",
     "@types/jasmine": "~2.8.8",
     "@types/jasminewd2": "~2.0.3",
-    "@types/node": "~8.9.4",
+    "@types/node": "^8.9.5",
     "codelyzer": "~4.5.0",
     "jasmine-core": "~2.99.1",
     "jasmine-spec-reporter": "~4.2.1",
@@ -56,7 +57,7 @@
     "protractor": "~5.4.0",
     "ts-node": "~7.0.0",
     "tslint": "~5.11.0",
-    "typescript": "~3.1.6",
-    "typedoc": "^0.14.0"
+    "typedoc": "^0.14.0",
+    "typescript": "~3.1.6"
   }
 }

@@ -47,12 +47,16 @@ export class GameService {
     public _actualWeapon = new BehaviorSubject<AbilityData>(null);
     public actualWeapon: Observable<AbilityData>;
 
+    public _enemyShips = new BehaviorSubject<LodDoc[]>(null);
+    public enemyShips: Observable<LodDoc[]>;
+
     constructor(
         public mms: MatchMakingService,
         private ls: LoginService,
         private afs: AngularFirestore,
         private http: HttpClient,
     ) {
+        this.enemyShips = this._enemyShips.pipe(skip(1));
         this.actualWeapon = this._actualWeapon.asObservable();
 
         this.actualField = this._actualField.asObservable();
@@ -67,12 +71,19 @@ export class GameService {
             if(!data) this._actualMode.next(Mode.PlaceShips);
             else {
                 this.ls.userloaded.subscribe(loaded => {
-                    if(loaded && this.ls.userData.lastMatch.lastMatchUid !== "")
+                    if(loaded && this.ls.userData.lastMatch.lastMatchUid !== ""){
                         this.afs.doc(`Matches/${this.ls.userData.lastMatch.lastMatchUid}/Lode/${this.ls.userData.lastMatch.creator ? 'creator' : 'opponent'}`)
-                        .get().pipe(map(lode => {
+                            .get().pipe(map(lode => {
                             if(lode.data() == null) return null;
                             return lode.data().lode as LodDoc[];
                         })).subscribe(lode => this._placedShips.next(lode));
+
+                        this.afs.doc(`Matches/${this.ls.userData.lastMatch.lastMatchUid}/Lode/${this.ls.userData.lastMatch.creator ? 'opponent' : 'creator'}`)
+                            .get().pipe(map(lode => {
+                            if(lode.data() == null) return null;
+                            return lode.data().lode as LodDoc[];
+                        })).subscribe(lode => this._enemyShips.next(lode));
+                    }
                 });
             }
         });
