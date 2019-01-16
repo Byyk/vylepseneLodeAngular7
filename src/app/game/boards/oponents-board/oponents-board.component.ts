@@ -2,7 +2,7 @@ import {ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, OnIni
 import {Point, PoleModel, StavPole} from '../../../model/pole.model';
 import {Field, GameService} from '../../../services/game.service';
 import {AbilityData} from '../../../model/my-board.model';
-import {filter, first} from 'rxjs/operators';
+import {filter, first, skip} from 'rxjs/operators';
 import {HttpClient} from '@angular/common/http';
 import {environment} from '../../../../environments/environment';
 import {AngularFireAuth} from '@angular/fire/auth';
@@ -15,7 +15,7 @@ import {LodDoc, LodModel} from '../../../model/lod.model';
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class OponentsBoardComponent implements OnInit {
-    public poles = new Array<PoleModel>();
+    public poles = [];
     public stavPole = StavPole;
     public zasazenaPole: PoleModel[] = [];
     private lode: LodModel[];
@@ -44,10 +44,33 @@ export class OponentsBoardComponent implements OnInit {
                 this.lode = lode.map(lod => {
                     return new LodModel(ships.find(ship => ship.uid === lod.LodDataUid), lod.pozice, lod.smer);
                 });
+                this.zpracujVysrely(this.gs.Vystrely);
+                const preskoc = this.gs.Vystrely.length === 0 ? 0 : 1;
+                this.gs.vystrely.pipe(skip(preskoc)).subscribe(this.zpracujVysrely);
             });
         });
     }
-    ngOnInit() {}
+    ngOnInit() {
+    }
+    private zpracujVysrely = (data) => {
+        if(data == null || this.lode == null) return;
+        this.zasazenaPole = this.zasazenaPole.concat(data.map(pozice => {
+            let zasah = false;
+            this.lode.forEach(lod => {
+                lod.castiLode.forEach((cast) => {
+                    if(Point.Equals(cast.pozice, pozice)){
+                        zasah = true;
+                    }
+                });
+            });
+            if(zasah)
+                return {pozice: pozice, state: StavPole.poskozenaLod};
+            else
+                return {pozice: pozice, state: StavPole.zasazeneMore};
+        }));
+        this.view();
+    }
+
     getHeight(){
         return this.list.nativeElement.offsetHeight;
     }
@@ -73,20 +96,7 @@ export class OponentsBoardComponent implements OnInit {
                 subTyp: this.actualRocket.supTyp
             }).subscribe();
         });
-        this.zasazenaPole = this.zasazenaPole.concat(nezasazazena.map(pozice => {
-            let zasah = false;
-            this.lode.forEach(lod => {
-                lod.castiLode.forEach((cast) => {
-                    if(Point.Equals(cast.pozice, pozice)){
-                        zasah = true;
-                    }
-                });
-            });
-            if(zasah)
-                return {pozice: pozice, state: StavPole.poskozenaLod};
-            else
-                return {pozice: pozice, state: StavPole.zasazeneMore};
-        }));
+        this.gs._vystrely.next(nezasazazena);
         this.view();
     }
     hover(event: MouseEvent) {
@@ -104,7 +114,7 @@ export class OponentsBoardComponent implements OnInit {
         this.view();
     }
     view() {
-        const arr = new Array<PoleModel>();
+        const arr = [];
         if(this.actualRocket != null && this.showHover)
             this.actualRocket.pattern.forEach(point => {
                 const soucetBodu = Point.Sum(point, this.pointLastHovered);

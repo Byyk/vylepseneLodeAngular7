@@ -9,6 +9,7 @@ import {map, skip} from 'rxjs/operators';
 import {HttpClient} from '@angular/common/http';
 import {environment} from '../../environments/environment';
 import {AbilityData} from '../model/my-board.model';
+import {Point} from "../model/pole.model";
 
 export interface Limits {
     [key: number]: number;
@@ -50,6 +51,10 @@ export class GameService {
     public _enemyShips = new BehaviorSubject<LodDoc[]>(null);
     public enemyShips: Observable<LodDoc[]>;
 
+    public _vystrely = new BehaviorSubject<Point[]>([]);
+    public vystrely: Observable<Point[]>;
+    public Vystrely: Point[] = [];
+
     constructor(
         public mms: MatchMakingService,
         private ls: LoginService,
@@ -57,6 +62,10 @@ export class GameService {
         private http: HttpClient,
     ) {
         this.enemyShips = this._enemyShips.pipe(skip(1));
+        this.vystrely = this._vystrely.asObservable();
+        this.vystrely.subscribe(strela => {
+            this.Vystrely = this.Vystrely.concat(strela);
+        });
         this.actualWeapon = this._actualWeapon.asObservable();
 
         this.actualField = this._actualField.asObservable();

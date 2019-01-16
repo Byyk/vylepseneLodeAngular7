@@ -1,3 +1,8 @@
+*, button{
+    font-family: "Comic Sans MS", serif;
+    font-size: 1.1rem;
+}
+
 .nadpis-small p{
     position: absolute !important;
     left: 28px !important;
