@@ -6,3 +6,11 @@ export class RaketaModel {
     public pattern: Point[];
     type: number;
 }
+
+export interface Raketa {
+    typ: 'Common' | 'Bombardment' | 'TrumpsAtomBlast';
+    subTyp: string;
+    cooldown: number;
+    type: number;
+    pattern: Point[];
+}

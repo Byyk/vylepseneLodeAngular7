@@ -6,6 +6,7 @@ import { map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import { User } from 'firebase';
 import {MessagingService} from "../services/messaging.service";
+import {faQuestion} from '@fortawesome/free-solid-svg-icons';
 
 
 @Component({
@@ -15,6 +16,8 @@ import {MessagingService} from "../services/messaging.service";
 })
 export class NavbarComponent implements OnInit {
   user$: Observable<User>;
+  profilePopUpVisible = false;
+  faQuestion = faQuestion;
 
   transparentNavbar = false;
 

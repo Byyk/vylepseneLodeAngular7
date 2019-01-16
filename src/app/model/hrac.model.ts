@@ -4,6 +4,7 @@ export interface Hrac {
     uid: string;
     nickName: string;
     lastMatch: LastMatch;
+    golds: number;
 }
 
 export interface LastMatch {

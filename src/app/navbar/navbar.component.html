@@ -1,43 +1,46 @@
 <mat-sidenav-container class="sidenav-container">
-  <mat-sidenav
-    #drawer
-    class="sidenav"
-    fixedInViewport="true"
-    [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'"
-    [mode]="(isHandset$ | async) ? 'over' : 'side'"
-    [opened]="false">
-    <mat-toolbar color="primary">Menu</mat-toolbar>
-    <mat-nav-list>
-      <a *ngIf="(isHandset$ | async) && (user$ | async) as user" mat-list-item routerLink="/profile" routerLinkActive="active">{{user.email}}</a>
-      <a mat-list-item href="#">Link 2</a>
-      <a mat-list-item href="#">Link 3</a>
-    </mat-nav-list>
-  </mat-sidenav>
-  <mat-sidenav-content>
-    <mat-toolbar id="navbar" color="primary" [ngClass]="{'navbar-transparent': transparentNavbar}">
-      <button
-        type="button"
-        aria-label="Toggle sidenav"
-        mat-icon-button
-        (click)="drawer.toggle()"
-        *ngIf="isHandset$ | async">
-        <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
-      </button>
-      <span id="nadpis" routerLink="/">Vylepšené lode</span>
-      <span style="flex-grow: 1;"></span>
-      <span *ngIf="(LService.userloaded | async) && user$ | async as user">
-        <a *ngIf="!(isHandset | async)" mat-button routerLink="/profile" routerLinkActive="active"> {{user.email}} </a>
-        <button mat-button routerLink="matchmaking" id="hrat"> hrát </button>
-        <button mat-button (click)="logout()" [tabindex]="-1" id="logout"> Logout </button>
-      </span>
-      <button mat-button *ngIf="!(user$ | async) && !transparentNavbar" style="margin-right: 10px" routerLink="/Login" routerLinkActive="active">
-        Login
-      </button>
-      <button mat-button *ngIf="transparentNavbar" style="margin-right: 10px" (click)="goBack()">
-        Zpět
-      </button>
-    </mat-toolbar>
-    <ng-content></ng-content>
-    <app-profile-pop-up [ngClass]="{'unvisible': false}"></app-profile-pop-up>
-  </mat-sidenav-content>
+    <mat-sidenav
+        #drawer
+        class="sidenav"
+        fixedInViewport="true"
+        [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'"
+        [mode]="(isHandset$ | async) ? 'over' : 'side'"
+        [opened]="false">
+        <mat-toolbar color="primary">Menu</mat-toolbar>
+        <mat-nav-list>
+            <a *ngIf="(isHandset$ | async) && (user$ | async) as user" mat-list-item routerLink="/profile"
+               routerLinkActive="active">{{user.email}}</a>
+            <a mat-list-item href="#">Link 2</a>
+            <a mat-list-item href="#">Link 3</a>
+        </mat-nav-list>
+    </mat-sidenav>
+    <mat-sidenav-content>
+        <mat-toolbar id="navbar" color="primary" [ngClass]="{'navbar-transparent': transparentNavbar}">
+            <button
+                type="button"
+                aria-label="Toggle sidenav"
+                mat-icon-button
+                (click)="drawer.toggle()"
+                *ngIf="isHandset$ | async">
+                <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
+            </button>
+            <span id="nadpis" routerLink="/">Vylepšené lode</span>
+            <span style="flex-grow: 1;"></span>
+            <span *ngIf="(LService.userloaded | async) && user$ | async as user">
+                <a *ngIf="!(isHandset | async)" mat-button (click)="profilePopUpVisible = !profilePopUpVisible"> {{user.email}} </a>
+                <button mat-button routerLink="matchmaking" id="hrat"> hrát </button>
+                <button mat-button (click)="logout()" [tabindex]="-1" id="logout"> Logout </button>
+            </span>
+            <button mat-button *ngIf="!(user$ | async) && !transparentNavbar" style="margin-right: 10px"
+                    routerLink="/Login" routerLinkActive="active">
+                Login
+            </button>
+            <button mat-button *ngIf="transparentNavbar" style="margin-right: 10px" (click)="goBack()">
+                Zpět
+            </button>
+        </mat-toolbar>
+        <ng-content></ng-content>
+        <app-profile-pop-up [(opened)]="profilePopUpVisible"
+                            [ngClass]="{'unvisible': !profilePopUpVisible}"></app-profile-pop-up>
+    </mat-sidenav-content>
 </mat-sidenav-container>

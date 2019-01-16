@@ -1,14 +1,18 @@
 <div id="pop-up-container">
-  <div *ngIf="(ls.afa.user | async) as user">
-    <div id="profile-image">
-      <img [src]="user.photoURL" alt="profile-img">
-    </div>
-    <div id="profile-data">
-      <span id="profile-user-name"> {{ user.displayName }} </span>
-      <span id="profile-email"> {{ user.email }} </span>
-    </div>
-    <button mat-mini-fab>
-      <fa-icon [icon]="faConsfig"></fa-icon>
-    </button>
-  </div>
+      <div *ngIf="(ls.afa.user | async) as user">
+            <div id="profile-image">
+                <img [src]="user.photoURL" alt="profile-img">
+            </div>
+            <div id="profile-data">
+                <span id="profile-user-name"> {{ user.displayName }} </span> <br/>
+                <span id="profile-email"> {{ user.email }} </span> <br/>
+                <div matTooltip="Buy Golds" *ngIf="(ls.userloaded | async)" id="golds">
+                    <fa-icon [icon]="faGolds"></fa-icon>
+                    {{ ls.userData.golds }}
+                </div>
+            </div>
+            <button mat-icon-button (click)="opened = false" routerLink="/profile" routerLinkActive="active">
+                <fa-icon [icon]="faConsfig"></fa-icon>
+            </button>
+      </div>
 </div>
