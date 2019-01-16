@@ -53,6 +53,7 @@ import { GameMenuItemComponent } from './game/game-menu/game-menu-item/game-menu
 import { GameMenuItemTierComponent } from './game/game-menu/game-menu-item/game-menu-item-tier/game-menu-item-tier.component';
 import { GameSecondaryMenuComponent } from './game/game-menu/game-secondary-menu/game-secondary-menu.component';
 import { GameSecondaryMenuItemComponent } from './game/game-menu/game-secondary-menu/game-secondary-menu-item/game-secondary-menu-item.component';
+import { ProfilePopUpComponent } from './profile-pop-up/profile-pop-up.component';
 
 @NgModule({
     declarations: [
@@ -88,7 +89,8 @@ import { GameSecondaryMenuItemComponent } from './game/game-menu/game-secondary-
         GameMenuItemComponent,
         GameMenuItemTierComponent,
         GameSecondaryMenuComponent,
-        GameSecondaryMenuItemComponent
+        GameSecondaryMenuItemComponent,
+        ProfilePopUpComponent
     ],
     imports: [
         BrowserModule,

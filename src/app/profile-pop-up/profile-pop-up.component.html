@@ -1,0 +1,14 @@
+<div id="pop-up-container">
+  <div *ngIf="(ls.afa.user | async) as user">
+    <div id="profile-image">
+      <img [src]="user.photoURL" alt="profile-img">
+    </div>
+    <div id="profile-data">
+      <span id="profile-user-name"> {{ user.displayName }} </span>
+      <span id="profile-email"> {{ user.email }} </span>
+    </div>
+    <button mat-mini-fab>
+      <fa-icon [icon]="faConsfig"></fa-icon>
+    </button>
+  </div>
+</div>
