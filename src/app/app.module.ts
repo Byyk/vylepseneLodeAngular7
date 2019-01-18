@@ -45,15 +45,8 @@ import { SliderComponent } from './match-making/lobby/tabs/tabs-nav/slider/slide
 import { ChatComponent } from './match-making/lobby/tabs/chat/chat.component';
 import { RequestsComponent } from './match-making/lobby/tabs/requests/requests.component';
 import {ChatMessageComponent} from './match-making/lobby/tabs/chat/message/message.component';
-import { GameComponent } from './game/game.component';
-import { GameMenuComponent } from './game/game-menu/game-menu.component';
-import { OponentsBoardComponent } from './game/boards/oponents-board/oponents-board.component';
-import { MyBoardComponent } from './game/boards/my-board/my-board.component';
-import { GameMenuItemComponent } from './game/game-menu/game-menu-item/game-menu-item.component';
-import { GameMenuItemTierComponent } from './game/game-menu/game-menu-item/game-menu-item-tier/game-menu-item-tier.component';
-import { GameSecondaryMenuComponent } from './game/game-menu/game-secondary-menu/game-secondary-menu.component';
-import { GameSecondaryMenuItemComponent } from './game/game-menu/game-secondary-menu/game-secondary-menu-item/game-secondary-menu-item.component';
 import { ProfilePopUpComponent } from './profile-pop-up/profile-pop-up.component';
+import {GameModule} from "./modules/game.module";
 
 @NgModule({
     declarations: [
@@ -82,14 +75,6 @@ import { ProfilePopUpComponent } from './profile-pop-up/profile-pop-up.component
         ChatComponent,
         RequestsComponent,
         ChatMessageComponent,
-        GameComponent,
-        GameMenuComponent,
-        OponentsBoardComponent,
-        MyBoardComponent,
-        GameMenuItemComponent,
-        GameMenuItemTierComponent,
-        GameSecondaryMenuComponent,
-        GameSecondaryMenuItemComponent,
         ProfilePopUpComponent
     ],
     imports: [
@@ -99,12 +84,13 @@ import { ProfilePopUpComponent } from './profile-pop-up/profile-pop-up.component
         HttpClientModule,
         FormsModule,
         ReactiveFormsModule,
+        GameModule,
         AngularFireModule.initializeApp(environment.firebase),
         AngularFirestoreModule,
         AngularFireAuthModule,
         AngularFireStorageModule,
         AngularFireMessagingModule,
-        AppFontAwesomeModule
+        AppFontAwesomeModule,
     ],
     providers: [
         CanDeactivateGuard,
