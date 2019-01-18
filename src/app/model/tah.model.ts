@@ -5,7 +5,7 @@ export interface TahModel {
     tahData: TahData; 
 }
 
-export type TahData = Utok | string;
+export type TahData = Utok;
 
 export class Utok {
     poziceZasahu: Point;

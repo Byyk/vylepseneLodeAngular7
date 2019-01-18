@@ -1,0 +1,410 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>vylepsene-lode-angular7 documentation</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
+	      <link rel="stylesheet" href="../styles/style.css">
+    </head>
+    <body>
+
+        <div class="navbar navbar-default navbar-fixed-top visible-xs">
+            <a href="../" class="navbar-brand">vylepsene-lode-angular7 documentation</a>
+            <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
+        </div>
+
+        <div class="xs-menu menu" id="mobile-menu">
+                <div id="book-search-input" role="search"><input type="text" placeholder="Type to search"></div>            <compodoc-menu></compodoc-menu>
+        </div>
+
+        <div class="container-fluid main">
+           <div class="row main">
+               <div class="hidden-xs menu">
+                   <compodoc-menu mode="normal"></compodoc-menu>
+               </div>
+               <!-- START CONTENT -->
+               <div class="content interface">
+                   <div class="content-data">
+
+
+
+
+
+
+
+
+
+
+
+
+<ol class="breadcrumb">
+  <li>Interfaces</li>
+  <li>Limits</li>
+</ol>
+
+<ul class="nav nav-tabs" role="tablist">
+        <li class="active">
+            <a href="#info" role="tab" id="info-tab" data-toggle="tab" data-link="info">Info</a>
+        </li>
+        <li >
+            <a href="#source" role="tab" id="source-tab" data-toggle="tab" data-link="source">Source</a>
+        </li>
+</ul>
+
+<div class="tab-content">
+    <div class="tab-pane fade active in" id="c-info">
+        <p class="comment">
+            <h3>File</h3>
+        </p>
+        <p class="comment">
+            <code>src/app/services/game.service.ts</code>
+        </p>
+
+
+
+
+
+            <section>
+    <h3 id="inputs">Indexable</h3>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <code>[key: number]:    <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+</code>
+                    </td>
+                </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="16" class="link-to-prism">src/app/services/game.service.ts:16</a></div>
+                            </td>
+                        </tr>
+            </tbody>
+        </table>
+</section>
+
+    </div>
+
+
+    <div class="tab-pane fade  tab-source-code" id="c-source">
+        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import {Injectable} from &#x27;@angular/core&#x27;;
+import {BehaviorSubject, Observable} from &#x27;rxjs&#x27;;
+import {MatchMakingService} from &#x27;./match-making.service&#x27;;
+import {Match} from &#x27;../model/match.model&#x27;;
+import {LoginService} from &#x27;./login.service&#x27;;
+import {LodData, LodDoc} from &#x27;../model/lod.model&#x27;;
+import {AngularFirestore} from &#x27;@angular/fire/firestore&#x27;;
+import {map, skip} from &#x27;rxjs/operators&#x27;;
+import {HttpClient} from &#x27;@angular/common/http&#x27;;
+import {environment} from &#x27;../../environments/environment&#x27;;
+import {AbilityData, DOCData} from &#x27;../model/my-board.model&#x27;;
+import {Point} from &#x27;../model/pole.model&#x27;;
+import {TahModel, Utok} from &#x27;../model/tah.model&#x27;;
+import {Raketa} from &#x27;../model/raketa.model&#x27;;
+
+export interface Limits {
+    [key: number]: number;
+}
+
+@Injectable({
+    providedIn: &#x27;root&#x27;
+})
+export class GameService {
+    public _actualField &#x3D; new BehaviorSubject&lt;Field&gt;(Field.playerField);
+    public ActualField &#x3D; Field.playerField;
+    public actualField: Observable&lt;Field&gt;;
+
+    public _actualMode &#x3D; new BehaviorSubject&lt;Mode&gt;(Mode.Nada);
+    public ActualMode &#x3D; Mode.Nada;
+    public actualMode: Observable&lt;Mode&gt;;
+
+    public _rozmisteno &#x3D; new BehaviorSubject&lt;boolean&gt;(true);
+    public Rozmisteno &#x3D; false;
+    public rozmisteno: Observable&lt;boolean&gt;;
+
+    ships$: Observable&lt;LodData[]&gt;;
+    ships: LodData[];
+
+    public limits$: Observable&lt;Limits&gt;;
+    public _limits &#x3D; new BehaviorSubject&lt;Limits&gt;({});
+    public limits: Observable&lt;Limits&gt;;
+    Limits: Limits;
+
+    public _shipSelected &#x3D; new BehaviorSubject&lt;LodData&gt;(null);
+    public shipSelected: Observable&lt;LodData&gt;;
+
+    public _placedShips &#x3D; new BehaviorSubject&lt;LodDoc[]&gt;([]);
+    public placedShips: Observable&lt;LodDoc[]&gt;;
+
+    public _actualWeapon &#x3D; new BehaviorSubject&lt;AbilityData&gt;(null);
+    public actualWeapon: Observable&lt;AbilityData&gt;;
+
+    public _enemyShips &#x3D; new BehaviorSubject&lt;LodDoc[]&gt;(null);
+    public enemyShips: Observable&lt;LodDoc[]&gt;;
+
+    public _vystrely &#x3D; new BehaviorSubject&lt;Point[]&gt;([]);
+    public vystrely: Observable&lt;Point[]&gt;;
+    public Vystrely: Point[] &#x3D; [];
+
+    public _zbrane &#x3D; new BehaviorSubject&lt;Raketa[]&gt;(null);
+    public zbrane: Observable&lt;Raketa[]&gt;;
+
+    constructor(
+        public mms: MatchMakingService,
+        private ls: LoginService,
+        private afs: AngularFirestore,
+        private http: HttpClient,
+    ) {
+        this.enemyShips &#x3D; this._enemyShips.pipe(skip(1));
+        this.vystrely &#x3D; this._vystrely.asObservable();
+        this.zbrane &#x3D; this._zbrane.asObservable();
+        this.vystrely.subscribe(strela &#x3D;&gt; {
+            this.Vystrely &#x3D; this.Vystrely.concat(strela);
+        });
+        this.actualWeapon &#x3D; this._actualWeapon.asObservable();
+
+        this.actualField &#x3D; this._actualField.asObservable();
+        this.actualField.subscribe((data) &#x3D;&gt; this.ActualField &#x3D; data);
+
+        this.actualMode &#x3D; this._actualMode.asObservable();
+        this.actualMode.subscribe((data) &#x3D;&gt; this.ActualMode &#x3D; data);
+
+        this.rozmisteno &#x3D; this._rozmisteno.asObservable();
+        this.afs.collection(&#x27;Rakety&#x27;).get().pipe(
+            map(snap &#x3D;&gt; snap.docs.map(doc &#x3D;&gt; doc.data() as DOCData)),
+            map(data &#x3D;&gt; {
+                const ret &#x3D; [];
+                for (const doc of data) {
+                    for (const key in doc) {
+                        if (typeof doc[key] &#x3D;&#x3D;&#x3D; &quot;number&quot;) continue;
+                        const utok &#x3D; doc[key] as AbilityData;
+                        ret.push({
+                            typ: key.split(&#x27;-&#x27;)[0],
+                            cooldown: doc.cooldown,
+                            type: doc.type,
+                            subTyp: key,
+                            pattern: utok.pattern
+                        } as Raketa);
+                    }
+                }
+                return ret;
+            })
+        ).subscribe(data &#x3D;&gt; this._zbrane.next(data));
+        this.rozmisteno.subscribe((data) &#x3D;&gt; {
+            this.Rozmisteno &#x3D; data;
+            if (!data) this._actualMode.next(Mode.PlaceShips);
+            else {
+                this.ls.userloaded.subscribe(loaded &#x3D;&gt; {
+                    if (loaded &amp;&amp; this.ls.userData.lastMatch.lastMatchUid !&#x3D;&#x3D; &#x27;&#x27;) {
+                        this.afs.doc(&#x60;Matches/${this.ls.userData.lastMatch.lastMatchUid}/Lode/${this.ls.userData.lastMatch.creator ? &#x27;creator&#x27; : &#x27;opponent&#x27;}&#x60;)
+                            .get().pipe(map(lode &#x3D;&gt; {
+                            if (lode.data() &#x3D;&#x3D; null) return null;
+                            return lode.data().lode as LodDoc[];
+                        })).subscribe(lode &#x3D;&gt; this._placedShips.next(lode));
+
+                        this.afs.doc(&#x60;Matches/${this.ls.userData.lastMatch.lastMatchUid}/Lode/${this.ls.userData.lastMatch.creator ? &#x27;opponent&#x27; : &#x27;creator&#x27;}&#x60;)
+                            .get().pipe(map(lode &#x3D;&gt; {
+                            if (lode.data() &#x3D;&#x3D; null) return null;
+                            return lode.data().lode as LodDoc[];
+                        })).subscribe(lode &#x3D;&gt; this._enemyShips.next(lode));
+
+                        this.afs.collection(&#x60;Matches/${this.ls.userData.lastMatch.lastMatchUid}/Tahy&#x60;).get().pipe(
+                            map(snap &#x3D;&gt; snap.docs.map(doc &#x3D;&gt; doc.data() as TahModel)),
+                            map(Data &#x3D;&gt; ({
+                                creator: Data.filter(_data &#x3D;&gt; _data.seenFor &#x3D;&#x3D;&#x3D; &#x27;creator&#x27;),
+                                opponent: Data.filter(_data &#x3D;&gt; _data.seenFor &#x3D;&#x3D;&#x3D; &#x27;opponent&#x27;)
+                            }))
+                        ).subscribe(res &#x3D;&gt; {
+                            this.zbrane.subscribe(zbrane &#x3D;&gt; {
+                                if (data &#x3D;&#x3D; null) return;
+                                const vysledek &#x3D; [];
+                                res[this.ls.userData.lastMatch.creator ? &#x27;creator&#x27; : &#x27;opponent&#x27;]
+                                    .filter(utok &#x3D;&gt; utok.type &#x3D;&#x3D;&#x3D; &quot;Utok&quot;)
+                                    .map((raketa: TahModel) &#x3D;&gt; raketa.tahData)
+                                    .map((raketa: Utok) &#x3D;&gt; {
+                                        const zbran &#x3D; zbrane.find(_zbran &#x3D;&gt; _zbran.subTyp &#x3D;&#x3D;&#x3D; raketa.subTyp);
+                                        return zbran.pattern.map(pat &#x3D;&gt; Point.Sum(pat, raketa.poziceZasahu));
+                                    }).forEach((points: Point[]) &#x3D;&gt; {
+                                    points.forEach(point &#x3D;&gt; {
+                                        if (!vysledek.some(vys &#x3D;&gt; Point.Equals(point, vys)) &amp;&amp;
+                                            point.x &gt;&#x3D; 0 &amp;&amp; point.x &lt;&#x3D; 20 &amp;&amp; point.y &gt;&#x3D; 0 &amp;&amp; point.y &lt;&#x3D; 20)
+                                            vysledek.push(point);
+                                    });
+                                });
+                                this._vystrely.next(vysledek);
+                            });
+                        });
+                    }
+                });
+            }
+        });
+        this.placedShips &#x3D; this._placedShips.asObservable().pipe(skip(1));
+
+        this.ships$ &#x3D; afs.collection&lt;LodData&gt;(&#x27;Lode&#x27;, ref &#x3D;&gt; ref.orderBy(&#x27;rank&#x27;)).get().pipe(
+            map(lode &#x3D;&gt; lode.docs.map(lod &#x3D;&gt; lod.data() as LodData)),
+        );
+        this.ships$.subscribe(lode &#x3D;&gt; {
+            this.ships &#x3D; lode;
+        });
+
+        this.limits$ &#x3D; afs.doc(&#x27;BackendData/Lode&#x27;).get().pipe(map(doc &#x3D;&gt; doc.data().limits as Limits));
+        this.limits$.subscribe(limits &#x3D;&gt; {
+            this._limits.next(limits);
+        });
+        this.limits &#x3D; this._limits.asObservable();
+        this.limits.subscribe((data) &#x3D;&gt; this.Limits &#x3D; data);
+
+        this.shipSelected &#x3D; this._shipSelected.asObservable().pipe(skip(1));
+
+        ls.userloaded.subscribe((data: boolean) &#x3D;&gt; {
+            if (data &amp;&amp; this.ls.userData.lastMatch.lastMatchUid !&#x3D;&#x3D; &#x27;&#x27;)
+                this.mms.getMyMatch().subscribe((match: Match) &#x3D;&gt; {
+                    if (this.Rozmisteno !&#x3D;&#x3D; match.rozmisteno)
+                        this._rozmisteno.next(match.rozmisteno);
+                });
+        });
+    }
+
+    public swapField() {
+        if (this.ActualField &#x3D;&#x3D;&#x3D; Field.playerField)
+            this._actualField.next(Field.enemyField);
+        else this._actualField.next(Field.playerField);
+    }
+
+    public changeMode(mode: Mode) {
+        switch (mode) {
+            case Mode.PlaceShips:
+                this._actualField.next(Field.playerField);
+                break;
+            case Mode.Attack:
+                this._actualField.next(Field.enemyField);
+                break;
+            case Mode.HeavyAttack:
+                this._actualField.next(Field.enemyField);
+                break;
+            case Mode.SpecAbility:
+                // Todo spec abil. impl.
+                console.error(&#x27;spec. abil. není implementována!&#x27;);
+                break;
+            case Mode.MoveShips:
+                this._actualField.next(Field.playerField);
+                break;
+            case Mode.SafeCraw:
+                this._actualField.next(Field.playerField);
+                break;
+            case Mode.Nada:
+                this._actualField.next(Field.playerField);
+                break;
+            default:
+                console.error(&#x27;neocekavana hodnota!&#x27;);
+        }
+
+        this._actualMode.next(mode);
+    }
+
+    public lodPolozina(rank: number, lode?: LodDoc[]) {
+        if (this.Limits[rank] &#x3D;&#x3D;&#x3D; 0) return;
+        this.Limits[rank]--;
+        if (this.Limits[rank] &#x3D;&#x3D;&#x3D; 0) {
+            if (this.ships[rank] &#x3D;&#x3D; null) {
+                this.changeMode(Mode.Nada);
+                if (lode !&#x3D; null)
+                    this.ls.afa.idToken.subscribe(token &#x3D;&gt; {
+                        this.http.post(&#x60;${environment.urlBase}/matches/setLode&#x60;,
+                            {lode: lode, token: token}).subscribe();
+                    });
+            } else this._shipSelected.next(this.ships[rank]);
+        }
+        this._limits.next(this.Limits);
+    }
+
+    public lodZvednuta(rank: number) {
+        this.Limits[rank]++;
+        this._limits.next(this.Limits);
+    }
+
+    public selectShip(data: LodData) {
+        this._shipSelected.next(data);
+    }
+
+    public setWeapon(wea: AbilityData) {
+        this._actualWeapon.next(wea);
+    }
+}
+
+export enum Field {
+    playerField &#x3D; 1,
+    enemyField &#x3D; 2
+}
+
+export enum Mode {
+    Nada &#x3D; 0,
+    Attack &#x3D; 1,
+    HeavyAttack &#x3D; 2,
+    SpecAbility &#x3D; 3,
+    MoveShips &#x3D; 4,
+    SafeCraw &#x3D; 5,
+    PlaceShips &#x3D; 6
+}
+</code></pre>
+    </div>
+</div>
+
+
+
+
+
+
+                   </div><div class="search-results">
+    <div class="has-results">
+        <h1 class="search-results-title"><span class='search-results-count'></span> result-matching "<span class='search-query'></span>"</h1>
+        <ul class="search-results-list"></ul>
+    </div>
+    <div class="no-results">
+        <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+    </div>
+</div>
+</div>
+               <!-- END CONTENT -->
+           </div>
+       </div>
+
+       <script>
+            var COMPODOC_CURRENT_PAGE_DEPTH = 1;
+            var COMPODOC_CURRENT_PAGE_CONTEXT = 'interface';
+            var COMPODOC_CURRENT_PAGE_URL = 'Limits.html';
+       </script>
+
+       <script src="../js/libs/custom-elements.min.js"></script>
+       <script src="../js/libs/lit-html.js"></script>
+       <!-- Required to polyfill modern browsers as code is ES5 for IE... -->
+       <script src="../js/libs/custom-elements-es5-adapter.js" charset="utf-8" defer></script>
+       <script src="../js/menu-wc.js" defer></script>
+
+       <script src="../js/libs/bootstrap-native.js"></script>
+
+       <script src="../js/libs/es6-shim.min.js"></script>
+       <script src="../js/libs/EventDispatcher.js"></script>
+       <script src="../js/libs/promise.min.js"></script>
+       <script src="../js/libs/zepto.min.js"></script>
+
+       <script src="../js/compodoc.js"></script>
+
+       <script src="../js/tabs.js"></script>
+       <script src="../js/menu.js"></script>
+       <script src="../js/libs/clipboard.min.js"></script>
+       <script src="../js/libs/prism.js"></script>
+       <script src="../js/sourceCode.js"></script>
+          <script src="../js/search/search.js"></script>
+          <script src="../js/search/lunr.min.js"></script>
+          <script src="../js/search/search-lunr.js"></script>
+          <script src="../js/search/search_index.js"></script>
+       <script src="../js/lazy-load-graphs.js"></script>
+
+
+    </body>
+</html>

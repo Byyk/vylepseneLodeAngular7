@@ -85,11 +85,17 @@ export class GameService {
             map(snap => snap.docs.map(doc => doc.data() as DOCData)),
             map(data => {
                 const ret = [];
-                for(const doc of data){
-                    for(const key in doc) {
-                        if(typeof doc[key] === "number") continue;
+                for (const doc of data) {
+                    for (const key in doc) {
+                        if (typeof doc[key] === "number") continue;
                         const utok = doc[key] as AbilityData;
-                        ret.push({typ: key.split('-')[0], cooldown: doc.cooldown, type: doc.type, subTyp: key, pattern: utok.pattern} as Raketa);
+                        ret.push({
+                            typ: key.split('-')[0],
+                            cooldown: doc.cooldown,
+                            type: doc.type,
+                            subTyp: key,
+                            pattern: utok.pattern
+                        } as Raketa);
                     }
                 }
                 return ret;
@@ -121,15 +127,22 @@ export class GameService {
                             }))
                         ).subscribe(res => {
                             this.zbrane.subscribe(zbrane => {
-                                if(data == null) return;
-                                this._vystrely.next(res[this.ls.userData.lastMatch.creator ? 'creator' : 'opponent'].map(
-                                    raketa => {
-                                        if(!(raketa.tahData instanceof Utok)) return null;
-                                        const tahData = raketa.tahData;
-                                        zbrane.find(zbran => zbran.subTyp === tahData.subTyp).pattern.map(point => Point.Sum(tahData.poziceZasahu, point));
-                                        const ret = [];
-                                    }
-                                ));
+                                if (data == null) return;
+                                const vysledek = [];
+                                res[this.ls.userData.lastMatch.creator ? 'creator' : 'opponent']
+                                    .filter(utok => utok.type === "Utok")
+                                    .map((raketa: TahModel) => raketa.tahData)
+                                    .map((raketa: Utok) => {
+                                        const zbran = zbrane.find(_zbran => _zbran.subTyp === raketa.subTyp);
+                                        return zbran.pattern.map(pat => Point.Sum(pat, raketa.poziceZasahu));
+                                    }).forEach((points: Point[]) => {
+                                    points.forEach(point => {
+                                        if (!vysledek.some(vys => Point.Equals(point, vys)) &&
+                                            point.x >= 0 && point.x <= 20 && point.y >= 0 && point.y <= 20)
+                                            vysledek.push(point);
+                                    });
+                                });
+                                this._vystrely.next(vysledek);
                             });
                         });
                     }

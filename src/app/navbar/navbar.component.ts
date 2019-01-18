@@ -7,6 +7,7 @@ import { Observable } from 'rxjs';
 import { User } from 'firebase';
 import {MessagingService} from "../services/messaging.service";
 import {faQuestion} from '@fortawesome/free-solid-svg-icons';
+import {NavbarServiceService} from "../services/navbar-service.service";
 
 
 @Component({
@@ -29,17 +30,12 @@ export class NavbarComponent implements OnInit {
       public LService: LoginService,
       public router: Router,
       private route: ActivatedRoute,
-      private mms: MessagingService
+      private mms: MessagingService,
+      public ns: NavbarServiceService
   ) {}
 
   ngOnInit(): void {
       this.user$ = this.LService.getUserObservable();
-      this.router.events.subscribe((event: Event) => {
-        if(event instanceof NavigationEnd)
-          {
-            this.transparentNavbar = event.url === '/Login' || event.url === '/passwordreset';
-          }
-      });
       this.LService.afa.idToken.subscribe(token =>{
         console.log(token);
         console.log(this.mms.token);

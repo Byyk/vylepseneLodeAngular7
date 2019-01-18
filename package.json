@@ -9,6 +9,7 @@
     "lint": "ng lint",
     "e2e": "ng e2e",
     "serve": "ng build --prod && firebase serve --only hosting",
+    "compodoc": "npx compodoc -p src/tsconfig.app.json",
     "typedoc": "typedoc --mode modules -module commonjs --exclude **/*.spec.ts --out docs/typedoc src/app"
   },
   "private": true,

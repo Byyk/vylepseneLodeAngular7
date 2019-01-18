@@ -1,0 +1,900 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>vylepsene-lode-angular7 documentation</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
+	      <link rel="stylesheet" href="../styles/style.css">
+    </head>
+    <body>
+
+        <div class="navbar navbar-default navbar-fixed-top visible-xs">
+            <a href="../" class="navbar-brand">vylepsene-lode-angular7 documentation</a>
+            <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
+        </div>
+
+        <div class="xs-menu menu" id="mobile-menu">
+                <div id="book-search-input" role="search"><input type="text" placeholder="Type to search"></div>            <compodoc-menu></compodoc-menu>
+        </div>
+
+        <div class="container-fluid main">
+           <div class="row main">
+               <div class="hidden-xs menu">
+                   <compodoc-menu mode="normal"></compodoc-menu>
+               </div>
+               <!-- START CONTENT -->
+               <div class="content component">
+                   <div class="content-data">
+
+
+
+
+<ol class="breadcrumb">
+  <li>Components</li>
+  <li>GameMenuComponent</li>
+</ol>
+
+<ul class="nav nav-tabs" role="tablist">
+        <li class="active">
+            <a href="#info" role="tab" id="info-tab" data-toggle="tab" data-link="info">Info</a>
+        </li>
+        <li >
+            <a href="#source" role="tab" id="source-tab" data-toggle="tab" data-link="source">Source</a>
+        </li>
+        <li >
+            <a href="#templateData" role="tab" id="templateData-tab" data-toggle="tab" data-link="template">Template</a>
+        </li>
+        <li >
+            <a href="#styleData" role="tab" id="styleData-tab" data-toggle="tab" data-link="style">Styles</a>
+        </li>
+        <li >
+            <a href="#tree" role="tab" id="tree-tab" data-toggle="tab" data-link="dom-tree">DOM Tree</a>
+        </li>
+</ul>
+
+<div class="tab-content">
+    <div class="tab-pane fade active in" id="c-info"><p class="comment">
+    <h3>File</h3>
+</p>
+<p class="comment">
+    <code>src/app/game/game-menu/game-menu.component.ts</code>
+</p>
+
+
+
+    <p class="comment">
+        <h3>Implements</h3>
+    </p>
+    <p class="comment">
+                <code><a href="https://angular.io/api/core/OnInit" target="_blank" >OnInit</a></code>
+    </p>
+
+
+<section>
+    <h3>Metadata</h3>
+    <table class="table table-sm table-hover">
+        <tbody>
+
+
+
+
+
+
+
+
+
+
+
+            <tr>
+                <td class="col-md-3">selector</td>
+                <td class="col-md-9"><code>app-game-menu</code></td>
+            </tr>
+
+            <tr>
+                <td class="col-md-3">styleUrls</td>
+                <td class="col-md-9"><code>./game-menu.component.scss</code></td>
+            </tr>
+
+
+
+            <tr>
+                <td class="col-md-3">templateUrl</td>
+                <td class="col-md-9"><code>./game-menu.component.html</code></td>
+            </tr>
+
+
+
+
+
+
+
+
+        </tbody>
+    </table>
+</section>
+
+    <section>
+    <h3 id="index">Index</h3>
+    <table class="table table-sm table-bordered index-table">
+        <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Properties</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#afs">afs</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#gs">gs</a>
+                            </li>
+                            <li>
+                                <a href="#menu">menu</a>
+                            </li>
+                            <li>
+                                <a href="#ships$">ships$</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#tabs">tabs</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Methods</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                <a href="#isNotNull">isNotNull</a>
+                            </li>
+                            <li>
+                                <a href="#ngOnInit">ngOnInit</a>
+                            </li>
+                            <li>
+                                <a href="#secondaryMenuClicked">secondaryMenuClicked</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+
+
+
+
+        </tbody>
+    </table>
+</section>
+
+    <section>
+    <h3 id="constructor">Constructor</h3>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+<code>constructor(gs: <a href="../injectables/GameService.html">GameService</a>, afs: AngularFirestore)</code>
+                    </td>
+                </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="22" class="link-to-prism">src/app/game/game-menu/game-menu.component.ts:22</a></div>
+                            </td>
+                        </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                            <div>
+                                    <b>Parameters :</b>
+                                    <table class="params">
+                                        <thead>
+                                            <tr>
+                                                <td>Name</td>
+                                                    <td>Type</td>
+                                                <td>Optional</td>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                                <tr>
+                                                        <td>gs</td>
+                                                  
+                                                        <td>
+                                                                    <code><a href="../injectables/GameService.html" target="_self" >GameService</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>afs</td>
+                                                  
+                                                        <td>
+                                                                    <code>AngularFirestore</code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                        </tbody>
+                                    </table>
+                            </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+</section>
+
+
+
+
+
+    <section>
+    
+        <h3 id="methods">
+            Methods
+        </h3>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="isNotNull"></a>
+                        <span class="name">
+                            <b>
+                            isNotNull
+                            </b>
+                            <a href="#isNotNull"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+<code>isNotNull(val)</code>
+                    </td>
+                </tr>
+
+
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="59" class="link-to-prism">src/app/game/game-menu/game-menu.component.ts:59</a></div>
+                            </td>
+                        </tr>
+
+
+                <tr>
+                    <td class="col-md-4">
+
+                            <div class="io-description">
+                                    <b>Parameters :</b>
+                                    <table class="params">
+                                        <thead>
+                                            <tr>
+                                                <td>Name</td>
+                                                <td>Optional</td>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                                <tr>
+                                                        <td>val</td>
+                                                    
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+
+                                                </tr>
+                                        </tbody>
+                                    </table>
+                            </div>
+                            <div>
+                            </div>
+                            <div class="io-description">
+                                <b>Returns : </b>    <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank" >boolean</a></code>
+
+                            </div>
+                                <div class="io-description">
+                                    
+                                </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="ngOnInit"></a>
+                        <span class="name">
+                            <b>
+                            ngOnInit
+                            </b>
+                            <a href="#ngOnInit"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+<code>ngOnInit()</code>
+                    </td>
+                </tr>
+
+
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="47" class="link-to-prism">src/app/game/game-menu/game-menu.component.ts:47</a></div>
+                            </td>
+                        </tr>
+
+
+                <tr>
+                    <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Returns : </b>    <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                            </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="secondaryMenuClicked"></a>
+                        <span class="name">
+                            <b>
+                            secondaryMenuClicked
+                            </b>
+                            <a href="#secondaryMenuClicked"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+<code>secondaryMenuClicked()</code>
+                    </td>
+                </tr>
+
+
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="49" class="link-to-prism">src/app/game/game-menu/game-menu.component.ts:49</a></div>
+                            </td>
+                        </tr>
+
+
+                <tr>
+                    <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Returns : </b>    <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                            </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+</section>
+
+    <section>
+    
+        <h3 id="inputs">
+            Properties
+        </h3>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="afs"></a>
+                        <span class="name">
+                            <b>
+                                <span class="modifier">Public</span>
+                            afs
+                            </b>
+                            <a href="#afs"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span><code>afs:     <code>AngularFirestore</code>
+</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Type : </i>    <code>AngularFirestore</code>
+
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="26" class="link-to-prism">src/app/game/game-menu/game-menu.component.ts:26</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="gs"></a>
+                        <span class="name">
+                            <b>
+                                <span class="modifier">Public</span>
+                            gs
+                            </b>
+                            <a href="#gs"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span><code>gs:     <code><a href="../injectables/GameService.html" target="_self" >GameService</a></code>
+</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Type : </i>    <code><a href="../injectables/GameService.html" target="_self" >GameService</a></code>
+
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="25" class="link-to-prism">src/app/game/game-menu/game-menu.component.ts:25</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="menu"></a>
+                        <span class="name">
+                            <b>
+                            menu
+                            </b>
+                            <a href="#menu"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <code>menu:     <code><a href="../classes/MenuModel.html" target="_self" >MenuModel</a></code>
+</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Type : </i>    <code><a href="../classes/MenuModel.html" target="_self" >MenuModel</a></code>
+
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="19" class="link-to-prism">src/app/game/game-menu/game-menu.component.ts:19</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="ships$"></a>
+                        <span class="name">
+                            <b>
+                            ships$
+                            </b>
+                            <a href="#ships$"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <code>ships$:     <code>Observable&lt;&gt;</code>
+</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Type : </i>    <code>Observable&lt;&gt;</code>
+
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="18" class="link-to-prism">src/app/game/game-menu/game-menu.component.ts:18</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="tabs"></a>
+                        <span class="name">
+                            <b>
+                                <span class="modifier">Public</span>
+                            tabs
+                            </b>
+                            <a href="#tabs"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span><code>tabs:     <code>QueryList&lt;ElementRef&lt;HTMLDivElement&gt;&gt;</code>
+</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Type : </i>    <code>QueryList&lt;ElementRef&lt;HTMLDivElement&gt;&gt;</code>
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <b>Decorators : </b>
+                            <br />
+                            <code>
+                                @ViewChildren(&#x27;tabs&#x27;)<br />
+                            </code>
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="22" class="link-to-prism">src/app/game/game-menu/game-menu.component.ts:22</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+</section>
+
+</div>
+
+
+    <div class="tab-pane fade  tab-source-code" id="c-source">
+        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import {Component, ElementRef, OnInit, QueryList, ViewChildren} from &#x27;@angular/core&#x27;;
+import {faBolt, faCrosshairs, faRocket} from &#x27;@fortawesome/free-solid-svg-icons&#x27;;
+import {faSuperpowers} from &#x27;@fortawesome/free-brands-svg-icons&#x27;;
+import {faCompass, faLifeRing} from &#x27;@fortawesome/free-regular-svg-icons&#x27;;
+import {GameService} from &#x27;../../services/game.service&#x27;;
+import {LodData} from &#x27;../../model/lod.model&#x27;;
+import {Observable} from &#x27;rxjs&#x27;;
+import {map} from &#x27;rxjs/operators&#x27;;
+import {MenuModel} from &#x27;../../model/my-board.model&#x27;;
+import {AngularFirestore} from &#x27;@angular/fire/firestore&#x27;;
+
+@Component({
+  selector: &#x27;app-game-menu&#x27;,
+  templateUrl: &#x27;./game-menu.component.html&#x27;,
+  styleUrls: [&#x27;./game-menu.component.scss&#x27;]
+})
+export class GameMenuComponent implements OnInit {
+    ships$: Observable&lt;[LodData[]]&gt;;
+    menu: MenuModel;
+
+    @ViewChildren(&#x27;tabs&#x27;)
+    public tabs: QueryList&lt;ElementRef&lt;HTMLDivElement&gt;&gt;;
+
+    constructor(
+        public gs: GameService,
+        public afs: AngularFirestore
+    ) {
+        this.ships$ &#x3D; gs.ships$.pipe(map(lode &#x3D;&gt; {
+            const _lode: [LodData[]] &#x3D; [[]];
+            for(const lod of lode) {
+                if(_lode[lod.rank - 1] &#x3D;&#x3D;&#x3D; undefined) _lode[lod.rank - 1] &#x3D; [lod];
+                else _lode[lod.rank - 1].push(lod);
+            }
+            return _lode;
+        }));
+        this.menu &#x3D; {
+            tabs: [
+                {icon: faRocket, toolTip: &quot;Vystřilit z děla&quot;, doc: &quot;Rakety/Common&quot;},
+                {icon: faBolt, toolTip: &quot;Vystřelit z těžkého děla&quot;},
+                {icon: faSuperpowers, toolTip: &quot;Použít speciální schopnost kapitána&quot;},
+                {icon: faCompass, toolTip: &quot;Pohybovat loděmi&quot;},
+                {icon: faLifeRing, toolTip: &quot;Zachránit posádku&quot;}
+            ]
+        };
+    }
+
+    ngOnInit() {
+    }
+    secondaryMenuClicked(){
+        this.tabs.forEach(tab &#x3D;&gt; {
+            tab.nativeElement.childNodes.forEach((child: HTMLElement) &#x3D;&gt; {
+                if(child.tagName &#x3D;&#x3D;&#x3D; &#x27;APP-GAME-SECONDARY-MENU&#x27;) {
+                    child.style.display &#x3D; &quot;none&quot;;
+                    setTimeout(() &#x3D;&gt; child.style.display &#x3D; &quot;&quot;, 200);
+                }
+            });
+        });
+    }
+    isNotNull(val){
+        return val !&#x3D; null;
+    }
+}
+</code></pre>
+    </div>
+
+    <div class="tab-pane fade " id="c-templateData">
+        <pre class="line-numbers"><code class="language-html">&lt;div id&#x3D;&quot;main-container&quot;&gt;
+    &lt;div class&#x3D;&quot;action&quot; [matTooltip]&#x3D;&quot;(gs.actualField | async) &#x3D;&#x3D;&#x3D; 1 ? &#x27;Útok&#x27; : &#x27;Obrana&#x27;&quot; (click)&#x3D;&quot;gs.swapField()&quot;&gt;
+        &lt;img [ngClass]&#x3D;&quot;{&#x27;neviditelny&#x27; : (gs.actualField | async) !&#x3D;&#x3D; 1}&quot;
+             src&#x3D;&quot;https://firebasestorage.googleapis.com/v0/b/lode-1835e.appspot.com/o/attack.png?alt&#x3D;media&amp;token&#x3D;3f8b4f23-dca7-4f8c-8287-cff9ea276420&quot; alt&#x3D;&quot;protivníkovo pole&quot;&gt;
+        &lt;img  [ngClass]&#x3D;&quot;{&#x27;neviditelny&#x27; : (gs.actualField | async) !&#x3D;&#x3D; 2}&quot;
+              src&#x3D;&quot;https://firebasestorage.googleapis.com/v0/b/lode-1835e.appspot.com/o/defenc.png?alt&#x3D;media&amp;token&#x3D;033f27b8-6822-456e-aada-5f3daa9289ef&quot; alt&#x3D;&quot;moje pole&quot;&gt;
+    &lt;/div&gt;
+    &lt;div class&#x3D;&quot;separator&quot;&gt;&lt;/div&gt;
+    &lt;div *ngFor&#x3D;&quot;let tab of menu.tabs; let i &#x3D; index&quot; #tabs class&#x3D;&quot;action&quot; [ngClass]&#x3D;&quot;{&#x27;active&#x27;: (gs.actualMode | async) &#x3D;&#x3D;&#x3D; i + 1}&quot;&gt;
+        &lt;fa-icon [icon]&#x3D;&quot;tab.icon&quot; size&#x3D;&quot;2x&quot;&gt;&lt;/fa-icon&gt;
+        &lt;div class&#x3D;&quot;events-handler&quot; [matTooltip]&#x3D;&quot;tab.toolTip&quot;&gt;&lt;/div&gt;
+        &lt;app-game-secondary-menu
+            *ngIf&#x3D;&quot;isNotNull(tab.doc)&quot;
+            [menudoc]&#x3D;&quot;tab.doc&quot;
+            [index]&#x3D;&quot;i&quot;
+            (click)&#x3D;&quot;secondaryMenuClicked()&quot;&gt;
+        &lt;/app-game-secondary-menu&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+&lt;div id&#x3D;&quot;secondary-container&quot; *ngIf&#x3D;&quot;!(gs.rozmisteno | async)&quot;&gt;
+    &lt;div *ngFor&#x3D;&quot;let lode of (ships$ | async)&quot; class&#x3D;&quot;seznam&quot;&gt;
+        &lt;app-game-menu-item
+            *ngFor&#x3D;&quot;let lod of lode&quot;
+            (click)&#x3D;&quot;gs.selectShip(lod)&quot;
+            [rank]&#x3D;&quot;lod.rank&quot;&gt;
+            {{ lod.name }}
+        &lt;/app-game-menu-item&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+</code></pre>
+    </div>
+
+    <div class="tab-pane fade " id="c-styleData">
+                <p class="comment">
+                    <code>./game-menu.component.scss</code>
+                </p>
+                <pre class="line-numbers"><code class="language-scss">#main-container {
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 50px;
+    background: #00aced;
+    z-index: 1100;
+    box-shadow: 5px 0 #10A6DF;
+    box-sizing: border-box;
+}
+
+#secondary-container {
+    position: absolute;
+    left: 50px;
+    top: 0;
+    bottom: 0;
+    width: 205px;
+    padding: 5px 5px 0 5px;
+    background: #20A1D2;
+    z-index: 1100;
+
+    .seznam {
+        padding-left: 5px;
+
+        .head {
+            line-height: 20px;
+            background: #18799E;
+            color: #E6E6E8;
+            cursor: default;
+        }
+
+        app-game-menu-item {
+            display: block;
+            position: relative;
+            width: calc(100% - 5px);
+            height: 50px;
+            line-height: 50px;
+            padding-left: 5px;
+            color: #3b3b44;
+            cursor: pointer;
+
+            &amp;.active {
+                background: #1485B0;
+            }
+
+            &amp;:hover {
+                background: #1C8DB8;
+            }
+        }
+    }
+}
+.action {
+    position: relative;
+    width: 50px;
+    height: 50px;
+    cursor: pointer;
+
+    &amp;:hover app-game-secondary-menu {
+        display: block;
+    }
+
+    &amp;:hover(:focus) app-game-secondary-menu {
+        display: none !important;
+    }
+
+    app-game-secondary-menu {
+        display: none;
+        position: absolute;
+        z-index: 1100;
+        left: 50px;
+        height: 50px;
+        width: calc(100vw - 50px);
+        pointer-events: none;
+    }
+
+    .events-handler {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 50px;
+        height: 50px;
+    }
+
+    fa-icon, img {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        color: #5b5a70;
+    }
+    img {
+        width: 32px;
+        height: 32px;
+    }
+
+    .neviditelny {
+        display: none;
+    }
+
+    &amp;.active {
+        background: #fff4;
+    }
+
+    &amp;:hover {
+        background: #fff5;
+    }
+}
+.separator {
+    height: 10px;
+    width: 50px;
+    background: #3335;
+}
+</code></pre>
+    </div>
+
+    <div class="tab-pane fade " id="c-tree">
+        <div id="tree-container"></div>
+        <div class="tree-legend">
+            <div class="title">
+                <b>Legend</b>
+            </div>
+            <div>
+                <div class="color htmlelement"></div><span>Html element</span>
+            </div>
+            <div>
+                <div class="color component"></div><span>Component</span>
+            </div>
+            <div>
+                <div class="color directive"></div><span>Html element with directive</span>
+            </div>
+        </div>
+    </div>
+
+    
+</div>
+
+<script src="../js/libs/vis.min.js"></script>
+<script src="../js/libs/htmlparser.js"></script>
+<script src="../js/libs/deep-iterator.js"></script>
+<script>
+        var COMPONENT_TEMPLATE = '<div><div id="main-container">    <div class="action" [matTooltip]="(gs.actualField | async) === 1 ? \'Útok\' : \'Obrana\'" (click)="gs.swapField()">        <img [ngClass]="{\'neviditelny\' : (gs.actualField | async) !== 1}"             src="https://firebasestorage.googleapis.com/v0/b/lode-1835e.appspot.com/o/attack.png?alt=media&token=3f8b4f23-dca7-4f8c-8287-cff9ea276420" alt="protivníkovo pole">        <img  [ngClass]="{\'neviditelny\' : (gs.actualField | async) !== 2}"              src="https://firebasestorage.googleapis.com/v0/b/lode-1835e.appspot.com/o/defenc.png?alt=media&token=033f27b8-6822-456e-aada-5f3daa9289ef" alt="moje pole">    </div>    <div class="separator"></div>    <div *ngFor="let tab of menu.tabs; let i = index" #tabs class="action" [ngClass]="{\'active\': (gs.actualMode | async) === i + 1}">        <fa-icon [icon]="tab.icon" size="2x"></fa-icon>        <div class="events-handler" [matTooltip]="tab.toolTip"></div>        <app-game-secondary-menu            *ngIf="isNotNull(tab.doc)"            [menudoc]="tab.doc"            [index]="i"            (click)="secondaryMenuClicked()">        </app-game-secondary-menu>    </div></div><div id="secondary-container" *ngIf="!(gs.rozmisteno | async)">    <div *ngFor="let lode of (ships$ | async)" class="seznam">        <app-game-menu-item            *ngFor="let lod of lode"            (click)="gs.selectShip(lod)"            [rank]="lod.rank">            {{ lod.name }}        </app-game-menu-item>    </div></div></div>'
+    var COMPONENTS = [{'name': 'AppComponent', 'selector': 'app-root'},{'name': 'ChatComponent', 'selector': 'app-chat'},{'name': 'ChatMessageComponent', 'selector': 'app-chat-message'},{'name': 'CircleButtonComponent', 'selector': 'app-circle-button'},{'name': 'ConfirmResetComponent', 'selector': 'app-confirm-reset'},{'name': 'CreateGameComponent', 'selector': 'app-create-game'},{'name': 'DiscardDialogComponent', 'selector': 'app-discard-dialog'},{'name': 'GameComponent', 'selector': 'app-game'},{'name': 'GameMenuComponent', 'selector': 'app-game-menu'},{'name': 'GameMenuItemComponent', 'selector': 'app-game-menu-item'},{'name': 'GameMenuItemTierComponent', 'selector': 'app-game-menu-item-tier'},{'name': 'GameSecondaryMenuComponent', 'selector': 'app-game-secondary-menu'},{'name': 'GameSecondaryMenuItemComponent', 'selector': 'app-game-secondary-menu-item'},{'name': 'HomeComponent', 'selector': 'app-home'},{'name': 'JoinGameComponent', 'selector': 'app-join-game'},{'name': 'LobbyComponent', 'selector': 'app-lobby'},{'name': 'LoginComponent', 'selector': 'app-login'},{'name': 'MatchMakingComponent', 'selector': 'app-match-making'},{'name': 'MenuComponent', 'selector': 'app-menu'},{'name': 'MessageComponent', 'selector': 'app-message'},{'name': 'MessageContainerComponent', 'selector': 'app-message-container'},{'name': 'MyBoardComponent', 'selector': 'app-my-board'},{'name': 'NavbarComponent', 'selector': 'app-navbar'},{'name': 'OponentsBoardComponent', 'selector': 'app-oponents-board'},{'name': 'PasswordDialogComponent', 'selector': 'app-password-dialog'},{'name': 'ProfileComponent', 'selector': 'app-profile'},{'name': 'ProfileImageComponent', 'selector': 'app-profile-image'},{'name': 'ProfilePopUpComponent', 'selector': 'app-profile-pop-up'},{'name': 'RequestsComponent', 'selector': 'app-requests'},{'name': 'SliderComponent', 'selector': 'app-slider'},{'name': 'TabComponent', 'selector': 'app-tab'},{'name': 'TabsComponent', 'selector': 'app-tabs'},{'name': 'TabsContainerComponent', 'selector': 'app-tabs-container'},{'name': 'TabsNavComponent', 'selector': 'app-tabs-nav'}];
+    var DIRECTIVES = [];
+    var ACTUAL_COMPONENT = {'name': 'GameMenuComponent'};
+</script>
+<script src="../js/tree.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                   </div><div class="search-results">
+    <div class="has-results">
+        <h1 class="search-results-title"><span class='search-results-count'></span> result-matching "<span class='search-query'></span>"</h1>
+        <ul class="search-results-list"></ul>
+    </div>
+    <div class="no-results">
+        <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+    </div>
+</div>
+</div>
+               <!-- END CONTENT -->
+           </div>
+       </div>
+
+       <script>
+            var COMPODOC_CURRENT_PAGE_DEPTH = 1;
+            var COMPODOC_CURRENT_PAGE_CONTEXT = 'component';
+            var COMPODOC_CURRENT_PAGE_URL = 'GameMenuComponent.html';
+       </script>
+
+       <script src="../js/libs/custom-elements.min.js"></script>
+       <script src="../js/libs/lit-html.js"></script>
+       <!-- Required to polyfill modern browsers as code is ES5 for IE... -->
+       <script src="../js/libs/custom-elements-es5-adapter.js" charset="utf-8" defer></script>
+       <script src="../js/menu-wc.js" defer></script>
+
+       <script src="../js/libs/bootstrap-native.js"></script>
+
+       <script src="../js/libs/es6-shim.min.js"></script>
+       <script src="../js/libs/EventDispatcher.js"></script>
+       <script src="../js/libs/promise.min.js"></script>
+       <script src="../js/libs/zepto.min.js"></script>
+
+       <script src="../js/compodoc.js"></script>
+
+       <script src="../js/tabs.js"></script>
+       <script src="../js/menu.js"></script>
+       <script src="../js/libs/clipboard.min.js"></script>
+       <script src="../js/libs/prism.js"></script>
+       <script src="../js/sourceCode.js"></script>
+          <script src="../js/search/search.js"></script>
+          <script src="../js/search/lunr.min.js"></script>
+          <script src="../js/search/search-lunr.js"></script>
+          <script src="../js/search/search_index.js"></script>
+       <script src="../js/lazy-load-graphs.js"></script>
+
+
+    </body>
+</html>

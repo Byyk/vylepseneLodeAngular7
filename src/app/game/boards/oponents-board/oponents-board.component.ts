@@ -55,6 +55,7 @@ export class OponentsBoardComponent implements OnInit {
     private zpracujVysrely = (data) => {
         if(data == null || this.lode == null) return;
         this.zasazenaPole = this.zasazenaPole.concat(data.map(pozice => {
+            if(pozice == null) return null;
             let zasah = false;
             this.lode.forEach(lod => {
                 lod.castiLode.forEach((cast) => {
@@ -67,7 +68,7 @@ export class OponentsBoardComponent implements OnInit {
                 return {pozice: pozice, state: StavPole.poskozenaLod};
             else
                 return {pozice: pozice, state: StavPole.zasazeneMore};
-        }));
+        })).filter(pole => pole != null);
         this.view();
     }
 
