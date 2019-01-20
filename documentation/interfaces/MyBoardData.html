@@ -8,32 +8,810 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
         <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
-	      <link rel="stylesheet" href="../styles/style.css">
+	    <link rel="stylesheet" href="../styles/style.css">
     </head>
     <body>
 
         <div class="navbar navbar-default navbar-fixed-top visible-xs">
             <a href="../" class="navbar-brand">vylepsene-lode-angular7 documentation</a>
-            <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
+            <button type="button" class="btn btn-default btn-menu fa fa-bars" id="btn-menu"></button>
         </div>
 
         <div class="xs-menu menu" id="mobile-menu">
-                <div id="book-search-input" role="search"><input type="text" placeholder="Type to search"></div>            <compodoc-menu></compodoc-menu>
+            <div id="book-search-input" role="search">
+                <input type="text" placeholder="Type to search">
+            </div>
+            <nav>
+            
+                <ul class="list">
+            
+                    <li class="title">
+                        <a href="../">vylepsene-lode-angular7 documentation</a>
+                    </li>
+            
+                    <li class="divider"></li>
+            
+            
+                    <li class="chapter">
+                        <a data-type="chapter-link" href="../"><span class="fa fa-home"></span>Getting started</a>
+                        <ul class="links">
+                                <li class="link">
+                                    <a href="../" ><span class="fa fa-file-text-o"></span>README</a>
+                                </li>
+                                <li class="link">
+                                    <a 
+                                        
+                                         href="../overview.html" 
+                                         href="../overview.html" 
+                                        >
+                                        <span class="fa fa-th"></span>Overview
+                                    </a>
+                                </li>
+                        </ul>
+                    </li>
+            
+                    <li class="chapter">
+                        <a data-type="chapter-link" href="./modules.html" >
+                            <span class="fa fa-archive"></span>
+                            <span>Modules</span>
+                            <span class="menu-toggler fa fa-angle-up" data-toggle="collapse"
+                                    data-target="#xs-modules-links"
+                            ></span>
+                        </a>
+                        <ul class="links collapse in"
+                                id="xs-modules-links"
+                            >
+                                <li class="link">
+                                    <a href="../modules/AppFontAwesomeModule.html" >AppFontAwesomeModule</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../modules/AppModule.html" >AppModule</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../modules/GameModule.html" >GameModule</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../modules/MaterialModule.html" >MaterialModule</a>
+                                </li>
+                        </ul>
+                    </li>
+            
+                    <li class="chapter">
+                        <div class="simple">
+                            <span class="fa fa-cogs"></span>
+                            <span>Components</span>
+                            <span class="menu-toggler fa fa-angle-up" data-toggle="collapse"
+                                    data-target="#xs-components-links"
+                                ></span>
+                        </div>
+                        <ul class="links collapse in"
+                                id="xs-components-links"
+                            >
+                                <li class="link">
+                                    <a href="../components/AppComponent.html" >AppComponent</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../components/ChatComponent.html" >ChatComponent</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../components/ChatMessageComponent.html" >ChatMessageComponent</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../components/CircleButtonComponent.html" >CircleButtonComponent</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../components/ConfirmResetComponent.html" >ConfirmResetComponent</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../components/CreateGameComponent.html" >CreateGameComponent</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../components/DiscardDialogComponent.html" >DiscardDialogComponent</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../components/GameComponent.html" >GameComponent</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../components/GameMenuComponent.html" >GameMenuComponent</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../components/GameMenuItemComponent.html" >GameMenuItemComponent</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../components/GameMenuItemTierComponent.html" >GameMenuItemTierComponent</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../components/GameSecondaryMenuComponent.html" >GameSecondaryMenuComponent</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../components/GameSecondaryMenuItemComponent.html" >GameSecondaryMenuItemComponent</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../components/HomeComponent.html" >HomeComponent</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../components/JoinGameComponent.html" >JoinGameComponent</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../components/LobbyComponent.html" >LobbyComponent</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../components/LoginComponent.html" >LoginComponent</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../components/MatchMakingComponent.html" >MatchMakingComponent</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../components/MenuComponent.html" >MenuComponent</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../components/MessageComponent.html" >MessageComponent</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../components/MessageContainerComponent.html" >MessageContainerComponent</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../components/MyBoardComponent.html" >MyBoardComponent</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../components/NavbarComponent.html" >NavbarComponent</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../components/OponentsBoardComponent.html" >OponentsBoardComponent</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../components/PasswordDialogComponent.html" >PasswordDialogComponent</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../components/ProfileComponent.html" >ProfileComponent</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../components/ProfileImageComponent.html" >ProfileImageComponent</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../components/ProfilePopUpComponent.html" >ProfilePopUpComponent</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../components/RequestsComponent.html" >RequestsComponent</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../components/SliderComponent.html" >SliderComponent</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../components/TabComponent.html" >TabComponent</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../components/TabsComponent.html" >TabsComponent</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../components/TabsContainerComponent.html" >TabsContainerComponent</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../components/TabsNavComponent.html" >TabsNavComponent</a>
+                                </li>
+                        </ul>
+                    </li>
+            
+            
+                    <li class="chapter">
+                        <div class="simple">
+                            <span class="fa fa-file-code-o"></span>
+                            <span>Classes</span>
+                            <span class="menu-toggler fa fa-angle-up" data-toggle="collapse"
+                                    data-target="#xs-classes-links"
+                                ></span>
+                        </div>
+                        <ul class="links collapse in"
+                                id="xs-classes-links"
+                            >
+                                <li class="link">
+                                    <a href="../classes/Breakpointy.html" >Breakpointy</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../classes/CastLodi.html" >CastLodi</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../classes/FontAwesomeDirectory.html" >FontAwesomeDirectory</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../classes/LodData.html" >LodData</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../classes/LodModel.html" >LodModel</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../classes/MatchPrivateData.html" >MatchPrivateData</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../classes/MenuModel.html" >MenuModel</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../classes/MessageModel.html" >MessageModel</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../classes/MyBoardModel.html" >MyBoardModel</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../classes/NameGroup.html" >NameGroup</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../classes/Point.html" >Point</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../classes/Pozice.html" >Pozice</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../classes/RaketaModel.html" >RaketaModel</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../classes/Ship.html" >Ship</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../classes/UserModel.html" >UserModel</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../classes/Utok.html" >Utok</a>
+                                </li>
+                        </ul>
+                    </li>
+            
+            
+                    <li class="chapter">
+                        <div class="simple">
+                            <span class="fa fa-long-arrow-down"></span>
+                            <span>Injectables</span>
+                            <span class="menu-toggler fa fa-angle-up" data-toggle="collapse"
+                                    data-target="#xs-injectables-links"
+                                ></span>
+                        </div>
+                        <ul class="links collapse in"
+                                id="xs-injectables-links"
+                            >
+                                <li class="link">
+                                    <a href="../injectables/CanActivateGuard.html" >CanActivateGuard</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../injectables/CanDeactivateGuard.html" >CanDeactivateGuard</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../injectables/CanNotActivateGuard.html" >CanNotActivateGuard</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../injectables/GameService.html" >GameService</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../injectables/Gs2Service.html" >Gs2Service</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../injectables/LoginService.html" >LoginService</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../injectables/MatchChatService.html" >MatchChatService</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../injectables/MatchMakingService.html" >MatchMakingService</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../injectables/MessagingService.html" >MessagingService</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../injectables/NavbarServiceService.html" >NavbarServiceService</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../injectables/UploadFileService.html" >UploadFileService</a>
+                                </li>
+                        </ul>
+                    </li>
+            
+                    <li class="chapter">
+                        <div class="simple">
+                            <span class="fa fa-info"></span>
+                            <span>Interfaces</span>
+                            <span class="menu-toggler fa fa-angle-up" data-toggle="collapse"
+                                    data-target="#xs-interfaces-links"
+                                ></span>
+                        </div>
+                        <ul class="links collapse in"
+                                id="xs-interfaces-links"
+                            >
+                                <li class="link">
+                                    <a href="../interfaces/AbilityData.html" >AbilityData</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../interfaces/CanComponentDeactivate.html" >CanComponentDeactivate</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../interfaces/CastLode.html" >CastLode</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../interfaces/Casti.html" >Casti</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../interfaces/DOCData.html" >DOCData</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../interfaces/DiscardDialogData.html" >DiscardDialogData</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../interfaces/Hrac.html" >Hrac</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../interfaces/IconDefinitions.html" >IconDefinitions</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../interfaces/LastMatch.html" >LastMatch</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../interfaces/Limits.html" >Limits</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../interfaces/LodDoc.html" >LodDoc</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../interfaces/LodViewData.html" >LodViewData</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../interfaces/Match.html" >Match</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../interfaces/MatchListData.html" >MatchListData</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../interfaces/Message.html" >Message</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../interfaces/MyBoardData.html"  class="active" >MyBoardData</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../interfaces/Notification.html" >Notification</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../interfaces/OnlyDocData.html" >OnlyDocData</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../interfaces/PoleModel.html" >PoleModel</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../interfaces/Posun.html" >Posun</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../interfaces/Raketa.html" >Raketa</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../interfaces/Tab.html" >Tab</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../interfaces/TahModel.html" >TahModel</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../interfaces/Uploding.html" >Uploding</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../interfaces/UserData.html" >UserData</a>
+                                </li>
+                        </ul>
+                    </li>
+            
+            
+                    <li class="chapter">
+                        <a data-type="chapter-link" href="../miscellaneous.html" ><span class="fa fa-cubes"></span>Miscellaneous</a>
+                    </li>
+            
+                    <li class="chapter">
+                        <a data-type="chapter-link" href="../coverage.html" ><span class="fa fa-tasks"></span>Documentation coverage</a>
+                    </li>
+            
+                    <li class="divider"></li>
+                    <li class="copyright">
+                            Documentation generated using <a href="https://compodoc.github.io/compodoc/" target="_blank">
+                                        <img src="..//images/compodoc-vectorise.svg" class="img-responsive">
+                            </a>
+                    </li>
+            
+                </ul>
+            
+            </nav>
         </div>
 
         <div class="container-fluid main">
            <div class="row main">
                <div class="hidden-xs menu">
-                   <compodoc-menu mode="normal"></compodoc-menu>
+                   <nav>
+                   
+                       <ul class="list">
+                   
+                           <li class="title">
+                               <a href="../">vylepsene-lode-angular7 documentation</a>
+                           </li>
+                   
+                           <li class="divider"></li>
+                   
+                               <div id="book-search-input" role="search">
+                                   <input type="text" placeholder="Type to search">
+                               </div>
+                   
+                           <li class="chapter">
+                               <a data-type="chapter-link" href="../"><span class="fa fa-home"></span>Getting started</a>
+                               <ul class="links">
+                                       <li class="link">
+                                           <a href="../" ><span class="fa fa-file-text-o"></span>README</a>
+                                       </li>
+                                       <li class="link">
+                                           <a 
+                                               
+                                                href="../overview.html" 
+                                                href="../overview.html" 
+                                               >
+                                               <span class="fa fa-th"></span>Overview
+                                           </a>
+                                       </li>
+                               </ul>
+                           </li>
+                   
+                           <li class="chapter">
+                               <a data-type="chapter-link" href="./modules.html" >
+                                   <span class="fa fa-archive"></span>
+                                   <span>Modules</span>
+                                   <span class="menu-toggler fa fa-angle-up" data-toggle="collapse"
+                                           data-target="#modules-links"
+                                   ></span>
+                               </a>
+                               <ul class="links collapse in"
+                                       id="modules-links"
+                   >
+                                       <li class="link">
+                                           <a href="../modules/AppFontAwesomeModule.html" >AppFontAwesomeModule</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../modules/AppModule.html" >AppModule</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../modules/GameModule.html" >GameModule</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../modules/MaterialModule.html" >MaterialModule</a>
+                                       </li>
+                               </ul>
+                           </li>
+                   
+                           <li class="chapter">
+                               <div class="simple">
+                                   <span class="fa fa-cogs"></span>
+                                   <span>Components</span>
+                                   <span class="menu-toggler fa fa-angle-up" data-toggle="collapse"
+                                           data-target="#components-links"
+                   ></span>
+                               </div>
+                               <ul class="links collapse in"
+                                       id="components-links"
+                   >
+                                       <li class="link">
+                                           <a href="../components/AppComponent.html" >AppComponent</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../components/ChatComponent.html" >ChatComponent</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../components/ChatMessageComponent.html" >ChatMessageComponent</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../components/CircleButtonComponent.html" >CircleButtonComponent</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../components/ConfirmResetComponent.html" >ConfirmResetComponent</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../components/CreateGameComponent.html" >CreateGameComponent</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../components/DiscardDialogComponent.html" >DiscardDialogComponent</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../components/GameComponent.html" >GameComponent</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../components/GameMenuComponent.html" >GameMenuComponent</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../components/GameMenuItemComponent.html" >GameMenuItemComponent</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../components/GameMenuItemTierComponent.html" >GameMenuItemTierComponent</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../components/GameSecondaryMenuComponent.html" >GameSecondaryMenuComponent</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../components/GameSecondaryMenuItemComponent.html" >GameSecondaryMenuItemComponent</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../components/HomeComponent.html" >HomeComponent</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../components/JoinGameComponent.html" >JoinGameComponent</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../components/LobbyComponent.html" >LobbyComponent</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../components/LoginComponent.html" >LoginComponent</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../components/MatchMakingComponent.html" >MatchMakingComponent</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../components/MenuComponent.html" >MenuComponent</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../components/MessageComponent.html" >MessageComponent</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../components/MessageContainerComponent.html" >MessageContainerComponent</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../components/MyBoardComponent.html" >MyBoardComponent</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../components/NavbarComponent.html" >NavbarComponent</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../components/OponentsBoardComponent.html" >OponentsBoardComponent</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../components/PasswordDialogComponent.html" >PasswordDialogComponent</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../components/ProfileComponent.html" >ProfileComponent</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../components/ProfileImageComponent.html" >ProfileImageComponent</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../components/ProfilePopUpComponent.html" >ProfilePopUpComponent</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../components/RequestsComponent.html" >RequestsComponent</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../components/SliderComponent.html" >SliderComponent</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../components/TabComponent.html" >TabComponent</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../components/TabsComponent.html" >TabsComponent</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../components/TabsContainerComponent.html" >TabsContainerComponent</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../components/TabsNavComponent.html" >TabsNavComponent</a>
+                                       </li>
+                               </ul>
+                           </li>
+                   
+                   
+                           <li class="chapter">
+                               <div class="simple">
+                                   <span class="fa fa-file-code-o"></span>
+                                   <span>Classes</span>
+                                   <span class="menu-toggler fa fa-angle-up" data-toggle="collapse"
+                                           data-target="#classes-links"
+                   ></span>
+                               </div>
+                               <ul class="links collapse in"
+                                       id="classes-links"
+                   >
+                                       <li class="link">
+                                           <a href="../classes/Breakpointy.html" >Breakpointy</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../classes/CastLodi.html" >CastLodi</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../classes/FontAwesomeDirectory.html" >FontAwesomeDirectory</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../classes/LodData.html" >LodData</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../classes/LodModel.html" >LodModel</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../classes/MatchPrivateData.html" >MatchPrivateData</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../classes/MenuModel.html" >MenuModel</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../classes/MessageModel.html" >MessageModel</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../classes/MyBoardModel.html" >MyBoardModel</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../classes/NameGroup.html" >NameGroup</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../classes/Point.html" >Point</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../classes/Pozice.html" >Pozice</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../classes/RaketaModel.html" >RaketaModel</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../classes/Ship.html" >Ship</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../classes/UserModel.html" >UserModel</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../classes/Utok.html" >Utok</a>
+                                       </li>
+                               </ul>
+                           </li>
+                   
+                   
+                           <li class="chapter">
+                               <div class="simple">
+                                   <span class="fa fa-long-arrow-down"></span>
+                                   <span>Injectables</span>
+                                   <span class="menu-toggler fa fa-angle-up" data-toggle="collapse"
+                                           data-target="#injectables-links"
+                   ></span>
+                               </div>
+                               <ul class="links collapse in"
+                                       id="injectables-links"
+                   >
+                                       <li class="link">
+                                           <a href="../injectables/CanActivateGuard.html" >CanActivateGuard</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../injectables/CanDeactivateGuard.html" >CanDeactivateGuard</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../injectables/CanNotActivateGuard.html" >CanNotActivateGuard</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../injectables/GameService.html" >GameService</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../injectables/Gs2Service.html" >Gs2Service</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../injectables/LoginService.html" >LoginService</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../injectables/MatchChatService.html" >MatchChatService</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../injectables/MatchMakingService.html" >MatchMakingService</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../injectables/MessagingService.html" >MessagingService</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../injectables/NavbarServiceService.html" >NavbarServiceService</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../injectables/UploadFileService.html" >UploadFileService</a>
+                                       </li>
+                               </ul>
+                           </li>
+                   
+                           <li class="chapter">
+                               <div class="simple">
+                                   <span class="fa fa-info"></span>
+                                   <span>Interfaces</span>
+                                   <span class="menu-toggler fa fa-angle-up" data-toggle="collapse"
+                                           data-target="#interfaces-links"
+                   ></span>
+                               </div>
+                               <ul class="links collapse in"
+                                       id="interfaces-links"
+                   >
+                                       <li class="link">
+                                           <a href="../interfaces/AbilityData.html" >AbilityData</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../interfaces/CanComponentDeactivate.html" >CanComponentDeactivate</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../interfaces/CastLode.html" >CastLode</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../interfaces/Casti.html" >Casti</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../interfaces/DOCData.html" >DOCData</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../interfaces/DiscardDialogData.html" >DiscardDialogData</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../interfaces/Hrac.html" >Hrac</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../interfaces/IconDefinitions.html" >IconDefinitions</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../interfaces/LastMatch.html" >LastMatch</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../interfaces/Limits.html" >Limits</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../interfaces/LodDoc.html" >LodDoc</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../interfaces/LodViewData.html" >LodViewData</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../interfaces/Match.html" >Match</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../interfaces/MatchListData.html" >MatchListData</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../interfaces/Message.html" >Message</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../interfaces/MyBoardData.html"  class="active" >MyBoardData</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../interfaces/Notification.html" >Notification</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../interfaces/OnlyDocData.html" >OnlyDocData</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../interfaces/PoleModel.html" >PoleModel</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../interfaces/Posun.html" >Posun</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../interfaces/Raketa.html" >Raketa</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../interfaces/Tab.html" >Tab</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../interfaces/TahModel.html" >TahModel</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../interfaces/Uploding.html" >Uploding</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../interfaces/UserData.html" >UserData</a>
+                                       </li>
+                               </ul>
+                           </li>
+                   
+                   
+                           <li class="chapter">
+                               <a data-type="chapter-link" href="../miscellaneous.html" ><span class="fa fa-cubes"></span>Miscellaneous</a>
+                           </li>
+                   
+                           <li class="chapter">
+                               <a data-type="chapter-link" href="../coverage.html" ><span class="fa fa-tasks"></span>Documentation coverage</a>
+                           </li>
+                   
+                           <li class="divider"></li>
+                           <li class="copyright">
+                                   Documentation generated using <a href="https://compodoc.github.io/compodoc/" target="_blank">
+                                               <img src="..//images/compodoc-vectorise.svg" class="img-responsive">
+                                   </a>
+                           </li>
+                   
+                       </ul>
+                   
+                   </nav>
                </div>
-               <!-- START CONTENT -->
                <div class="content interface">
                    <div class="content-data">
-
-
-
-
-
 
 
 
@@ -47,16 +825,16 @@
 </ol>
 
 <ul class="nav nav-tabs" role="tablist">
-        <li class="active">
-            <a href="#info" role="tab" id="info-tab" data-toggle="tab" data-link="info">Info</a>
-        </li>
-        <li >
-            <a href="#source" role="tab" id="source-tab" data-toggle="tab" data-link="source">Source</a>
-        </li>
+    <li class="active">
+        <a href="#infos" id="infos-tab" role="tab" data-toggle="tab">Infos</a>
+    </li>
+    <li>
+        <a href="#source" role="tab" id="source-tab" data-toggle="tab">Source</a>
+    </li>
 </ul>
 
 <div class="tab-content">
-    <div class="tab-pane fade active in" id="c-info">
+    <div class="tab-pane fade active in" id="infos">
         <p class="comment">
             <h3>File</h3>
         </p>
@@ -66,41 +844,6 @@
 
 
 
-        <section>
-            <h3 id="index">Index</h3>
-            <table class="table table-sm table-bordered index-table">
-                <tbody>
-                    <tr>
-                        <td class="col-md-4">
-                            <h6><b>Properties</b></h6>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="col-md-4">
-                            <ul class="index-list">
-                                <li>
-                                            <span class="modifier">Optional</span>
-                                        <a href="#limits">limits</a>
-                                </li>
-                                <li>
-                                            <span class="modifier">Optional</span>
-                                        <a href="#placedShips">placedShips</a>
-                                </li>
-                                <li>
-                                            <span class="modifier">Optional</span>
-                                        <a href="#rozmisteno">rozmisteno</a>
-                                </li>
-                                <li>
-                                            <span class="modifier">Optional</span>
-                                        <a href="#ships">ships</a>
-                                </li>
-                            </ul>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </section>
-
 
 
             <section>
@@ -109,31 +852,23 @@
                         <tbody>
                                 <tr>
                                     <td class="col-md-4">
-                                        <a name="limits"></a>
-                                        <span class="name"><b>limits</b><a href="#limits"><span class="icon ion-ios-link"></span></a></span>
+                                        <b>limits</b>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td class="col-md-4">
-                                        <code>limits:     <code><a href="../interfaces/Limits.html" target="_self" >Limits</a></code>
-</code>
+                                        <code>limits:     <code>Limits</code>
+</bcode>
                                     </td>
                                 </tr>
 
 
                                     <tr>
                                         <td class="col-md-4">
-                                            <i>Type : </i>    <code><a href="../interfaces/Limits.html" target="_self" >Limits</a></code>
+                                            <i>Type : </i>    <code>Limits</code>
 
                                         </td>
                                     </tr>
-
-                                    <tr>
-                                        <td class="col-md-4">
-                                            <i>Optional</i>
-                                        </td>
-                                    </tr>
-
 
 
 
@@ -143,31 +878,23 @@
                         <tbody>
                                 <tr>
                                     <td class="col-md-4">
-                                        <a name="placedShips"></a>
-                                        <span class="name"><b>placedShips</b><a href="#placedShips"><span class="icon ion-ios-link"></span></a></span>
+                                        <b>placedShips</b>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td class="col-md-4">
-                                        <code>placedShips:     <code><a href="../interfaces/LodDoc.html" target="_self" >LodDoc[]</a></code>
-</code>
+                                        <code>placedShips:     <code>LodDoc[]</code>
+</bcode>
                                     </td>
                                 </tr>
 
 
                                     <tr>
                                         <td class="col-md-4">
-                                            <i>Type : </i>    <code><a href="../interfaces/LodDoc.html" target="_self" >LodDoc[]</a></code>
+                                            <i>Type : </i>    <code>LodDoc[]</code>
 
                                         </td>
                                     </tr>
-
-                                    <tr>
-                                        <td class="col-md-4">
-                                            <i>Optional</i>
-                                        </td>
-                                    </tr>
-
 
 
 
@@ -177,31 +904,23 @@
                         <tbody>
                                 <tr>
                                     <td class="col-md-4">
-                                        <a name="rozmisteno"></a>
-                                        <span class="name"><b>rozmisteno</b><a href="#rozmisteno"><span class="icon ion-ios-link"></span></a></span>
+                                        <b>rozmisteno</b>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td class="col-md-4">
-                                        <code>rozmisteno:     <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank" >boolean</a></code>
-</code>
+                                        <code>rozmisteno:     <code>boolean</code>
+</bcode>
                                     </td>
                                 </tr>
 
 
                                     <tr>
                                         <td class="col-md-4">
-                                            <i>Type : </i>    <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank" >boolean</a></code>
+                                            <i>Type : </i>    <code>boolean</code>
 
                                         </td>
                                     </tr>
-
-                                    <tr>
-                                        <td class="col-md-4">
-                                            <i>Optional</i>
-                                        </td>
-                                    </tr>
-
 
 
 
@@ -211,14 +930,13 @@
                         <tbody>
                                 <tr>
                                     <td class="col-md-4">
-                                        <a name="ships"></a>
-                                        <span class="name"><b>ships</b><a href="#ships"><span class="icon ion-ios-link"></span></a></span>
+                                        <b>ships</b>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td class="col-md-4">
                                         <code>ships:     <code><a href="../classes/LodData.html" target="_self" >LodData[]</a></code>
-</code>
+</bcode>
                                     </td>
                                 </tr>
 
@@ -230,23 +948,14 @@
                                         </td>
                                     </tr>
 
-                                    <tr>
-                                        <td class="col-md-4">
-                                            <i>Optional</i>
-                                        </td>
-                                    </tr>
-
-
 
 
                         </tbody>
                     </table>
             </section>
     </div>
-
-
-    <div class="tab-pane fade  tab-source-code" id="c-source">
-        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import {LodData, LodDoc} from &#x27;./lod.model&#x27;;
+    <div class="tab-pane fade tab-source-code" id="source">
+        <pre><code class="hljs javascript">import {LodData, LodDoc} from &#x27;./lod.model&#x27;;
 import {Limits} from &#x27;../services/game.service&#x27;;
 import {IconDefinition} from &#x27;@fortawesome/fontawesome-common-types&#x27;;
 import {Observable} from &#x27;rxjs&#x27;;
@@ -298,11 +1007,9 @@ export interface AbilityData {
 
 
 
-
-
                    </div><div class="search-results">
     <div class="has-results">
-        <h1 class="search-results-title"><span class='search-results-count'></span> result-matching "<span class='search-query'></span>"</h1>
+        <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
         <ul class="search-results-list"></ul>
     </div>
     <div class="no-results">
@@ -310,21 +1017,8 @@ export interface AbilityData {
     </div>
 </div>
 </div>
-               <!-- END CONTENT -->
            </div>
        </div>
-
-       <script>
-            var COMPODOC_CURRENT_PAGE_DEPTH = 1;
-            var COMPODOC_CURRENT_PAGE_CONTEXT = 'interface';
-            var COMPODOC_CURRENT_PAGE_URL = 'MyBoardData.html';
-       </script>
-
-       <script src="../js/libs/custom-elements.min.js"></script>
-       <script src="../js/libs/lit-html.js"></script>
-       <!-- Required to polyfill modern browsers as code is ES5 for IE... -->
-       <script src="../js/libs/custom-elements-es5-adapter.js" charset="utf-8" defer></script>
-       <script src="../js/menu-wc.js" defer></script>
 
        <script src="../js/libs/bootstrap-native.js"></script>
 
@@ -335,17 +1029,20 @@ export interface AbilityData {
 
        <script src="../js/compodoc.js"></script>
 
-       <script src="../js/tabs.js"></script>
-       <script src="../js/menu.js"></script>
-       <script src="../js/libs/clipboard.min.js"></script>
-       <script src="../js/libs/prism.js"></script>
-       <script src="../js/sourceCode.js"></script>
-          <script src="../js/search/search.js"></script>
-          <script src="../js/search/lunr.min.js"></script>
-          <script src="../js/search/search-lunr.js"></script>
-          <script src="../js/search/search_index.js"></script>
-       <script src="../js/lazy-load-graphs.js"></script>
+       <script src="../js/search/search.js"></script>
+       <script src="../js/search/lunr.min.js"></script>
+       <script src="../js/search/search-lunr.js"></script>
 
+       <script src="../js/menu.js"></script>
+       <script src="../js/libs/highlight.pack.js"></script>
+       <script src="../js/libs/highlightjs-line-numbers.min.js"></script>
+       <script src="../js/search/search_index.js"></script>
+       <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                hljs.initHighlightingOnLoad();
+                hljs.initLineNumbersOnLoad();
+            });
+       </script>
 
     </body>
 </html>

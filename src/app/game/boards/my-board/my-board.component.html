@@ -2,7 +2,7 @@
     <div #list
          class="content" [style.width.px]="getHeight()">
         <div class="tile"
-             *ngFor="let pole of poles"
+             *ngFor="let pole of poles; let i = index"
              [style.top.px]="pole.pozice.y * getHeight() / 21"
              [style.left.px]="pole.pozice.x * getHeight() / 21"
              [style.width.px]="getHeight() / 21"
@@ -11,9 +11,9 @@
                 'hover' : pole.state === stavPole.hover && (boardEntered | async),
                 'lod': pole.state === stavPole.lod,
                 'chyba-pokladani': pole.state === stavPole.chybaPokladani,
-                'poskozenaLod':  pole.state === stavPole.poskozenaLod,
-                'zasazeneMore':  pole.state === stavPole.zasazeneMore,
-                'znicenaLod': pole.state === stavPole.znicenaLod
+                'poskozena-lod':  pole.state === stavPole.poskozenaLod,
+                'zasazene-more':  pole.state === stavPole.zasazeneMore,
+                'znicena-lod': pole.state === stavPole.znicenaLod
              }">
             <img *ngIf="pole.lod != null"
                  style="z-index: 1000; pointer-events: none; position: absolute; zoom: 90%"

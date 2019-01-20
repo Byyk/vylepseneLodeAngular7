@@ -90,7 +90,7 @@ export class OponentsBoardComponent implements OnInit {
         });
         if (nezasazazena.length === 0) return;
         this.afa.idToken.pipe(first()).subscribe(token =>  {
-            this.http.post(`${environment.urlBase}/matches/attack`, {
+            this.http.post(`${environment.urlBase}/matches/Attack`, {
                 token: token,
                 pozice: {x, y},
                 typ: this.actualRocket.typ,

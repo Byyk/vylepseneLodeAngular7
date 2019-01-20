@@ -21,7 +21,7 @@
             justify-content: center;
 
             &.lod {
-                background: #00B303;
+                background: #eef3;
             }
 
             &.chyba-pokladani {
@@ -30,22 +30,20 @@
 
             &.hover {
                 background: #fff4;
+                z-index: 1002;
+            }
+
+            &.poskozena-lod {
+                background: #E35C6499;
                 z-index: 1001;
             }
 
-            &.chybaPokladani {
-
+            &.zasazene-more {
+                background: #0004;
+                z-index: 1001;
             }
 
-            &.poskozenaLod {
-
-            }
-
-            &.zasazeneMore {
-
-            }
-
-            &.znicenaLod {
+            &.znicena-lod {
 
             }
         }

@@ -3,7 +3,7 @@ import {GameService, Mode} from '../../../services/game.service';
 import {Point, PoleModel, StavPole} from '../../../model/pole.model';
 import {LodModel} from '../../../model/lod.model';
 import {BehaviorSubject} from 'rxjs';
-import {filter, first, last} from 'rxjs/operators';
+import {filter, skip} from 'rxjs/operators';
 
 @Component({
     selector: 'app-my-board',
@@ -16,6 +16,7 @@ export class MyBoardComponent implements OnInit {
     public stavPole = StavPole;
     public boardEntered = new BehaviorSubject(false);
     private shipsLoaded = new BehaviorSubject(false);
+    private dopady = new Array<PoleModel>();
     private CanPolozit = false;
     private polozeneLode : LodModel[] = [];
     private pointLastHovered: Point = {x: -1, y: -1};
@@ -77,6 +78,7 @@ export class MyBoardComponent implements OnInit {
                 this.poles.push({pozice: cast.pozice, state: StavPole.hover});
             }
         else this.poles.push({state: StavPole.hover, pozice: {x: this.pointLastHovered.x, y: this.pointLastHovered.y}});
+        this.poles = this.poles.concat(this.dopady);
     }
     pokladaniView(){
         const casti = this.lod.castiLode;
@@ -123,6 +125,22 @@ export class MyBoardComponent implements OnInit {
         if(this.gs.ships != null)
             this.zpracujLode(this.gs.ships);
         else this.gs.ships$.subscribe(this.zpracujLode);
+        this.gs._dopady.pipe(skip(1)).subscribe((dopady) => {
+            this.dopady = dopady.map(point => {
+                if(this.JeLodNapozici(point))
+                    return {pozice: point, state: StavPole.poskozenaLod} as PoleModel;
+                else return {pozice: point, state: StavPole.zasazeneMore} as PoleModel;
+            });
+            this.View();
+        });
+        this.gs.dopad.pipe(skip(1)).subscribe(dopad => {
+            this.dopady = this.dopady.concat(dopad.map(_dopad => {
+                if(this.dopady.some(d => Point.Equals(d.pozice, _dopad))) return null;
+                if(this.JeLodNapozici(_dopad))
+                    return {pozice: _dopad, state: StavPole.poskozenaLod} as PoleModel;
+                else return {pozice: _dopad, state: StavPole.zasazeneMore} as PoleModel;
+            }).filter(_dopad => _dopad != null));
+        });
     }
     floor = Math.floor;
     private zpracujLode = lode => {
@@ -135,5 +153,14 @@ export class MyBoardComponent implements OnInit {
             }
             this.View();
         });
+    }
+    private JeLodNapozici(point: Point) {
+        for(const lod of this.polozeneLode) {
+            for(const cast of lod.castiLode) {
+                if(!Point.Equals(cast.pozice, point)) continue;
+                return Point.Equals(cast.pozice, point);
+            }
+        }
+        return false;
     }
 }

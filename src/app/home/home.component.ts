@@ -15,7 +15,6 @@ export class HomeComponent implements OnInit {
     }
 
     ngOnInit() {
-        const a = floor(1.0);
     }
 
     getRandomImage(): string {

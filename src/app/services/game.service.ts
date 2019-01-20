@@ -5,7 +5,7 @@ import {Match} from '../model/match.model';
 import {LoginService} from './login.service';
 import {LodData, LodDoc} from '../model/lod.model';
 import {AngularFirestore} from '@angular/fire/firestore';
-import {map, skip} from 'rxjs/operators';
+import {first, map, skip, skipWhile} from 'rxjs/operators';
 import {HttpClient} from '@angular/common/http';
 import {environment} from '../../environments/environment';
 import {AbilityData, DOCData} from '../model/my-board.model';
@@ -57,6 +57,13 @@ export class GameService {
     public vystrely: Observable<Point[]>;
     public Vystrely: Point[] = [];
 
+    public _dopady = new BehaviorSubject<Point[]>([]);
+    public dopady: Observable<Point[]>;
+    public Dopady: Point[] = [];
+
+    public _dopad = new BehaviorSubject<Point[]>(null);
+    public dopad: Observable<Point[]>;
+
     public _zbrane = new BehaviorSubject<Raketa[]>(null);
     public zbrane: Observable<Raketa[]>;
 
@@ -68,11 +75,17 @@ export class GameService {
     ) {
         this.enemyShips = this._enemyShips.pipe(skip(1));
         this.vystrely = this._vystrely.asObservable();
+        this.dopady = this._dopady.asObservable();
         this.zbrane = this._zbrane.asObservable();
+        this.actualWeapon = this._actualWeapon.asObservable();
+        this.dopad = this._dopad.asObservable();
+
         this.vystrely.subscribe(strela => {
             this.Vystrely = this.Vystrely.concat(strela);
         });
-        this.actualWeapon = this._actualWeapon.asObservable();
+        this.dopady.subscribe(dopad => {
+            this.Dopady = this.Dopady.concat(dopad);
+        });
 
         this.actualField = this._actualField.asObservable();
         this.actualField.subscribe((data) => this.ActualField = data);
@@ -87,7 +100,7 @@ export class GameService {
                 const ret = [];
                 for (const doc of data) {
                     for (const key in doc) {
-                        if (typeof doc[key] === "number") continue;
+                        if (typeof doc[key] === 'number') continue;
                         const utok = doc[key] as AbilityData;
                         ret.push({
                             typ: key.split('-')[0],
@@ -124,25 +137,34 @@ export class GameService {
                             map(Data => ({
                                 creator: Data.filter(_data => _data.seenFor === 'creator'),
                                 opponent: Data.filter(_data => _data.seenFor === 'opponent')
-                            }))
+                            })),
+                            first()
                         ).subscribe(res => {
                             this.zbrane.subscribe(zbrane => {
                                 if (data == null) return;
-                                const vysledek = [];
-                                res[this.ls.userData.lastMatch.creator ? 'creator' : 'opponent']
-                                    .filter(utok => utok.type === "Utok")
-                                    .map((raketa: TahModel) => raketa.tahData)
-                                    .map((raketa: Utok) => {
-                                        const zbran = zbrane.find(_zbran => _zbran.subTyp === raketa.subTyp);
-                                        return zbran.pattern.map(pat => Point.Sum(pat, raketa.poziceZasahu));
-                                    }).forEach((points: Point[]) => {
-                                    points.forEach(point => {
-                                        if (!vysledek.some(vys => Point.Equals(point, vys)) &&
-                                            point.x >= 0 && point.x <= 20 && point.y >= 0 && point.y <= 20)
-                                            vysledek.push(point);
-                                    });
-                                });
+
+                                let vysledek = [];
+                                this.HnadleVystrely(vysledek,
+                                    this.ls.userData.lastMatch.creator ? 'creator' : 'opponent', zbrane, res);
+
                                 this._vystrely.next(vysledek);
+                                vysledek = [];
+                                this.HnadleVystrely(vysledek,
+                                    this.ls.userData.lastMatch.creator ? 'opponent' : 'creator', zbrane, res);
+                                this._dopady.next(vysledek);
+
+                                this.afs.collection<TahModel>(`Matches/${this.ls.userData.lastMatch.lastMatchUid}/Tahy`, ref =>
+                                    ref.where('seenFor', '==', this.ls.userData.lastMatch.creator ? 'opponent' : 'creator')
+                                        .orderBy('timestamp', 'desc')
+                                        .limit(1)
+                                ).valueChanges().pipe(
+                                    map(tah => tah[0]),
+                                    skipWhile(tah => tah == null),
+                                    map(tah => {
+                                        return zbrane.find(_zbran => _zbran.subTyp === tah.tahData.subTyp)
+                                            .pattern.map(point => Point.Sum(point, tah.tahData.poziceZasahu));
+                                    })
+                                ).subscribe(dopad => this._dopad.next(dopad));
                             });
                         });
                     }
@@ -168,11 +190,12 @@ export class GameService {
         this.shipSelected = this._shipSelected.asObservable().pipe(skip(1));
 
         ls.userloaded.subscribe((data: boolean) => {
-            if (data && this.ls.userData.lastMatch.lastMatchUid !== '')
+            if (data && this.ls.userData.lastMatch.lastMatchUid !== ''){
                 this.mms.getMyMatch().subscribe((match: Match) => {
                     if (this.Rozmisteno !== match.rozmisteno)
                         this._rozmisteno.next(match.rozmisteno);
                 });
+            }
         });
     }
 
@@ -240,6 +263,27 @@ export class GameService {
 
     public setWeapon(wea: AbilityData) {
         this._actualWeapon.next(wea);
+    }
+
+    private HnadleVystrely(
+        vysledek: Point[],
+        field: string,
+        zbrane: Raketa[],
+        tahy: { creator: TahModel[], opponent: TahModel[] }
+    ) {
+        tahy[field]
+            .filter(utok => utok.type === 'Utok')
+            .map((raketa: TahModel) => raketa.tahData)
+            .map((raketa: Utok) => {
+                const zbran = zbrane.find(_zbran => _zbran.subTyp === raketa.subTyp);
+                return zbran.pattern.map(pat => Point.Sum(pat, raketa.poziceZasahu));
+            }).forEach((points: Point[]) => {
+            points.forEach(point => {
+                if (!vysledek.some(vys => Point.Equals(point, vys)) &&
+                    point.x >= 0 && point.x <= 20 && point.y >= 0 && point.y <= 20)
+                    vysledek.push(point);
+            });
+        });
     }
 }
 
