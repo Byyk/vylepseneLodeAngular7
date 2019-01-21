@@ -1,62 +1,66 @@
 #pop-up-container {
-      position: fixed;
-      top: 74px;
-      right: 15px;
-      z-index: 1009;
-      width: 400px;
-      height: 110px;
-      background: #40C0DA;
-      border-radius: 3px;
+    position: fixed;
+    top: 74px;
+    right: 15px;
+    z-index: 1009;
+    width: 400px;
+    height: 110px;
+    background: #40C0DA;
+    border-radius: 3px;
 
-      #profile-image {
-            position: absolute;
-            top: 5px;
-            left: 5px;
-            z-index: 1012;
+    #profile-image {
+        position: absolute;
+        top: 5px;
+        left: 5px;
+        z-index: 1012;
+        width: 100px;
+        height: 100px;
+
+        img {
             width: 100px;
             height: 100px;
-
-            img {
-                  width: 100px;
-                  height: 100px;
-                  pointer-events: none;
-                  border-radius: 100%;
-                  box-shadow: #0005 2px 2px;
-            }
-      }
-
-      #profile-data {
-          position: absolute;
-          left: 55px;
-          right: 5px;
-          top: 6px;
-          height: 99px;
-          background: #00809A;
-          z-index: 101;
-          padding: 10px 10px 5px 55px;
-          box-sizing: border-box;
-          font-family: "Comic Sans MS", serif;
-          font-size: 1.1rem;
-
-          #golds {
-              margin-top: 7px;
-              display: inline-block;
-              fa-icon {
-                  color: #D1DB02;
-              }
-          }
-      }
-
-      button {
             position: absolute;
-            right: 10px;
-            bottom: 10px;
-            z-index: 1013;
-            zoom: 75%;
+            pointer-events: none;
+            border-radius: 100%;
+            background: #eee;
+            box-shadow: #0005 2px 2px;
+            box-shadow: #0005 2px 2px;
+        }
+    }
+
+    #profile-data {
+        position: absolute;
+        left: 55px;
+        right: 5px;
+        top: 6px;
+        height: 99px;
+        background: #00809A;
+        z-index: 101;
+        padding: 10px 10px 5px 55px;
+        box-sizing: border-box;
+        font-family: "Comic Sans MS", serif;
+        font-size: 1.1rem;
+
+        #golds {
+            margin-top: 7px;
+            display: inline-block;
 
             fa-icon {
-                  color: #AEB1B1;
-                  zoom: 160%;
+                color: #D1DB02;
             }
-      }
+        }
+    }
+
+    button {
+        position: absolute;
+        right: 10px;
+        bottom: 10px;
+        z-index: 1013;
+        zoom: 75%;
+
+        fa-icon {
+            color: #AEB1B1;
+            zoom: 160%;
+        }
+    }
 }

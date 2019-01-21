@@ -1,4 +1,4 @@
-import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
+import {ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {GameService, Mode} from '../../../services/game.service';
 import {Point, PoleModel, StavPole} from '../../../model/pole.model';
 import {LodModel} from '../../../model/lod.model';
@@ -25,7 +25,8 @@ export class MyBoardComponent implements OnInit {
     public list: ElementRef<HTMLDivElement>;
 
     constructor(
-        public gs: GameService
+        public gs: GameService,
+        private cdr: ChangeDetectorRef
     ) {}
 
     getHeight(){
@@ -140,6 +141,8 @@ export class MyBoardComponent implements OnInit {
                     return {pozice: _dopad, state: StavPole.poskozenaLod} as PoleModel;
                 else return {pozice: _dopad, state: StavPole.zasazeneMore} as PoleModel;
             }).filter(_dopad => _dopad != null));
+            this.View();
+            this.cdr.markForCheck();
         });
     }
     floor = Math.floor;
@@ -151,9 +154,9 @@ export class MyBoardComponent implements OnInit {
             for(const lod of this.polozeneLode) {
                 this.gs.lodPolozina(lod.data.rank);
             }
-            this.View();
         });
     }
+
     private JeLodNapozici(point: Point) {
         for(const lod of this.polozeneLode) {
             for(const cast of lod.castiLode) {

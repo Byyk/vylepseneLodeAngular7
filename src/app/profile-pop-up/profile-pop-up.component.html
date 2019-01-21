@@ -1,7 +1,7 @@
 <div id="pop-up-container">
       <div *ngIf="(ls.afa.user | async) as user">
             <div id="profile-image">
-                <img [src]="user.photoURL" alt="profile-img">
+                <img [src]="user.photoURL">
             </div>
             <div id="profile-data">
                 <span id="profile-user-name"> {{ user.displayName }} </span> <br/>

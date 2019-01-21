@@ -1018,6 +1018,33 @@
                             </tr>
                         </tbody>
                     </table>
+                    <table class="table table-sm table-bordered">
+                        <tbody>
+                            <tr>
+                                <td class="col-md-4">
+                                    <b><span class="modifier">Private</span> HnadleVystrely</b>
+                                </td>
+                            </tr>
+            
+                            <tr>
+                                <td class="col-md-4">
+                                        <span class="modifier-icon method fa fa-play lock">
+                                            <span class="fa fa-lock"></span>
+                                        </span>
+                                    <code>HnadleVystrely(vysledek: <a href="../classes/Point.html" >Point[]</a>, field: string, zbrane: Raketa[], tahy: { creator: TahModel[]; opponent: TahModel[]; })</code>
+                                </td>
+                            </tr>
+            
+                            <tr>
+                                <td class="col-md-4">
+                                        <div class="io-description">
+                                            <b>Returns: </b>    <code>void</code>
+            
+                                        </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
             </section>
 
             <section>
@@ -1062,6 +1089,36 @@
                             <tr>
                                 <td class="col-md-4">
                                     <span class="modifier-icon fa fa-circle"></span><code>_actualWeapon:     <code>BehaviorSubject&lt;AbilityData&gt;</code>
+            </bcode>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <table class="table table-sm table-bordered">
+                        <tbody>
+                            <tr>
+                                <td class="col-md-4">
+                                    <b><span class="modifier">Public</span> _dopad</b>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <span class="modifier-icon fa fa-circle"></span><code>_dopad:     <code><a href="../classes/Point.html" target="_self" >BehaviorSubject&lt;Point[]&gt;</a></code>
+            </bcode>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <table class="table table-sm table-bordered">
+                        <tbody>
+                            <tr>
+                                <td class="col-md-4">
+                                    <b><span class="modifier">Public</span> _dopady</b>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <span class="modifier-icon fa fa-circle"></span><code>_dopady:     <code><a href="../classes/Point.html" target="_self" >BehaviorSubject&lt;Point[]&gt;</a></code>
             </bcode>
                                 </td>
                             </tr>
@@ -1242,6 +1299,51 @@
                             <tr>
                                 <td class="col-md-4">
                                     <span class="modifier-icon fa fa-circle"></span><code>actualWeapon:     <code>Observable&lt;AbilityData&gt;</code>
+            </bcode>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <table class="table table-sm table-bordered">
+                        <tbody>
+                            <tr>
+                                <td class="col-md-4">
+                                    <b><span class="modifier">Public</span> dopad</b>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <span class="modifier-icon fa fa-circle"></span><code>dopad:     <code><a href="../classes/Point.html" target="_self" >Observable&lt;Point[]&gt;</a></code>
+            </bcode>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <table class="table table-sm table-bordered">
+                        <tbody>
+                            <tr>
+                                <td class="col-md-4">
+                                    <b><span class="modifier">Public</span> dopady</b>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <span class="modifier-icon fa fa-circle"></span><code>dopady:     <code><a href="../classes/Point.html" target="_self" >Observable&lt;Point[]&gt;</a></code>
+            </bcode>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <table class="table table-sm table-bordered">
+                        <tbody>
+                            <tr>
+                                <td class="col-md-4">
+                                    <b><span class="modifier">Public</span> Dopady</b>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <span class="modifier-icon fa fa-circle"></span><code>Dopady:     <code><a href="../classes/Point.html" target="_self" >Point[]</a></code>
             </bcode>
                                 </td>
                             </tr>
@@ -1472,7 +1574,7 @@ import {Match} from &#x27;../model/match.model&#x27;;
 import {LoginService} from &#x27;./login.service&#x27;;
 import {LodData, LodDoc} from &#x27;../model/lod.model&#x27;;
 import {AngularFirestore} from &#x27;@angular/fire/firestore&#x27;;
-import {map, skip} from &#x27;rxjs/operators&#x27;;
+import {first, map, skip, skipWhile} from &#x27;rxjs/operators&#x27;;
 import {HttpClient} from &#x27;@angular/common/http&#x27;;
 import {environment} from &#x27;../../environments/environment&#x27;;
 import {AbilityData, DOCData} from &#x27;../model/my-board.model&#x27;;
@@ -1524,6 +1626,13 @@ export class GameService {
     public vystrely: Observable&lt;Point[]&gt;;
     public Vystrely: Point[] &#x3D; [];
 
+    public _dopady &#x3D; new BehaviorSubject&lt;Point[]&gt;([]);
+    public dopady: Observable&lt;Point[]&gt;;
+    public Dopady: Point[] &#x3D; [];
+
+    public _dopad &#x3D; new BehaviorSubject&lt;Point[]&gt;(null);
+    public dopad: Observable&lt;Point[]&gt;;
+
     public _zbrane &#x3D; new BehaviorSubject&lt;Raketa[]&gt;(null);
     public zbrane: Observable&lt;Raketa[]&gt;;
 
@@ -1535,11 +1644,17 @@ export class GameService {
     ) {
         this.enemyShips &#x3D; this._enemyShips.pipe(skip(1));
         this.vystrely &#x3D; this._vystrely.asObservable();
+        this.dopady &#x3D; this._dopady.asObservable();
         this.zbrane &#x3D; this._zbrane.asObservable();
+        this.actualWeapon &#x3D; this._actualWeapon.asObservable();
+        this.dopad &#x3D; this._dopad.asObservable();
+
         this.vystrely.subscribe(strela &#x3D;&gt; {
             this.Vystrely &#x3D; this.Vystrely.concat(strela);
         });
-        this.actualWeapon &#x3D; this._actualWeapon.asObservable();
+        this.dopady.subscribe(dopad &#x3D;&gt; {
+            this.Dopady &#x3D; this.Dopady.concat(dopad);
+        });
 
         this.actualField &#x3D; this._actualField.asObservable();
         this.actualField.subscribe((data) &#x3D;&gt; this.ActualField &#x3D; data);
@@ -1591,25 +1706,34 @@ export class GameService {
                             map(Data &#x3D;&gt; ({
                                 creator: Data.filter(_data &#x3D;&gt; _data.seenFor &#x3D;&#x3D;&#x3D; &#x27;creator&#x27;),
                                 opponent: Data.filter(_data &#x3D;&gt; _data.seenFor &#x3D;&#x3D;&#x3D; &#x27;opponent&#x27;)
-                            }))
+                            })),
+                            first()
                         ).subscribe(res &#x3D;&gt; {
                             this.zbrane.subscribe(zbrane &#x3D;&gt; {
                                 if (data &#x3D;&#x3D; null) return;
-                                const vysledek &#x3D; [];
-                                res[this.ls.userData.lastMatch.creator ? &#x27;creator&#x27; : &#x27;opponent&#x27;]
-                                    .filter(utok &#x3D;&gt; utok.type &#x3D;&#x3D;&#x3D; &#x27;Utok&#x27;)
-                                    .map((raketa: TahModel) &#x3D;&gt; raketa.tahData)
-                                    .map((raketa: Utok) &#x3D;&gt; {
-                                        const zbran &#x3D; zbrane.find(_zbran &#x3D;&gt; _zbran.subTyp &#x3D;&#x3D;&#x3D; raketa.subTyp);
-                                        return zbran.pattern.map(pat &#x3D;&gt; Point.Sum(pat, raketa.poziceZasahu));
-                                    }).forEach((points: Point[]) &#x3D;&gt; {
-                                    points.forEach(point &#x3D;&gt; {
-                                        if (!vysledek.some(vys &#x3D;&gt; Point.Equals(point, vys)) &amp;&amp;
-                                            point.x &gt;&#x3D; 0 &amp;&amp; point.x &lt;&#x3D; 20 &amp;&amp; point.y &gt;&#x3D; 0 &amp;&amp; point.y &lt;&#x3D; 20)
-                                            vysledek.push(point);
-                                    });
-                                });
+
+                                let vysledek &#x3D; [];
+                                this.HnadleVystrely(vysledek,
+                                    this.ls.userData.lastMatch.creator ? &#x27;creator&#x27; : &#x27;opponent&#x27;, zbrane, res);
+
                                 this._vystrely.next(vysledek);
+                                vysledek &#x3D; [];
+                                this.HnadleVystrely(vysledek,
+                                    this.ls.userData.lastMatch.creator ? &#x27;opponent&#x27; : &#x27;creator&#x27;, zbrane, res);
+                                this._dopady.next(vysledek);
+
+                                this.afs.collection&lt;TahModel&gt;(&#x60;Matches/${this.ls.userData.lastMatch.lastMatchUid}/Tahy&#x60;, ref &#x3D;&gt;
+                                    ref.where(&#x27;seenFor&#x27;, &#x27;&#x3D;&#x3D;&#x27;, this.ls.userData.lastMatch.creator ? &#x27;opponent&#x27; : &#x27;creator&#x27;)
+                                        .orderBy(&#x27;timestamp&#x27;, &#x27;desc&#x27;)
+                                        .limit(1)
+                                ).valueChanges().pipe(
+                                    map(tah &#x3D;&gt; tah[0]),
+                                    skipWhile(tah &#x3D;&gt; tah &#x3D;&#x3D; null),
+                                    map(tah &#x3D;&gt; {
+                                        return zbrane.find(_zbran &#x3D;&gt; _zbran.subTyp &#x3D;&#x3D;&#x3D; tah.tahData.subTyp)
+                                            .pattern.map(point &#x3D;&gt; Point.Sum(point, tah.tahData.poziceZasahu));
+                                    })
+                                ).subscribe(dopad &#x3D;&gt; this._dopad.next(dopad));
                             });
                         });
                     }
@@ -1635,11 +1759,12 @@ export class GameService {
         this.shipSelected &#x3D; this._shipSelected.asObservable().pipe(skip(1));
 
         ls.userloaded.subscribe((data: boolean) &#x3D;&gt; {
-            if (data &amp;&amp; this.ls.userData.lastMatch.lastMatchUid !&#x3D;&#x3D; &#x27;&#x27;)
+            if (data &amp;&amp; this.ls.userData.lastMatch.lastMatchUid !&#x3D;&#x3D; &#x27;&#x27;){
                 this.mms.getMyMatch().subscribe((match: Match) &#x3D;&gt; {
                     if (this.Rozmisteno !&#x3D;&#x3D; match.rozmisteno)
                         this._rozmisteno.next(match.rozmisteno);
                 });
+            }
         });
     }
 
@@ -1707,6 +1832,27 @@ export class GameService {
 
     public setWeapon(wea: AbilityData) {
         this._actualWeapon.next(wea);
+    }
+
+    private HnadleVystrely(
+        vysledek: Point[],
+        field: string,
+        zbrane: Raketa[],
+        tahy: { creator: TahModel[], opponent: TahModel[] }
+    ) {
+        tahy[field]
+            .filter(utok &#x3D;&gt; utok.type &#x3D;&#x3D;&#x3D; &#x27;Utok&#x27;)
+            .map((raketa: TahModel) &#x3D;&gt; raketa.tahData)
+            .map((raketa: Utok) &#x3D;&gt; {
+                const zbran &#x3D; zbrane.find(_zbran &#x3D;&gt; _zbran.subTyp &#x3D;&#x3D;&#x3D; raketa.subTyp);
+                return zbran.pattern.map(pat &#x3D;&gt; Point.Sum(pat, raketa.poziceZasahu));
+            }).forEach((points: Point[]) &#x3D;&gt; {
+            points.forEach(point &#x3D;&gt; {
+                if (!vysledek.some(vys &#x3D;&gt; Point.Equals(point, vys)) &amp;&amp;
+                    point.x &gt;&#x3D; 0 &amp;&amp; point.x &lt;&#x3D; 20 &amp;&amp; point.y &gt;&#x3D; 0 &amp;&amp; point.y &lt;&#x3D; 20)
+                    vysledek.push(point);
+            });
+        });
     }
 }
 

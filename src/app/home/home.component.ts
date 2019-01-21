@@ -18,6 +18,6 @@ export class HomeComponent implements OnInit {
     }
 
     getRandomImage(): string {
-        return `https://picsum.photos/${window.innerWidth}/300?random`;
+        return `https://picsum.photos/${window.innerWidth}/${window.innerHeight}?random`;
     }
 }

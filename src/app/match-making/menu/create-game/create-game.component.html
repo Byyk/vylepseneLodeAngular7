@@ -1,19 +1,19 @@
 <div [formGroup]="formGroup">
   <mat-form-field class="vstup" style="margin-left: 50px ">
-    <input matInput formControlName="RoomName" type="text" placeholder="Game Name"/>
+    <input matInput formControlName="RoomName" type="text" placeholder="název místnosti" required/>
   </mat-form-field>
   <mat-form-field class="vstup">
-    <mat-select value="Veřejná" placeholder="Group type" (valueChange)="typeSelectChanged($event)">
+    <mat-select value="Veřejná" placeholder="typ hry" (valueChange)="typeSelectChanged($event)" required>
       <mat-option *ngFor="let modifier of modifiers" [value]="modifier">
         {{ modifier }}
       </mat-option>
     </mat-select>
   </mat-form-field>
   <mat-form-field class="vstup">
-    <input formControlName="Password" matInput type="password" placeholder="room password"/>
+    <input formControlName="Password" matInput type="password" placeholder="heslo k místnosti"/>
   </mat-form-field>
   <button (click)="createGame()" class="create-button" mat-raised-button color="primary" [disabled]="createButtonDisabled">
-    {{ createButtonDisabled ? '' : 'Create' }}
+    {{ createButtonDisabled ? '' : 'Vytvořit' }}
     <span class="spinner-container">
       <mat-progress-spinner *ngIf="createButtonDisabled"
                             mode="indeterminate"

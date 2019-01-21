@@ -3,7 +3,7 @@ import { LoginService } from '../services/login.service';
 import { Component, OnInit } from '@angular/core';
 import {ActivatedRoute, NavigationEnd, Router, Event} from '@angular/router';
 import { map } from 'rxjs/operators';
-import { Observable } from 'rxjs';
+import {BehaviorSubject, Observable} from 'rxjs';
 import { User } from 'firebase';
 import {MessagingService} from "../services/messaging.service";
 import {faQuestion} from '@fortawesome/free-solid-svg-icons';
@@ -21,6 +21,7 @@ export class NavbarComponent implements OnInit {
   faQuestion = faQuestion;
 
   transparentNavbar = false;
+  isLoginpage = new BehaviorSubject<boolean>(false);
 
   isHandset$: Observable<boolean> = this.breakpointObserver.observe(Breakpoints.Handset)
     .pipe(map(result => result.matches));
@@ -40,12 +41,22 @@ export class NavbarComponent implements OnInit {
         console.log(token);
         console.log(this.mms.token);
       });
+      this.router.events.subscribe(event => {
+         if(event instanceof NavigationEnd){
+             if(event.url === "/Login") {
+                this.isLoginpage.next(true);
+             } else {
+                this.isLoginpage.next(false);
+             }
+         }
+      });
   }
 
   logout(){
     this.LService.logout();
     this.router.navigate(['/']);
   }
+
   goBack() {
     window.history.back();
   }

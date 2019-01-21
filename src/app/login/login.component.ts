@@ -35,7 +35,7 @@ import * as formGroups from './formGroups';
             transition('shown <=> hiddenLeft', [
                 animate('0.3s')
             ])
-        ]),
+        ])
     ]
 })
 export class LoginComponent extends Breakpointy implements OnInit {

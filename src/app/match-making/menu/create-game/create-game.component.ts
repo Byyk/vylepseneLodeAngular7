@@ -26,9 +26,9 @@ export class CreateGameComponent implements OnInit {
     this.modifiers = ['Veřejná', 'Privátní', 'Jen na pozvání'];
     this.needpassword = false;
     this.formGroup = this.fb.group({
-        RoomName:  [this.ls.userData.nickName + ' - room', Validators.required],
+        RoomName:  [this.ls.userData.nickName + '\'s - room', Validators.required],
         GroupType: ['Veřejná', Validators.required],
-        Password: ['ja jsem heslo :)']
+        Password: ['']
       });
   }
 

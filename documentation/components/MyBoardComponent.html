@@ -1111,6 +1111,33 @@
                     </tr>
                 </tbody>
             </table>
+            <table class="table table-sm table-bordered">
+                <tbody>
+                    <tr>
+                        <td class="col-md-4">
+                            <b><span class="modifier">Private</span> JeLodNapozici</b>
+                        </td>
+                    </tr>
+    
+                    <tr>
+                        <td class="col-md-4">
+                                <span class="modifier-icon method fa fa-play lock">
+                                    <span class="fa fa-lock"></span>
+                                </span>
+                            <code>JeLodNapozici(point: <a href="../classes/Point.html" >Point</a>)</code>
+                        </td>
+                    </tr>
+    
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-description">
+                                    <b>Returns: </b>    <code>void</code>
+    
+                                </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
     </section>
 
     <section>
@@ -1148,6 +1175,21 @@
                                 <i>Default value: </i><code>false</code>
                             </td>
                         </tr>
+                </tbody>
+            </table>
+            <table class="table table-sm table-bordered">
+                <tbody>
+                    <tr>
+                        <td class="col-md-4">
+                            <b><span class="modifier">Private</span> dopady</b>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <span class="modifier-icon fa fa-lock"></span><code>dopady:     <code>PoleModel[]</code>
+    </bcode>
+                        </td>
+                    </tr>
                 </tbody>
             </table>
             <table class="table table-sm table-bordered">
@@ -1313,7 +1355,7 @@ import {GameService, Mode} from &#x27;../../../services/game.service&#x27;;
 import {Point, PoleModel, StavPole} from &#x27;../../../model/pole.model&#x27;;
 import {LodModel} from &#x27;../../../model/lod.model&#x27;;
 import {BehaviorSubject} from &#x27;rxjs&#x27;;
-import {filter, first, last} from &#x27;rxjs/operators&#x27;;
+import {filter, skip} from &#x27;rxjs/operators&#x27;;
 
 @Component({
     selector: &#x27;app-my-board&#x27;,
@@ -1326,6 +1368,7 @@ export class MyBoardComponent implements OnInit {
     public stavPole &#x3D; StavPole;
     public boardEntered &#x3D; new BehaviorSubject(false);
     private shipsLoaded &#x3D; new BehaviorSubject(false);
+    private dopady &#x3D; new Array&lt;PoleModel&gt;();
     private CanPolozit &#x3D; false;
     private polozeneLode : LodModel[] &#x3D; [];
     private pointLastHovered: Point &#x3D; {x: -1, y: -1};
@@ -1387,6 +1430,7 @@ export class MyBoardComponent implements OnInit {
                 this.poles.push({pozice: cast.pozice, state: StavPole.hover});
             }
         else this.poles.push({state: StavPole.hover, pozice: {x: this.pointLastHovered.x, y: this.pointLastHovered.y}});
+        this.poles &#x3D; this.poles.concat(this.dopady);
     }
     pokladaniView(){
         const casti &#x3D; this.lod.castiLode;
@@ -1433,6 +1477,22 @@ export class MyBoardComponent implements OnInit {
         if(this.gs.ships !&#x3D; null)
             this.zpracujLode(this.gs.ships);
         else this.gs.ships$.subscribe(this.zpracujLode);
+        this.gs._dopady.pipe(skip(1)).subscribe((dopady) &#x3D;&gt; {
+            this.dopady &#x3D; dopady.map(point &#x3D;&gt; {
+                if(this.JeLodNapozici(point))
+                    return {pozice: point, state: StavPole.poskozenaLod} as PoleModel;
+                else return {pozice: point, state: StavPole.zasazeneMore} as PoleModel;
+            });
+            this.View();
+        });
+        this.gs.dopad.pipe(skip(1)).subscribe(dopad &#x3D;&gt; {
+            this.dopady &#x3D; this.dopady.concat(dopad.map(_dopad &#x3D;&gt; {
+                if(this.dopady.some(d &#x3D;&gt; Point.Equals(d.pozice, _dopad))) return null;
+                if(this.JeLodNapozici(_dopad))
+                    return {pozice: _dopad, state: StavPole.poskozenaLod} as PoleModel;
+                else return {pozice: _dopad, state: StavPole.zasazeneMore} as PoleModel;
+            }).filter(_dopad &#x3D;&gt; _dopad !&#x3D; null));
+        });
     }
     floor &#x3D; Math.floor;
     private zpracujLode &#x3D; lode &#x3D;&gt; {
@@ -1445,6 +1505,15 @@ export class MyBoardComponent implements OnInit {
             }
             this.View();
         });
+    }
+    private JeLodNapozici(point: Point) {
+        for(const lod of this.polozeneLode) {
+            for(const cast of lod.castiLode) {
+                if(!Point.Equals(cast.pozice, point)) continue;
+                return Point.Equals(cast.pozice, point);
+            }
+        }
+        return false;
     }
 }
 </code></pre>

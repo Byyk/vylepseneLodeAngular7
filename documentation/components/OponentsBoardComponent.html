@@ -1278,7 +1278,7 @@ export class OponentsBoardComponent implements OnInit {
         });
         if (nezasazazena.length &#x3D;&#x3D;&#x3D; 0) return;
         this.afa.idToken.pipe(first()).subscribe(token &#x3D;&gt;  {
-            this.http.post(&#x60;${environment.urlBase}/matches/attack&#x60;, {
+            this.http.post(&#x60;${environment.urlBase}/matches/Attack&#x60;, {
                 token: token,
                 pozice: {x, y},
                 typ: this.actualRocket.typ,

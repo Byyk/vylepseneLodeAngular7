@@ -29,13 +29,13 @@
             <span *ngIf="(LService.userloaded | async) && user$ | async as user">
                 <a *ngIf="!(isHandset | async)" mat-button (click)="profilePopUpVisible = !profilePopUpVisible"> {{user.email}} </a>
                 <button mat-button routerLink="matchmaking" id="hrat"> hrát </button>
-                <button mat-button (click)="logout()" [tabindex]="-1" id="logout"> Logout </button>
+                <button mat-button (click)="logout()" [tabindex]="-1" id="logout"> Odhlásit </button>
             </span>
-            <button mat-button *ngIf="!(user$ | async) && !transparentNavbar" style="margin-right: 10px"
+            <button mat-button *ngIf="!(user$ | async) && !(isLoginpage | async)" style="margin-right: 10px"
                     routerLink="/Login" routerLinkActive="active">
                 Login
             </button>
-            <button mat-button *ngIf="transparentNavbar" style="margin-right: 10px" (click)="goBack()">
+            <button mat-button *ngIf="(isLoginpage | async)" style="margin-right: 10px" (click)="goBack()">
                 Zpět
             </button>
         </mat-toolbar>
