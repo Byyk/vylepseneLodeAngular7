@@ -18,13 +18,8 @@ import { LoginComponent } from './login/login.component';
 import { ProfileComponent } from './profile/profile.component';
 import { CanDeactivateGuard } from "./guards/can-deactivate.guard";
 import { DiscardDialogComponent } from './discard-dialog/discard-dialog.component';
-import { MatchMakingComponent } from './match-making/match-making.component';
 import { MatchMakingService } from "./services/match-making.service";
 import { ProfileImageComponent } from './profile/profile-image/profile-image.component';
-import { LobbyComponent } from './match-making/lobby/lobby.component';
-import { MenuComponent } from './match-making/menu/menu.component';
-import { CreateGameComponent } from './match-making/menu/create-game/create-game.component';
-import { JoinGameComponent } from './match-making/menu/join-game/join-game.component';
 import { CircleButtonComponent } from './circle-button/circle-button.component';
 import { HttpClientModule } from '@angular/common/http';
 
@@ -37,16 +32,9 @@ import { PasswordDialogComponent } from './password-dialog/password-dialog.compo
 import { MessageContainerComponent } from './messages/message-container.component';
 import { MessageComponent } from './messages/message/message.component';
 import {CookieService} from 'ngx-cookie-service';
-import { TabsContainerComponent } from './match-making/lobby/tabs/tabs-container/tabs-container.component';
-import { TabsComponent } from './match-making/lobby/tabs/tabs.component';
-import { TabsNavComponent } from './match-making/lobby/tabs/tabs-nav/tabs-nav.component';
-import { TabComponent } from './match-making/lobby/tabs/tabs-nav/tab/tab.component';
 import { SliderComponent } from './match-making/lobby/tabs/tabs-nav/slider/slider.component';
-import { ChatComponent } from './match-making/lobby/tabs/chat/chat.component';
-import { RequestsComponent } from './match-making/lobby/tabs/requests/requests.component';
-import {ChatMessageComponent} from './match-making/lobby/tabs/chat/message/message.component';
 import { ProfilePopUpComponent } from './profile-pop-up/profile-pop-up.component';
-import {GameModule} from "./modules/game.module";
+import {MatchMakingModule} from './match-making/match-making.module';
 
 @NgModule({
     declarations: [
@@ -56,25 +44,11 @@ import {GameModule} from "./modules/game.module";
         LoginComponent,
         ProfileComponent,
         DiscardDialogComponent,
-        MatchMakingComponent,
         ProfileImageComponent,
-        LobbyComponent,
-        MenuComponent,
-        CreateGameComponent,
-        JoinGameComponent,
         CircleButtonComponent,
         ConfirmResetComponent,
-        PasswordDialogComponent,
         MessageContainerComponent,
         MessageComponent,
-        TabsContainerComponent,
-        TabsComponent,
-        TabsNavComponent,
-        TabComponent,
-        SliderComponent,
-        ChatComponent,
-        RequestsComponent,
-        ChatMessageComponent,
         ProfilePopUpComponent
     ],
     imports: [
@@ -84,13 +58,13 @@ import {GameModule} from "./modules/game.module";
         HttpClientModule,
         FormsModule,
         ReactiveFormsModule,
-        GameModule,
         AngularFireModule.initializeApp(environment.firebase),
         AngularFirestoreModule,
         AngularFireAuthModule,
         AngularFireStorageModule,
         AngularFireMessagingModule,
         AppFontAwesomeModule,
+        MatchMakingModule
     ],
     providers: [
         CanDeactivateGuard,

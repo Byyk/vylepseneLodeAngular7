@@ -14,3 +14,7 @@ export interface Raketa {
     type: number;
     pattern: Point[];
 }
+
+export interface Rakety {
+    [key: string]: Raketa[];
+}

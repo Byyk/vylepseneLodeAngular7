@@ -2,8 +2,10 @@ import {Component, AfterViewInit, OnInit} from '@angular/core';
 import { MessagingService } from "./services/messaging.service";
 import { environment } from '../environments/environment';
 import {CookieService} from 'ngx-cookie-service';
-import {BehaviorSubject} from 'rxjs';
+import {BehaviorSubject, of} from 'rxjs';
 import { detektorDevTools } from './model/devtools.event';
+import { StorageBuilder} from './Data-Storage/Storage';
+import {Gs2Service} from './services/gs2.service';
 
 @Component({
   selector: 'app-root',
@@ -16,7 +18,8 @@ export class AppComponent implements AfterViewInit, OnInit{
     message;
     constructor(
         public ms: MessagingService,
-        public cs: CookieService
+        public cs: CookieService,
+        public gs2: Gs2Service
     ){
         detektorDevTools();
         ms.getPermission();
@@ -38,6 +41,7 @@ export class AppComponent implements AfterViewInit, OnInit{
   }
 
     ngOnInit(){
+
     }
 
     isCookiesEnabled(): boolean {

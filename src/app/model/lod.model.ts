@@ -70,6 +70,7 @@ export interface LodDoc {
     LodDataUid: string;
     smer: Smer;
     pozice: Point;
+    casti?: Point[];
 }
 export interface Posun {
     rovne: { vert: number, hori: number } | null;
@@ -81,6 +82,9 @@ export interface Casti {
 }
 export interface CastLode {
     pozice: Point;
+}
+export interface LodeDto {
+    [key: string]: { lode: LodDoc[] };
 }
 export enum Smer {
     Nahoru = 0,
@@ -114,3 +118,4 @@ export const Smerhandlers: ((data: Point) => Point)[] = [
         return {x: data.y, y: -data.x};
     }  // 7
 ];
+
