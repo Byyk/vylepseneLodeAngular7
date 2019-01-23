@@ -5,6 +5,11 @@ export class Storage<T extends Object>  {
     private data: T;
     private readonly _emitors: Emitors<T>;
 
+    private update() {
+        console.log(this.data);
+        this.check();
+    }
+
     constructor(emitors: Emitors<T>) {
         this.data = {} as T;
         this._emitors = emitors;
@@ -22,7 +27,7 @@ export class Storage<T extends Object>  {
                     if(data.hasOwnProperty(key))
                         this.data[key] = data[key];
                 }
-                this.check();
+                this.update();
             }
         );
     }

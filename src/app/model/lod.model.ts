@@ -4,7 +4,7 @@ export class LodModel {
     public smer: Smer;
     constructor(
         public data: LodData,
-        public pozice: Point,
+        public pozice?: Point,
         smer?: Smer
     ){
         this.smer = smer != null ? smer : Smer.Nahoru;
