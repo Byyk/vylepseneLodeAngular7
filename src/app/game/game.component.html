@@ -1,10 +1,10 @@
-<div class="relative-container">
+<div class="relative-container" *ngIf="loading | async">
     <app-game-menu
-        [ngStyle]="{'width': (gs.rozmisteno | async) ? '50px' : '250px', 'left': (gs.rozmisteno | async) ? '-55px' : '-265px'}">
+        [ngStyle]="{'width': (rozmisteno | async) ? '50px' : '250px', 'left': (rozmisteno | async) ? '-55px' : '-265px'}">
     </app-game-menu>
-    <div id="game" *ngIf="(gs.actualField | async) as field">
-        <app-oponents-board style="overflow: hidden" [ngClass]="{'neviditelny': field  === 1}"></app-oponents-board>
-        <app-my-board style="overflow: hidden" [ngClass]="{'neviditelny': field === 2}"></app-my-board>
+    <div id="game" *ngIf="(gs2.boardsState | async).field as field">
+        <app-oponents-board style="overflow: hidden" [ngClass]="{'neviditelny': field  === Field.playerField}"></app-oponents-board>
+        <app-my-board style="overflow: hidden" [ngClass]="{'neviditelny': field === Field.enemyField}"></app-my-board>
     </div>
 </div>
 

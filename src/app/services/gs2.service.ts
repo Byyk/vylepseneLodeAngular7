@@ -1,22 +1,29 @@
 import { Injectable } from '@angular/core';
-import { MyBoardModel} from '../model/my-board.model';
+import {AbilityData, MyBoardModel} from '../model/my-board.model';
 import {MatchMakingService} from './match-making.service';
 import {LoginService} from './login.service';
-import {AngularFirestore, DocumentChangeAction } from '@angular/fire/firestore';
+import {AngularFirestore, DocumentChangeAction, DocumentSnapshot} from '@angular/fire/firestore';
 import {HttpClient} from '@angular/common/http';
 import {Storage, StorageBuilder} from '../Data-Storage/Storage';
 import {Match} from '../model/match.model';
-import {TahModel} from '../model/tah.model';
-import {LodData, LodeDto, LodModel} from '../model/lod.model';
+import {TahModel, Utok} from '../model/tah.model';
+import {LodData, LodDoc, LodeDto} from '../model/lod.model';
 import {Raketa, Rakety} from '../model/raketa.model';
 import {firestore} from 'firebase';
+import {BehaviorSubject} from 'rxjs';
+import {Limits} from './game.service';
+import {environment} from '../../environments/environment';
+import {Point} from '../model/pole.model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class Gs2Service {
     public myboard = new MyBoardModel();
-    private storage: Storage<GameState>;
+    public boardsState = new BehaviorSubject<BoardsState>({field: Field.playerField, mode: Mode.Nada});
+    public selectedShip = new BehaviorSubject<LodData>(null);
+    public selectedWeapon = new BehaviorSubject<AbilityData>(null);
+    public storage: Storage<GameState>;
 
     constructor(
         public mms: MatchMakingService,
@@ -26,32 +33,61 @@ export class Gs2Service {
     ) {
         this.storage = Gs2Service.buildStorage();
         this.sbirej();
-        this.storage.getTransformer(transformers.see).subscribe(data => console.log(data));
     }
 
     private static buildStorage() {
         return StorageBuilder.Build<GameState>([
-            {name: emitors.matchloaded, checker: (data) => data.match != null}
+            {name: emitors.match_ready, checker: isDataForMatchReady},
+            {name: emitors.rozmisteno, checker: data => data.match == null ? false : data.match.rozmisteno}
         ], [
-            {
-                name: transformers.see,
-                checker: (data, lastData) => data.tahy == null ? false : data.tahy[0].seenFor !== lastData,
-                transformer: (data) => data.tahy[0].seenFor
-            }
+            {name: transformers.dopady, transformer: dopadTransformer, checker: dopadTransformerChecker}
         ]);
     }
     private sbirej() {
         this.ls.userloaded.subscribe((prihlaseny) => {
            if(prihlaseny) {
                const matchUid = this.ls.userData.lastMatch.lastMatchUid;
-               this.storage.collect(this.afs.doc(`Matches/${ matchUid }`).get(), zpracujMatch);
+               this.storage.collect(this.afs.doc(`Matches/${ matchUid }`).valueChanges(), zpracujMatch);
                this.storage.collect(this.afs.collection(`Matches/${ matchUid }/Tahy`).valueChanges(), zpracujTahy);
                this.storage.collect(this.afs.collection(`Matches/${ matchUid }/Lode`).snapshotChanges(), zpracujLode);
            } else this.storage.clear();
         });
         this.storage.collect(this.afs.collection('Rakety').get(), zpracujUtoky);
         this.storage.collect(this.afs.collection('Lode').get(), zpracujDataLodi);
-        this.storage.getEmitor(emitors.matchloaded).subscribe(data => console.log(data, this.storage.getData()));
+        this.storage.collect(this.afs.doc('BackendData/Lode').get(), zpracujLimity);
+    }
+    public swapField() {
+        if(this.boardsState.value.field === Field.playerField)
+            this.boardsState.next({field: Field.enemyField, mode: this.boardsState.value.mode});
+        else this.boardsState.next({field: Field.playerField, mode: this.boardsState.value.mode});
+    }
+    public setWeapon(wea: AbilityData) {
+        this.selectedWeapon.next(wea);
+    }
+    public changeMode(mode: Mode) {
+        if(fieldMode.hasOwnProperty(mode))
+            this.boardsState.next({field: fieldMode[mode], mode: mode});
+        else this.boardsState.next({field: this.boardsState.value.field, mode: mode});
+    }
+    public selectShip(data: LodData) {
+        this.selectedShip.next(data);
+    }
+    public lodPolozina(rank: number, lode?: LodDoc[]) {
+        const limits = this.storage.getData(data => data.limits);
+        const ships = this.storage.getData(data => data.lodedata);
+        if (limits[rank] === 0) return;
+        limits[rank]--;
+        if (limits[rank] === 0) {
+            if (ships[rank] == null) {
+                this.changeMode(Mode.Nada);
+                if (lode != null)
+                    this.ls.afa.idToken.subscribe(token => {
+                        this.http.post(`${environment.urlBase}/matches/setLode`,
+                            {lode: lode, token: token}).subscribe();
+                    });
+            } else this.selectedShip.next(ships[rank]);
+        }
+        this.storage.updateData(data => data.limits = limits);
     }
 }
 
@@ -60,19 +96,25 @@ export interface GameState {
     tahy? : TahModel[];
     lode? : LodeDto;
     utoky? : Raketa[];
-    lodedata? : LodModel[];
+    lodedata? : LodData[];
+    limits? : Limits;
 }
 
-const emitors = {
-    matchloaded: 'matchloaded'
+export interface BoardsState {
+    mode: Mode;
+    field: Field;
+}
+
+export const emitors = {
+    match_ready: 'match_ready',
+    rozmisteno: 'rozmisteno'
 };
-const transformers = {
-    see: 'see'
+export const transformers = {
+    dopady: 'dopady'
 };
 
 // data formators
-const dataFromDoc = (doc) => doc.data();
-const zpracujMatch = (doc) => ({ match: dataFromDoc(doc) });
+const zpracujMatch = (doc) => ({ match: doc});
 const zpracujTahy = (tahy) => ({ tahy });
 const zpracujLode = (docs : DocumentChangeAction<any>[]) => {
     const ret = {};
@@ -101,8 +143,72 @@ const zpracujUtoky = (docs: firestore.QuerySnapshot) => {
 const zpracujDataLodi = (docs: firestore.QuerySnapshot) => {
     const ret = [];
     for(const doc of docs.docs) {
-        ret.push(new LodModel(doc.data() as LodData));
+        ret.push(doc.data());
     }
     return { lodedata: ret };
 };
+const zpracujLimity = (doc: DocumentSnapshot<Limits>) => ({limits: doc.data()});
 
+// Checkers
+const isDataForMatchReady = (data: GameState) => data.match != null && data.utoky != null && data.lodedata != null &&
+    (!data.match.rozmisteno || (data.tahy != null && data.lode != null));
+const dopadTransformerChecker = (data: GameState) => data.tahy != null && data.utoky != null;
+
+// Transformers
+const dopadTransformer = (data: GameState) => {
+    const res = {creator: [], opponent: []};
+    for(const key in data.tahy) {
+        res[data.tahy[key].seenFor].push(data.tahy[key]);
+    }
+    let vysledek = [];
+    hnadleVystrely(vysledek,
+        this.ls.userData.lastMatch.creator ? 'creator' : 'opponent', data.utoky, res);
+
+    this._vystrely.next(vysledek);
+    vysledek = [];
+    hnadleVystrely(vysledek,
+        this.ls.userData.lastMatch.creator ? 'opponent' : 'creator', data.utoky, res);
+    this._dopady.next(vysledek);
+};
+
+export enum Field {
+    playerField = 1,
+    enemyField = 2
+}
+export enum Mode {
+    Nada = 0,
+    Attack = 1,
+    HeavyAttack = 2,
+    SpecAbility = 3,
+    MoveShips = 4,
+    SafeCraw = 5,
+    PlaceShips = 6
+}
+const fieldMode = {
+    0: Field.playerField,
+    1: Field.enemyField,
+    2: Field.enemyField,
+    4: Field.playerField,
+    5: Field.playerField,
+    6: Field.playerField
+};
+function hnadleVystrely(
+    vysledek: Point[],
+    field: string,
+    zbrane: Raketa[],
+    tahy: { creator: TahModel[], opponent: TahModel[] }
+) {
+    tahy[field]
+        .filter(utok => utok.type === 'Utok')
+        .map((raketa: TahModel) => raketa.tahData)
+        .map((raketa: Utok) => {
+            const zbran = zbrane.find(_zbran => _zbran.subTyp === raketa.subTyp);
+            return zbran.pattern.map(pat => Point.Sum(pat, raketa.poziceZasahu));
+        }).forEach((points: Point[]) => {
+        points.forEach(point => {
+            if (!vysledek.some(vys => Point.Equals(point, vys)) &&
+                point.x >= 0 && point.x <= 20 && point.y >= 0 && point.y <= 20)
+                vysledek.push(point);
+        });
+    });
+}

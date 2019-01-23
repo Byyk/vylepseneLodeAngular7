@@ -1,5 +1,6 @@
 import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
-import {GameService} from '../services/game.service';
+import {emitors, Field, Gs2Service} from '../services/gs2.service';
+import {Observable} from 'rxjs';
 
 @Component({
     selector: 'app-game',
@@ -8,11 +9,15 @@ import {GameService} from '../services/game.service';
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class GameComponent implements OnInit {
+    public loading: Observable<boolean>;
+    public rozmisteno: Observable<boolean>;
+    public Field = Field;
 
     constructor(
-        public gs: GameService
+        public gs2: Gs2Service
     ) {
-        gs.actualField.subscribe(() => {});
+        this.loading = this.gs2.storage.getEmitor(emitors.match_ready);
+        this.rozmisteno = this.gs2.storage.getEmitor(emitors.rozmisteno);
     }
 
     ngOnInit() {

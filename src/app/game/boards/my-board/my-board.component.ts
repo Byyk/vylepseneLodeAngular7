@@ -1,9 +1,10 @@
 import {ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild} from '@angular/core';
-import {GameService, Mode} from '../../../services/game.service';
+import {Mode} from '../../../services/game.service';
 import {Point, PoleModel, StavPole} from '../../../model/pole.model';
 import {LodModel} from '../../../model/lod.model';
 import {BehaviorSubject} from 'rxjs';
-import {filter, skip} from 'rxjs/operators';
+import { skip} from 'rxjs/operators';
+import {emitors, GameState, Gs2Service, transformers} from '../../../services/gs2.service';
 
 @Component({
     selector: 'app-my-board',
@@ -25,17 +26,25 @@ export class MyBoardComponent implements OnInit {
     public list: ElementRef<HTMLDivElement>;
 
     constructor(
-        public gs: GameService,
+        private gs2: Gs2Service,
         private cdr: ChangeDetectorRef
-    ) {}
+    ) {
+        this.gs2.storage.getEmitor(emitors.rozmisteno).subscribe(is => {
+            if(is) {
+
+            } else {
+
+            }
+        });
+    }
 
     getHeight(){
         return this.list.nativeElement.offsetHeight;
     }
     clicked(event: MouseEvent) {
-        if(!this.CanPolozit || this.gs.Limits[this.lod.data.rank] === 0) return;
+        if(!this.CanPolozit || this.gs2.storage.getData((data) => data.limits)[this.lod.data.rank] === 0) return;
         this.polozeneLode.push(this.lod.clone());
-        this.gs.lodPolozina(this.lod.data.rank, this.polozeneLode.map(lod => lod.doc));
+        this.gs2.lodPolozina(this.lod.data.rank, this.polozeneLode.map(lod => lod.doc));
         this.View();
     }
     poleRightClick(){
@@ -60,7 +69,7 @@ export class MyBoardComponent implements OnInit {
     }
     View(){
         this.poles = [];
-        if(this.gs.ActualMode === Mode.PlaceShips)
+        if(this.gs2.boardsState.value.mode === Mode.PlaceShips)
             this.pokladaniView();
 
         this.polozeneLode.forEach(lod => {
@@ -120,13 +129,12 @@ export class MyBoardComponent implements OnInit {
         return lod.pozice.x === pole.pozice.x && lod.pozice.y === pole.pozice.y;
     }
     ngOnInit() {
-        this.gs.shipSelected.subscribe(data => {
+        // const ships = ;
+        this.gs2.selectedShip.subscribe(data => {
             this.lod.data = data;
         });
-        if(this.gs.ships != null)
-            this.zpracujLode(this.gs.ships);
-        else this.gs.ships$.subscribe(this.zpracujLode);
-        this.gs._dopady.pipe(skip(1)).subscribe((dopady) => {
+        this.zpracujLode(this.gs2.storage.getData(zpracujLode));
+        this.gs2.storage.getTransformer<Point[]>(transformers.dopady).pipe(skip(1)).subscribe(dopady => {
             this.dopady = dopady.map(point => {
                 if(this.JeLodNapozici(point))
                     return {pozice: point, state: StavPole.poskozenaLod} as PoleModel;
@@ -134,29 +142,18 @@ export class MyBoardComponent implements OnInit {
             });
             this.View();
         });
-        this.gs.dopad.pipe(skip(1)).subscribe(dopad => {
-            this.dopady = this.dopady.concat(dopad.map(_dopad => {
-                if(this.dopady.some(d => Point.Equals(d.pozice, _dopad))) return null;
-                if(this.JeLodNapozici(_dopad))
-                    return {pozice: _dopad, state: StavPole.poskozenaLod} as PoleModel;
-                else return {pozice: _dopad, state: StavPole.zasazeneMore} as PoleModel;
-            }).filter(_dopad => _dopad != null));
-            this.View();
-            this.cdr.markForCheck();
-        });
     }
     floor = Math.floor;
     private zpracujLode = lode => {
+        console.log(lode);
         this.lod = new LodModel(lode[0], { x: 1, y: 1 });
         this.shipsLoaded.next(true);
-        this.gs._placedShips.pipe(filter(_lode => _lode != null)).subscribe(_lode => {
-            this.polozeneLode = _lode.map(lod => new LodModel(lode.find(value => value.uid === lod.LodDataUid), lod.pozice, lod.smer));
-            for(const lod of this.polozeneLode) {
-                this.gs.lodPolozina(lod.data.rank);
-            }
-        });
+        this.polozeneLode = this.gs2.storage.getData(data => data.lode['creator'].lode)
+            .map(lod => new LodModel(lode.find(value => value.uid === lod.LodDataUid), lod.pozice, lod.smer));
+        for(const lod of this.polozeneLode) {
+            this.gs2.lodPolozina(lod.data.rank);
+        }
     }
-
     private JeLodNapozici(point: Point) {
         for(const lod of this.polozeneLode) {
             for(const cast of lod.castiLode) {
@@ -167,3 +164,7 @@ export class MyBoardComponent implements OnInit {
         return false;
     }
 }
+
+const zpracujLode = (data: GameState) => {
+    
+};

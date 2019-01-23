@@ -2,7 +2,6 @@ import {Component, Input, OnInit} from '@angular/core';
 import {AbilityData} from '../../../../model/my-board.model';
 import {IconDefinition} from '@fortawesome/fontawesome-common-types';
 import {FontAwesomeDirectory} from '../../../../model/FontAwesome.directory';
-import {tap} from 'rxjs/operators';
 
 @Component({
   selector: 'app-game-secondary-menu-item',

@@ -1,5 +1,6 @@
 import {BehaviorSubject, Observable} from 'rxjs';
 import {map} from 'rxjs/operators';
+import {GameState} from '../services/gs2.service';
 
 export class Storage<T extends Object>  {
     private data: T;
@@ -52,8 +53,14 @@ export class Storage<T extends Object>  {
         this.data = {} as T;
     }
 
-    getData() {
-        return this.data;
+    getData<A>(quarry?: (data: T) => A) {
+        if(quarry == null)
+            return {...this.data as object} as A;
+        return quarry({...this.data as object} as T);
+    }
+    updateData(quarry: (data: GameState) => void) {
+        quarry(this.data);
+        this.check();
     }
 
     private check() {

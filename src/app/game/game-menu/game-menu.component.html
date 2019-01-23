@@ -1,12 +1,12 @@
 <div id="main-container">
-    <div class="action" [matTooltip]="(gs.actualField | async) === 1 ? 'Útok' : 'Obrana'" (click)="gs.swapField()">
-        <img [ngClass]="{'neviditelny' : (gs.actualField | async) !== 1}"
+    <div class="action" [matTooltip]="(gs2.boardsState | async).field === 1 ? 'Útok' : 'Obrana'" (click)="gs2.swapField()">
+        <img [ngClass]="{'neviditelny' : (gs2.boardsState | async).field !== 1}"
              src="https://firebasestorage.googleapis.com/v0/b/lode-1835e.appspot.com/o/attack.png?alt=media&token=3f8b4f23-dca7-4f8c-8287-cff9ea276420" alt="protivníkovo pole">
-        <img  [ngClass]="{'neviditelny' : (gs.actualField | async) !== 2}"
+        <img  [ngClass]="{'neviditelny' : (gs2.boardsState | async).field !== 2}"
               src="https://firebasestorage.googleapis.com/v0/b/lode-1835e.appspot.com/o/defenc.png?alt=media&token=033f27b8-6822-456e-aada-5f3daa9289ef" alt="moje pole">
     </div>
     <div class="separator"></div>
-    <div *ngFor="let tab of menu.tabs; let i = index" #tabs class="action" [ngClass]="{'active': (gs.actualMode | async) === i + 1}">
+    <div *ngFor="let tab of menu.tabs; let i = index" #tabs class="action" [ngClass]="{'active': (gs2.boardsState | async).field === i + 1}">
         <fa-icon [icon]="tab.icon" size="2x"></fa-icon>
         <div class="events-handler" [matTooltip]="tab.toolTip"></div>
         <app-game-secondary-menu
@@ -17,11 +17,11 @@
         </app-game-secondary-menu>
     </div>
 </div>
-<div id="secondary-container" *ngIf="!(gs.rozmisteno | async)">
-    <div *ngFor="let lode of (ships$ | async)" class="seznam">
+<div id="secondary-container" *ngIf="!(rozmisteno | async)">
+    <div *ngFor="let lode of ships" class="seznam">
         <app-game-menu-item
             *ngFor="let lod of lode"
-            (click)="gs.selectShip(lod)"
+            (click)="gs2.selectShip(lod)"
             [rank]="lod.rank">
             {{ lod.name }}
         </app-game-menu-item>

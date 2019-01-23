@@ -3,7 +3,7 @@ import {AngularFirestore} from '@angular/fire/firestore';
 import {AbilityData, DOCData, OnlyDocData} from '../../../model/my-board.model';
 import {map} from 'rxjs/operators';
 import {Observable} from 'rxjs';
-import {GameService} from '../../../services/game.service';
+import {Gs2Service} from '../../../services/gs2.service';
 
 @Component({
   selector: 'app-game-secondary-menu',
@@ -22,7 +22,7 @@ export class GameSecondaryMenuComponent implements OnInit, AfterViewInit {
 
     constructor(
         private afs: AngularFirestore,
-        private gs: GameService
+        private gs2: Gs2Service
     ) {}
 
     ngOnInit() {}
@@ -44,9 +44,9 @@ export class GameSecondaryMenuComponent implements OnInit, AfterViewInit {
     }
 
     clicked(data: AbilityData, key: string){
-        this.gs.changeMode(this.index + 1);
+        this.gs2.changeMode(this.index + 1);
         data.supTyp = key;
         data.typ = key.split('-')[0];
-        this.gs.setWeapon(data);
+        this.gs2.setWeapon(data);
     }
 }
