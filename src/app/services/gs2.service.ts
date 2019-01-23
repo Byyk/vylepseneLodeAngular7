@@ -7,7 +7,7 @@ import {HttpClient} from '@angular/common/http';
 import {Storage, StorageBuilder} from '../Data-Storage/Storage';
 import {Match} from '../model/match.model';
 import {TahModel} from '../model/tah.model';
-import {LodeDto} from '../model/lod.model';
+import {LodData, LodeDto, LodModel} from '../model/lod.model';
 import {Raketa, Rakety} from '../model/raketa.model';
 import {firestore} from 'firebase';
 
@@ -44,6 +44,7 @@ export class Gs2Service {
            } else this.storage.clear();
         });
         this.storage.collect(this.afs.collection('Rakety').get(), zpracujUtoky);
+        this.storage.collect(this.afs.collection('Lode').get(), zpracujDataLodi);
         this.storage.getEmitor(emitors.matchloaded).subscribe(data => console.log(data, this.storage.getData()));
     }
 }
@@ -53,6 +54,7 @@ export interface GameState {
     tahy? : TahModel;
     lode? : LodeDto;
     utoky? : Raketa[];
+    lodedata? : LodModel[];
 }
 
 const emitors = {
@@ -75,8 +77,9 @@ const zpracujUtoky = (docs: firestore.QuerySnapshot) => {
         const _utoky = utoky.data();
         for(const key in utoky.data()) {
             if(typeof _utoky[key] === "number") continue;
+            console.log(_utoky[key].pattern);
             ret.push({
-                typ: _utoky.id,
+                typ: utoky.id,
                 subTyp: key,
                 pattern: _utoky[key].pattern,
                 type: _utoky.type,
@@ -85,4 +88,11 @@ const zpracujUtoky = (docs: firestore.QuerySnapshot) => {
         }
     }
     return {utoky: ret};
+};
+const zpracujDataLodi = (docs: firestore.QuerySnapshot) => {
+    const ret = [];
+    for(const doc of docs.docs) {
+        ret.push(new LodModel(doc.data() as LodData));
+    }
+    return { lodedata: ret };
 };
