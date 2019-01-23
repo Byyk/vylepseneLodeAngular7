@@ -26,14 +26,20 @@ export class Gs2Service {
     ) {
         this.storage = Gs2Service.buildStorage();
         this.sbirej();
+        this.storage.getTransformer(transformers.see).subscribe(data => console.log(data));
     }
 
     private static buildStorage() {
         return StorageBuilder.Build<GameState>([
             {name: emitors.matchloaded, checker: (data) => data.match != null}
+        ], [
+            {
+                name: transformers.see,
+                checker: (data, lastData) => data.tahy == null ? false : data.tahy[0].seenFor !== lastData,
+                transformer: (data) => data.tahy[0].seenFor
+            }
         ]);
     }
-
     private sbirej() {
         this.ls.userloaded.subscribe((prihlaseny) => {
            if(prihlaseny) {
@@ -51,7 +57,7 @@ export class Gs2Service {
 
 export interface GameState {
     match? : Match;
-    tahy? : TahModel;
+    tahy? : TahModel[];
     lode? : LodeDto;
     utoky? : Raketa[];
     lodedata? : LodModel[];
@@ -60,7 +66,11 @@ export interface GameState {
 const emitors = {
     matchloaded: 'matchloaded'
 };
+const transformers = {
+    see: 'see'
+};
 
+// data formators
 const dataFromDoc = (doc) => doc.data();
 const zpracujMatch = (doc) => ({ match: dataFromDoc(doc) });
 const zpracujTahy = (tahy) => ({ tahy });
@@ -77,7 +87,6 @@ const zpracujUtoky = (docs: firestore.QuerySnapshot) => {
         const _utoky = utoky.data();
         for(const key in utoky.data()) {
             if(typeof _utoky[key] === "number") continue;
-            console.log(_utoky[key].pattern);
             ret.push({
                 typ: utoky.id,
                 subTyp: key,
@@ -96,3 +105,4 @@ const zpracujDataLodi = (docs: firestore.QuerySnapshot) => {
     }
     return { lodedata: ret };
 };
+
