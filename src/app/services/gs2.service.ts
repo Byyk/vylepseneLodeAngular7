@@ -24,11 +24,11 @@ export class Gs2Service {
         private afs: AngularFirestore,
         private http: HttpClient
     ) {
-        this.storage = this.buildStorage();
+        this.storage = Gs2Service.buildStorage();
         this.sbirej();
     }
 
-    private buildStorage() {
+    private static buildStorage() {
         return StorageBuilder.Build<GameState>([
             {name: emitors.matchloaded, checker: (data) => data.match != null}
         ]);
