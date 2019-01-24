@@ -2,7 +2,7 @@ import {CastLode, LodViewData} from './lod.model';
 
 export interface PoleModel {
     pozice: Point;
-    state: StavPole;
+    state?: StavPole;
     dalsicasti?: CastLode[];
     lod?: LodViewData;
     hover?: boolean; // Todo odebrat!

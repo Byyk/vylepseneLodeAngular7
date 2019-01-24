@@ -1,12 +1,14 @@
 import {ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {Point, PoleModel, StavPole} from '../../../model/pole.model';
-import {Field, GameService} from '../../../services/game.service';
+import {Field} from '../../../services/game.service';
 import {AbilityData} from '../../../model/my-board.model';
-import {filter, first, skip} from 'rxjs/operators';
+import {filter, first, map} from 'rxjs/operators';
 import {HttpClient} from '@angular/common/http';
 import {environment} from '../../../../environments/environment';
 import {AngularFireAuth} from '@angular/fire/auth';
-import {LodDoc, LodModel} from '../../../model/lod.model';
+import {LodModel} from '../../../model/lod.model';
+import {Gs2Service} from '../../../services/gs2.service';
+import {Poles} from '../my-board/my-board.component';
 
 @Component({
     selector: 'app-oponents-board',
@@ -15,49 +17,55 @@ import {LodDoc, LodModel} from '../../../model/lod.model';
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class OponentsBoardComponent implements OnInit {
-    public poles = [];
+    public poles: Poles<OpponentsBoardData>;
     public stavPole = StavPole;
-    public zasazenaPole: PoleModel[] = [];
-    private lode: LodModel[];
+    public Hover: PoleModel[] = [];
     private pointLastHovered: Point = {x: -1, y: -1};
-    private showHover = false;
-
     private actualRocket: AbilityData;
 
     @ViewChild('list')
     public list: ElementRef<HTMLDivElement>;
 
     constructor(
-        public gs: GameService,
+        public gs2: Gs2Service,
         private cdr: ChangeDetectorRef,
         private http: HttpClient,
         private afa: AngularFireAuth
     ) {
-        this.gs.actualWeapon.subscribe(weapon => this.actualRocket = weapon);
-        this.gs.actualField.pipe(
+        this.poles = new Poles(data => data.vystrely);
+        this.poles.data.vystrely = [];
+        this.gs2.selectedWeapon.subscribe(weapon => this.actualRocket = weapon);
+        this.gs2.boardsState.pipe(
+            map(state => state.field),
             filter(field => field === Field.enemyField),
             first()
         ).subscribe(() => this.cdr.markForCheck());
-        this.gs._enemyShips.subscribe((lode: LodDoc[]) => {
-            if(lode == null) return;
-            this.gs.ships$.subscribe(ships => {
-                this.lode = lode.map(lod => {
-                    return new LodModel(ships.find(ship => ship.uid === lod.LodDataUid), lod.pozice, lod.smer);
-                });
-                this.zpracujVysrely(this.gs.Vystrely);
-                const preskoc = this.gs.Vystrely.length === 0 ? 0 : 1;
-                this.gs.vystrely.pipe(skip(preskoc)).subscribe(this.zpracujVysrely);
+
+        this.poles.data.lode = this.gs2.storage.getData(data =>
+            data.lode[this.gs2.storage.getData(_data => _data.userData.lastMatch.creator ? 'opponent' : 'creator')].lode)
+            .map(lod => {
+               return new LodModel(this.gs2.storage.getData(data => data.lodedata)
+                   .find(_lod => _lod.uid === lod.LodDataUid), lod.pozice, lod.smer);
             });
-        });
+        this.zpracujVysrely(this.gs2.storage.getData(data => data.tahy
+            .filter(tah => tah.seenFor === (data.userData.lastMatch.creator ? 'opponent' : 'creator'))
+            .map(tah => this.gs2.storage.getData(_data => _data.utoky)
+                .find(utok => utok.subTyp === tah.tahData.subTyp)
+                .pattern.map(pat => Point.Sum(pat, tah.tahData.poziceZasahu)))
+        ));
     }
     ngOnInit() {
     }
-    private zpracujVysrely = (data) => {
-        if(data == null || this.lode == null) return;
-        this.zasazenaPole = this.zasazenaPole.concat(data.map(pozice => {
+    private zpracujVysrely = (_data) => {
+        let data = [];
+        for(const dat of _data) {
+            data = data.concat(dat);
+        }
+        if(data == null || this.poles.data.lode == null) return;
+        this.poles.data.vystrely = this.poles.data.vystrely.concat(data.map(pozice => {
             if(pozice == null) return null;
             let zasah = false;
-            this.lode.forEach(lod => {
+            this.poles.data.lode.forEach(lod => {
                 lod.castiLode.forEach((cast) => {
                     if(Point.Equals(cast.pozice, pozice)){
                         zasah = true;
@@ -69,7 +77,7 @@ export class OponentsBoardComponent implements OnInit {
             else
                 return {pozice: pozice, state: StavPole.zasazeneMore};
         })).filter(pole => pole != null);
-        this.view();
+        this.poles.reatatch();
     }
 
     getHeight(){
@@ -84,7 +92,7 @@ export class OponentsBoardComponent implements OnInit {
         this.actualRocket.pattern.forEach(point => {
             point = Point.Sum(point, {x, y});
             if(point.x >= 0 && point.x <= 20 && point.y >= 0 && point.y <= 20)
-            if(!this.zasazenaPole.some(pole => Point.Equals(pole.pozice, point))) {
+            if(!this.poles.data.vystrely.some(pole => Point.Equals(pole.pozice, point))) {
                 nezasazazena.push(point);
             }
         });
@@ -97,36 +105,24 @@ export class OponentsBoardComponent implements OnInit {
                 subTyp: this.actualRocket.supTyp
             }).subscribe();
         });
-        this.gs._vystrely.next(nezasazazena);
-        this.view();
+        this.zpracujVysrely([nezasazazena]);
     }
     hover(event: MouseEvent) {
         const x = Math.floor(event.offsetX / this.list.nativeElement.offsetHeight * 21);
         const y = Math.floor(event.offsetY / this.list.nativeElement.offsetHeight * 21);
         if(this.pointLastHovered.x === x && this.pointLastHovered.y === y) return;
-        this.showHover = true;
+        this.pointLastHovered.x = x; this.pointLastHovered.y = y;
 
-        this.pointLastHovered.x = x;
-        this.pointLastHovered.y = y;
-        this.view();
+        if(this.gs2.selectedWeapon.value != null)
+            this.Hover = this.gs2.selectedWeapon.value.pattern
+                .map(pat => ({pozice: Point.Sum(pat, this.pointLastHovered ), state: StavPole.hover}));
     }
     mouseout() {
-        this.showHover = false;
-        this.view();
+        this.pointLastHovered = {x: -1, y: -1};
     }
-    view() {
-        const arr = [];
-        if(this.actualRocket != null && this.showHover)
-            this.actualRocket.pattern.forEach(point => {
-                const soucetBodu = Point.Sum(point, this.pointLastHovered);
-                if(soucetBodu.x < 0 || soucetBodu.x > 20 || soucetBodu.y < 0 || soucetBodu.y > 20) return;
-                arr.push({
-                    pozice: soucetBodu,
-                    state: StavPole.hover
-                });
-            });
+}
 
-        this.poles = arr.concat(this.zasazenaPole);
-        this.cdr.markForCheck();
-    }
+interface OpponentsBoardData {
+    vystrely: PoleModel[];
+    lode: LodModel[];
 }

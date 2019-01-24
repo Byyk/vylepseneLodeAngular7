@@ -1,10 +1,8 @@
 import {ChangeDetectionStrategy, Component, ElementRef, OnInit, ViewChild} from '@angular/core';
-import {Mode} from '../../../services/game.service';
 import {Point, PoleModel, StavPole} from '../../../model/pole.model';
 import {LodModel} from '../../../model/lod.model';
 import {BehaviorSubject} from 'rxjs';
-import {skip} from 'rxjs/operators';
-import {emitors, GameState, Gs2Service, transformers} from '../../../services/gs2.service';
+import {GameState, Gs2Service, Mode, transformers} from '../../../services/gs2.service';
 
 @Component({
     selector: 'app-my-board',
@@ -13,9 +11,9 @@ import {emitors, GameState, Gs2Service, transformers} from '../../../services/gs
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class MyBoardComponent implements OnInit {
-    public poles: PoleModel[] = [];
-    public _poles: Poles;
+    public poles: Poles<MyBoardData>;
     public stavPole = StavPole;
+    public Hover: PoleModel[] = [];
     public boardEntered = new BehaviorSubject(false);
     private shipsLoaded = new BehaviorSubject(false);
     private CanPolozit = false;
@@ -27,21 +25,51 @@ export class MyBoardComponent implements OnInit {
     constructor(
         private gs2: Gs2Service,
     ) {
-        
+        this.poles = new Poles<MyBoardData>(data => {
+            let poles : PoleModel[] = [];
+            for(const lod of data.polozeneLode) {
+                const casti = lod.castiLode;
+                poles.push({pozice: lod.pozice, lod: lod.viewData, dalsicasti: casti});
+                for(const cast of casti) {
+                    poles.push({pozice: cast.pozice, state: StavPole.lod, dalsicasti: casti});
+                }
+            }
+            if(data.dopady != null)
+                poles = poles.concat(data.dopady);
+            if(this.gs2.boardsState.value.mode === Mode.PlaceShips){
+                const casti = data.lod.castiLode;
+                const spravne = [];
+                for(const cast of casti) {
+                    if(cast.pozice.x >= 0 && cast.pozice.x <= 20 && cast.pozice.y >= 0 && cast.pozice.y <= 20)
+                        spravne.push(cast.pozice);
+                }
+                if(spravne.length !== casti.length || this.zjistiPrekriVy()) {
+                    this.CanPolozit = false;
+                    spravne.forEach(spr => poles.push({state: StavPole.chybaPokladani, pozice: spr}));
+                }
+                else {
+                    this.CanPolozit = true;
+                    spravne.forEach(spr => poles.push({state: StavPole.lod, pozice: spr}));
+                }
+                poles.push({pozice: data.lod.pozice, state: StavPole.none, lod: data.lod.viewData});
+            }
+            return poles;
+        });
     }
 
     getHeight(){
         return this.list.nativeElement.offsetHeight;
     }
-    clicked(event: MouseEvent) {
-        if(!this.CanPolozit || this.gs2.storage.getData((data) => data.limits)[this.lod.data.rank] === 0) return;
-        this.polozeneLode.push(this.lod.clone());
-        this.gs2.lodPolozina(this.lod.data.rank, this.polozeneLode.map(lod => lod.doc));
-        this.View();
+    clicked() {
+        const lod = this.poles.data.lod.clone();
+        if(!this.CanPolozit || this.gs2.storage.getData((data) => data.limits)[lod.data.rank] === 0) return;
+        this.poles.data.polozeneLode.push(lod);
+        this.gs2.lodPolozina(lod.data.rank, this.poles.data.polozeneLode.map(_lod => _lod.doc));
+        this.poles.reatatch();
     }
     poleRightClick(){
-        this.lod.otocSe();
-        this.View();
+        this.poles.data.lod.otocSe();
+        this.poles.reatatch();
         return false;
     }
     hover(event: MouseEvent){
@@ -52,60 +80,27 @@ export class MyBoardComponent implements OnInit {
         this.pointLastHovered.x = x;
         this.pointLastHovered.y = y;
 
-        if(this.lod != null)
-            this.lod.pozice = {x: x, y: y};
+        if(this.poles.data.lod != null)
+            this.poles.data.lod.pozice = {x: x, y: y};
 
-        this.View();
+        this.Hover = [];
+        const pole = this.poles.reatatched.value.find(_pole => Point.Equals(_pole.pozice, this.pointLastHovered) &&
+            _pole.state === StavPole.lod);
+        if(pole != null)
+            for(const casti of pole.dalsicasti) {
+                this.Hover.push({pozice: casti.pozice, state: StavPole.hover});
+            }
+        else this.Hover.push({pozice: this.pointLastHovered, state: StavPole.hover});
 
+        if(this.gs2.boardsState.value.mode === Mode.PlaceShips)
+            this.poles.reatatch();
         return false;
-    }
-    View(){
-        this.poles = [];
-        if(this.gs2.boardsState.value.mode as Mode === Mode.PlaceShips)
-            this.pokladaniView();
-
-        this.polozeneLode.forEach(lod => {
-            const castiLode = lod.castiLode;
-            castiLode.forEach(cast => {
-                this.poles.push({pozice: cast.pozice, state: StavPole.lod, dalsicasti: castiLode});
-            });
-            this.poles.push({state: StavPole.none, pozice: lod.pozice, lod: lod.viewData});
-        });
-
-        const pole = this.poles.find(_pole => _pole.pozice.x === this.pointLastHovered.x &&
-            _pole.pozice.y === this.pointLastHovered.y && _pole.state === StavPole.lod);
-
-        if(pole != null && pole.dalsicasti != null)
-            for(const cast of pole.dalsicasti) {
-                this.poles.push({pozice: cast.pozice, state: StavPole.hover});
-            }
-        else this.poles.push({state: StavPole.hover, pozice: {x: this.pointLastHovered.x, y: this.pointLastHovered.y}});
-        this.poles = this.poles.concat(this.dopady);
-        this._poles.next(this.poles);
-    }
-    pokladaniView(){
-        const casti = this.lod.castiLode;
-        const spravne = [];
-        casti.forEach(cast => {
-            if(cast.pozice.x >= 0 && cast.pozice.x <= 20 && cast.pozice.y >= 0 && cast.pozice.y <= 20){
-                spravne.push(cast.pozice);
-            }
-        });
-        if(spravne.length !== casti.length || this.zjistiPrekriVy()) {
-            this.CanPolozit = false;
-            spravne.forEach(spr => this.poles.push({state: StavPole.chybaPokladani, pozice: spr}));
-        }
-        else {
-            this.CanPolozit = true;
-            spravne.forEach(spr => this.poles.push({state: StavPole.lod, pozice: spr}));
-        }
-        this.poles.push({pozice: this.lod.pozice, state: StavPole.none, lod: this.lod.viewData});
     }
     zjistiPrekriVy() : boolean{
         let prekriv;
-        for(let i = 0; i < this.polozeneLode.length; i++){
-            const lod = this.polozeneLode[i];
-            prekriv = this.lod.castiLode.some(cast => {
+        for(let i = 0; i < this.poles.data.polozeneLode.length; i++){
+            const lod = this.poles.data.polozeneLode[i];
+            prekriv = this.poles.data.lod.castiLode.some(cast => {
                 return lod.castiLode.some(_cast => {
                     return Point.Equals(_cast.pozice, cast.pozice);
                 });
@@ -123,31 +118,32 @@ export class MyBoardComponent implements OnInit {
     }
     ngOnInit() {
         this.gs2.selectedShip.subscribe(data => {
-            if(this.lod == null) return;
-            this.lod.data = data;
+            if(data == null) return;
+            this.poles.data.lod.data = data;
         });
         this.zpracujLode(this.gs2.storage.getData(zpracujLode));
-        this.gs2.storage.getTransformer<Point[]>(transformers.dopady).pipe(skip(1)).subscribe(dopady => {
-            this.dopady = dopady.map(point => {
+        this.gs2.storage.getTransformer<Point[]>(transformers.dopady).subscribe(dopady => {
+            this.poles.data.dopady = dopady.map(point => {
                 if(this.JeLodNapozici(point))
                     return {pozice: point, state: StavPole.poskozenaLod} as PoleModel;
                 else return {pozice: point, state: StavPole.zasazeneMore} as PoleModel;
             });
-            this.View();
+            this.poles.reatatch();
         });
+        this.poles.reatatch();
     }
     floor = Math.floor;
     private zpracujLode = lode => {
-        this.lod = new LodModel(lode[0], { x: 1, y: 1 });
+        this.poles.data.lod = new LodModel(lode[0], { x: 1, y: 1 });
         this.shipsLoaded.next(true);
-        this.polozeneLode = this.gs2.storage.getData(data => data.lode['creator'].lode)
+        this.poles.data.polozeneLode = this.gs2.storage.getData(data => data.lode['creator'].lode)
             .map(lod => new LodModel(lode.find(value => value.uid === lod.LodDataUid), lod.pozice, lod.smer));
-        for(const lod of this.polozeneLode) {
+        for(const lod of this.poles.data.polozeneLode) {
             this.gs2.lodPolozina(lod.data.rank);
         }
     }
     private JeLodNapozici(point: Point) {
-        for(const lod of this.polozeneLode) {
+        for(const lod of this.poles.data.polozeneLode) {
             for(const cast of lod.castiLode) {
                 if(!Point.Equals(cast.pozice, point)) continue;
                 return Point.Equals(cast.pozice, point);
@@ -162,11 +158,14 @@ const zpracujLode = (data: GameState)  => {
 };
 
 export class Poles<T> {
-    reatatch: (data: T) => PoleModel[];
+    private readonly _reatatch: (data: T) => PoleModel[];
+    reatatched = new BehaviorSubject<PoleModel[]>([]);
     data: T;
     constructor(reatatch: (data: T) => PoleModel[]) {
-        this.reatatch = reatatch;
+        this._reatatch = reatatch;
+        this.data = {} as T;
     }
+    reatatch = () => this.reatatched.next(this._reatatch(this.data));
 }
 
 export interface MyBoardData {

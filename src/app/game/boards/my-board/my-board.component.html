@@ -2,7 +2,7 @@
     <div #list
          class="content" [style.width.px]="getHeight()">
         <div class="tile"
-             *ngFor="let pole of poles; let i = index"
+             *ngFor="let pole of (poles.reatatched | async).concat(Hover); let i = index"
              [style.top.px]="pole.pozice.y * getHeight() / 21"
              [style.left.px]="pole.pozice.x * getHeight() / 21"
              [style.width.px]="getHeight() / 21"

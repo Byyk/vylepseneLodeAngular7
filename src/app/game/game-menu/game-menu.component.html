@@ -6,7 +6,7 @@
               src="https://firebasestorage.googleapis.com/v0/b/lode-1835e.appspot.com/o/defenc.png?alt=media&token=033f27b8-6822-456e-aada-5f3daa9289ef" alt="moje pole">
     </div>
     <div class="separator"></div>
-    <div *ngFor="let tab of menu.tabs; let i = index" #tabs class="action" [ngClass]="{'active': (gs2.boardsState | async).field === i + 1}">
+    <div *ngFor="let tab of menu.tabs; let i = index" #tabs class="action" [ngClass]="{'active': (gs2.boardsState | async).mode === i + 1}">
         <fa-icon [icon]="tab.icon" size="2x"></fa-icon>
         <div class="events-handler" [matTooltip]="tab.toolTip"></div>
         <app-game-secondary-menu

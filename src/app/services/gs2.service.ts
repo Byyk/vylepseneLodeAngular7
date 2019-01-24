@@ -155,11 +155,11 @@ const zpracujDataLodi = (docs: firestore.QuerySnapshot) => {
     }
     return { lodedata: ret };
 };
-const zpracujLimity = (doc: DocumentSnapshot<Limits>) => ({limits: doc.data()});
+const zpracujLimity = (doc: DocumentSnapshot<any>) => ({limits: doc.data().limits as Limits});
 
 // Checkers
-const isDataForMatchReady = (data: GameState) => data.userData != null && data.match != null && data.utoky != null &&
-    data.lodedata != null && (!data.match.rozmisteno || (data.tahy != null && data.lode != null));
+const isDataForMatchReady = (data: GameState) => data.limits != null && data.userData != null && data.match != null &&
+    data.utoky != null && data.lodedata != null && (!data.match.rozmisteno || (data.tahy != null && data.lode != null));
 const dopadTransformerChecker = (data: GameState) => data.tahy != null && data.utoky != null;
 
 // Transformers
@@ -171,7 +171,9 @@ const dopadTransformer = (data: GameState, creator: boolean) => {
         isCreator = data.userData.lastMatch.creator;
         if(tah.seenFor === (creator ? isCreator : !isCreator) ? 'creator' : 'opponent') {
             for(const point of rakety.find(raketa => raketa.subTyp === tah.tahData.subTyp).pattern) {
-                vysledek.push(Point.Sum(point, tah.tahData.poziceZasahu));
+                const zasah = Point.Sum(point, tah.tahData.poziceZasahu);
+                if(!vysledek.some(vys => Point.Equals(vys, zasah)))
+                    vysledek.push(zasah);
             }
         }
     }
