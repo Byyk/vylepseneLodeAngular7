@@ -14,6 +14,7 @@ import {BehaviorSubject} from 'rxjs';
 import {Limits} from './game.service';
 import {environment} from '../../environments/environment';
 import {Point} from '../model/pole.model';
+import {Hrac} from "../model/hrac.model";
 
 @Injectable({
   providedIn: 'root'
@@ -40,7 +41,7 @@ export class Gs2Service {
             {name: emitors.match_ready, checker: isDataForMatchReady},
             {name: emitors.rozmisteno, checker: data => data.match == null ? false : data.match.rozmisteno}
         ], [
-            {name: transformers.dopady, transformer: dopadTransformer, checker: dopadTransformerChecker}
+            {name: transformers.dopady, transformer: dopadTransformer.bind(false), checker: dopadTransformerChecker}
         ]);
     }
     private sbirej() {
@@ -55,6 +56,12 @@ export class Gs2Service {
         this.storage.collect(this.afs.collection('Rakety').get(), zpracujUtoky);
         this.storage.collect(this.afs.collection('Lode').get(), zpracujDataLodi);
         this.storage.collect(this.afs.doc('BackendData/Lode').get(), zpracujLimity);
+        this.ls.afa.user.subscribe(user => {
+            if(user != null)
+                this.storage.collect(this.ls.userDataObservable, (data) => ({userData: data}));
+            else
+                this.storage.updateData(data => data.userData = null);
+        });
     }
     public swapField() {
         if(this.boardsState.value.field === Field.playerField)
@@ -98,6 +105,7 @@ export interface GameState {
     utoky? : Raketa[];
     lodedata? : LodData[];
     limits? : Limits;
+    userData? : Hrac;
 }
 
 export interface BoardsState {
@@ -107,7 +115,7 @@ export interface BoardsState {
 
 export const emitors = {
     match_ready: 'match_ready',
-    rozmisteno: 'rozmisteno'
+    rozmisteno: 'rozmisteno',
 };
 export const transformers = {
     dopady: 'dopady'
@@ -150,25 +158,24 @@ const zpracujDataLodi = (docs: firestore.QuerySnapshot) => {
 const zpracujLimity = (doc: DocumentSnapshot<Limits>) => ({limits: doc.data()});
 
 // Checkers
-const isDataForMatchReady = (data: GameState) => data.match != null && data.utoky != null && data.lodedata != null &&
-    (!data.match.rozmisteno || (data.tahy != null && data.lode != null));
+const isDataForMatchReady = (data: GameState) => data.userData != null && data.match != null && data.utoky != null &&
+    data.lodedata != null && (!data.match.rozmisteno || (data.tahy != null && data.lode != null));
 const dopadTransformerChecker = (data: GameState) => data.tahy != null && data.utoky != null;
 
 // Transformers
-const dopadTransformer = (data: GameState) => {
-    const res = {creator: [], opponent: []};
-    for(const key in data.tahy) {
-        res[data.tahy[key].seenFor].push(data.tahy[key]);
+const dopadTransformer = (data: GameState, creator: boolean) => {
+    const rakety = data.utoky;
+    const vysledek = [];
+    let isCreator;
+    for(const tah of data.tahy) {
+        isCreator = data.userData.lastMatch.creator;
+        if(tah.seenFor === (creator ? isCreator : !isCreator) ? 'creator' : 'opponent') {
+            for(const point of rakety.find(raketa => raketa.subTyp === tah.tahData.subTyp).pattern) {
+                vysledek.push(Point.Sum(point, tah.tahData.poziceZasahu));
+            }
+        }
     }
-    let vysledek = [];
-    hnadleVystrely(vysledek,
-        this.ls.userData.lastMatch.creator ? 'creator' : 'opponent', data.utoky, res);
-
-    this._vystrely.next(vysledek);
-    vysledek = [];
-    hnadleVystrely(vysledek,
-        this.ls.userData.lastMatch.creator ? 'opponent' : 'creator', data.utoky, res);
-    this._dopady.next(vysledek);
+    return vysledek;
 };
 
 export enum Field {
@@ -192,23 +199,3 @@ const fieldMode = {
     5: Field.playerField,
     6: Field.playerField
 };
-function hnadleVystrely(
-    vysledek: Point[],
-    field: string,
-    zbrane: Raketa[],
-    tahy: { creator: TahModel[], opponent: TahModel[] }
-) {
-    tahy[field]
-        .filter(utok => utok.type === 'Utok')
-        .map((raketa: TahModel) => raketa.tahData)
-        .map((raketa: Utok) => {
-            const zbran = zbrane.find(_zbran => _zbran.subTyp === raketa.subTyp);
-            return zbran.pattern.map(pat => Point.Sum(pat, raketa.poziceZasahu));
-        }).forEach((points: Point[]) => {
-        points.forEach(point => {
-            if (!vysledek.some(vys => Point.Equals(point, vys)) &&
-                point.x >= 0 && point.x <= 20 && point.y >= 0 && point.y <= 20)
-                vysledek.push(point);
-        });
-    });
-}

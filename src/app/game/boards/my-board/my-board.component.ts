@@ -1,25 +1,24 @@
-import {ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild} from '@angular/core';
+import {ChangeDetectionStrategy, Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {Mode} from '../../../services/game.service';
 import {Point, PoleModel, StavPole} from '../../../model/pole.model';
 import {LodModel} from '../../../model/lod.model';
 import {BehaviorSubject} from 'rxjs';
-import { skip} from 'rxjs/operators';
+import {skip} from 'rxjs/operators';
 import {emitors, GameState, Gs2Service, transformers} from '../../../services/gs2.service';
 
 @Component({
     selector: 'app-my-board',
     templateUrl: './my-board.component.html',
     styleUrls: ['./my-board.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class MyBoardComponent implements OnInit {
-    public poles = new Array<PoleModel>();
-    public lod: LodModel;
+    public poles: PoleModel[] = [];
+    public _poles: Poles;
     public stavPole = StavPole;
     public boardEntered = new BehaviorSubject(false);
     private shipsLoaded = new BehaviorSubject(false);
-    private dopady = new Array<PoleModel>();
     private CanPolozit = false;
-    private polozeneLode : LodModel[] = [];
     private pointLastHovered: Point = {x: -1, y: -1};
 
     @ViewChild('list')
@@ -27,15 +26,8 @@ export class MyBoardComponent implements OnInit {
 
     constructor(
         private gs2: Gs2Service,
-        private cdr: ChangeDetectorRef
     ) {
-        this.gs2.storage.getEmitor(emitors.rozmisteno).subscribe(is => {
-            if(is) {
-
-            } else {
-
-            }
-        });
+        
     }
 
     getHeight(){
@@ -69,7 +61,7 @@ export class MyBoardComponent implements OnInit {
     }
     View(){
         this.poles = [];
-        if(this.gs2.boardsState.value.mode === Mode.PlaceShips)
+        if(this.gs2.boardsState.value.mode as Mode === Mode.PlaceShips)
             this.pokladaniView();
 
         this.polozeneLode.forEach(lod => {
@@ -89,6 +81,7 @@ export class MyBoardComponent implements OnInit {
             }
         else this.poles.push({state: StavPole.hover, pozice: {x: this.pointLastHovered.x, y: this.pointLastHovered.y}});
         this.poles = this.poles.concat(this.dopady);
+        this._poles.next(this.poles);
     }
     pokladaniView(){
         const casti = this.lod.castiLode;
@@ -129,8 +122,8 @@ export class MyBoardComponent implements OnInit {
         return lod.pozice.x === pole.pozice.x && lod.pozice.y === pole.pozice.y;
     }
     ngOnInit() {
-        // const ships = ;
         this.gs2.selectedShip.subscribe(data => {
+            if(this.lod == null) return;
             this.lod.data = data;
         });
         this.zpracujLode(this.gs2.storage.getData(zpracujLode));
@@ -145,7 +138,6 @@ export class MyBoardComponent implements OnInit {
     }
     floor = Math.floor;
     private zpracujLode = lode => {
-        console.log(lode);
         this.lod = new LodModel(lode[0], { x: 1, y: 1 });
         this.shipsLoaded.next(true);
         this.polozeneLode = this.gs2.storage.getData(data => data.lode['creator'].lode)
@@ -165,6 +157,21 @@ export class MyBoardComponent implements OnInit {
     }
 }
 
-const zpracujLode = (data: GameState) => {
-    
+const zpracujLode = (data: GameState)  => {
+    return data.lodedata;
 };
+
+export class Poles<T> {
+    reatatch: (data: T) => PoleModel[];
+    data: T;
+    constructor(reatatch: (data: T) => PoleModel[]) {
+        this.reatatch = reatatch;
+    }
+}
+
+export interface MyBoardData {
+    dopady: PoleModel[];
+    lod: LodModel;
+    polozeneLode: LodModel[];
+}
+

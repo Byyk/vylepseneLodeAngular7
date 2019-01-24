@@ -5,7 +5,6 @@ import { auth } from 'firebase';
 import {NameGroup} from "../model/nameGroup.model";
 import {Hrac} from '../model/hrac.model';
 import {BehaviorSubject, Observable} from 'rxjs';
-import {map} from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -16,6 +15,7 @@ export class LoginService {
 
     public userDataObservable: Observable<Hrac>;
     public userData: Hrac;
+    public static _userData: Hrac;
 
     private logginedIn: boolean;
   get LogginedIn(): boolean{
@@ -31,10 +31,10 @@ export class LoginService {
       this.afa.user.subscribe((res) => {
           this.logginedIn = res !== null;
           if(this.logginedIn){
-              this.userDataObservable = this.afs.collection<Hrac>('Users', ref => ref.where('uid', '==', res.uid)).valueChanges()
-                  .pipe(map((user) => user[0]));
+              this.userDataObservable = this.afs.doc<Hrac>(`Users/${res.uid}`).valueChanges();
               this.userDataObservable.subscribe((userData) => {
                   this.userData = userData;
+                  LoginService._userData = userData;
                   this._userLoaded.next(true);
               });
           }

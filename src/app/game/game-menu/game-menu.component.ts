@@ -70,7 +70,6 @@ export class GameMenuComponent implements OnInit {
 *
 * */
 
-
 export const zpracujLode = (lode: GameState) => {
     const _lode: [LodData[]] = [[]];
     for(const lod of lode.lodedata) {
