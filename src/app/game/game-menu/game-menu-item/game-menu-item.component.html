@@ -1,4 +1,6 @@
-<app-game-menu-item-tier [rank]="rank">  </app-game-menu-item-tier>
-<div id="content">
-    <ng-content></ng-content>
+<div id="container" (click)="click(lod)" [ngClass]="{'disabled': disabled}">
+    <app-game-menu-item-tier [rank]="rank" [matTooltip]="'rank ' + rank">  </app-game-menu-item-tier>
+    <div id="content">
+        <ng-content></ng-content>
+    </div>
 </div>

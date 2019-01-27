@@ -37,7 +37,7 @@ export class ProfilePopUpComponent implements OnInit {
     constructor(
         public ls: LoginService,
         private er: ElementRef
-    ) { }
+    ) {}
 
     ngOnInit() {
     }

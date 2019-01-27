@@ -21,7 +21,7 @@
     <div *ngFor="let lode of ships" class="seznam">
         <app-game-menu-item
             *ngFor="let lod of lode"
-            (click)="gs2.selectShip(lod)"
+            [lod]="lod"
             [rank]="lod.rank">
             {{ lod.name }}
         </app-game-menu-item>

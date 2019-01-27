@@ -66,7 +66,7 @@ export class Storage<T extends Object>  {
     private check() {
         for(const key in this._emitors) {
             const vyledek = this._emitors[key].check(this.data);
-            if(this._emitors[key].getValue() !== vyledek)
+            if(this._emitors[key].getValue() !== vyledek || this._emitors[key].multiple)
                 this._emitors[key].next(vyledek);
         }
 
@@ -86,7 +86,10 @@ export interface Transformers<T> {
 
 export class Emitor<T> extends BehaviorSubject<boolean>{
     check: (data: T) => boolean;
-    constructor(checker: (data: T) => boolean) {
+    constructor(
+        checker: (data: T) => boolean,
+        public multiple?: boolean
+    ) {
         super(false);
         this.check = checker;
     }
@@ -119,7 +122,7 @@ export class StorageBuilder {
         const _emitors = {};
         const _transformers = {};
         for(const emitor of emitors ) {
-            _emitors[emitor.name] = new Emitor(emitor.checker);
+            _emitors[emitor.name] = new Emitor(emitor.checker, emitor.multiple);
         }
         for(const trans of transformers) {
             if(trans.checker != null)
@@ -132,6 +135,7 @@ export class StorageBuilder {
 
 export interface EmitorData<T> {
     checker: ((data: T) => boolean);
+    multiple?: boolean;
     name: string;
 }
 

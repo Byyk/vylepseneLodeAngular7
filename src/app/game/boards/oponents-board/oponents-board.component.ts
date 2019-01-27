@@ -7,7 +7,7 @@ import {HttpClient} from '@angular/common/http';
 import {environment} from '../../../../environments/environment';
 import {AngularFireAuth} from '@angular/fire/auth';
 import {LodModel} from '../../../model/lod.model';
-import {Gs2Service} from '../../../services/gs2.service';
+import {emitors, Gs2Service, transformers} from '../../../services/gs2.service';
 import {Poles} from '../my-board/my-board.component';
 
 @Component({
@@ -41,14 +41,22 @@ export class OponentsBoardComponent implements OnInit {
             first()
         ).subscribe(() => this.cdr.markForCheck());
 
-        this.poles.data.lode = this.gs2.storage.getData(data =>
-            data.lode[this.gs2.storage.getData(_data => _data.userData.lastMatch.creator ? 'opponent' : 'creator')].lode)
-            .map(lod => {
-               return new LodModel(this.gs2.storage.getData(data => data.lodedata)
-                   .find(_lod => _lod.uid === lod.LodDataUid), lod.pozice, lod.smer);
-            });
-        this.zpracujVysrely(this.gs2.storage.getData(data => data.tahy
-            .filter(tah => tah.seenFor === (data.userData.lastMatch.creator ? 'opponent' : 'creator'))
+        this.gs2.storage.getEmitor(emitors.rozmisteno).subscribe(is => {
+            if(!is) return;
+            this.poles.data.lode = this.gs2.storage.getData(data =>
+                data.lode[this.gs2.storage.getData(_data => _data.userData.lastMatch.creator ? 'opponent' : 'creator')].lode)
+                .map(lod => {
+                    return new LodModel(this.gs2.storage.getData(data => data.lodedata)
+                        .find(_lod => _lod.uid === lod.LodDataUid), lod.pozice, lod.smer);
+                });
+        });
+
+        this.gs2.storage.updateData(data => {
+            if(data.vystrely == null)
+                data.vystrely = [];
+        });
+
+        this.zpracujVysrely(this.gs2.storage.getData(data => data.vystrely
             .map(tah => this.gs2.storage.getData(_data => _data.utoky)
                 .find(utok => utok.subTyp === tah.tahData.subTyp)
                 .pattern.map(pat => Point.Sum(pat, tah.tahData.poziceZasahu)))

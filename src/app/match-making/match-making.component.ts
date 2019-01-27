@@ -2,9 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import {BreakpointObserver} from "@angular/cdk/layout";
 import {Breakpointy} from "../model/breakpoints.model";
 import {LoginService} from '../services/login.service';
-import {Hrac} from '../model/hrac.model';
-import {GameService} from '../services/game.service';
-import {BehaviorSubject} from 'rxjs';
+import {BehaviorSubject, Observable} from 'rxjs';
+import {emitors, Gs2Service} from '../services/gs2.service';
 
 export enum stavyMatche { inLobby = 0, inGame = 1, inMenu = 2}
 
@@ -15,11 +14,12 @@ export enum stavyMatche { inLobby = 0, inGame = 1, inMenu = 2}
 })
 export class MatchMakingComponent extends Breakpointy implements OnInit {
   public State = new BehaviorSubject<stavyMatche>(undefined);
+  public rozmisteno: Observable<boolean>;
 
   constructor(
       public breakpointObserver: BreakpointObserver,
       public ls: LoginService,
-      public gs: GameService
+      public gs2: Gs2Service
   ) {
       super(breakpointObserver);
   }
@@ -31,6 +31,7 @@ export class MatchMakingComponent extends Breakpointy implements OnInit {
               else this.State.next(2);
           }
       });
+      this.rozmisteno = this.gs2.storage.getEmitor(emitors.rozmisteno);
   }
 
 }

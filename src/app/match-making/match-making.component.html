@@ -1,3 +1,6 @@
-<app-lobby *ngIf="(State | async) === 0"></app-lobby>
-<app-game *ngIf="(State | async) === 1" [ngStyle]="{'padding-left': (gs.rozmisteno | async) ? '55px' : '265px'}"></app-game>
-<app-menu *ngIf="(State | async)  === 2"></app-menu>
+<div *ngIf="ls.userloaded | async">
+    <app-lobby *ngIf="(State | async) === 0"></app-lobby>
+    <app-game *ngIf="(State | async) === 1" [ngStyle]="{'padding-left': (rozmisteno | async) ? '55px' : '265px'}"></app-game>
+    <app-menu *ngIf="(State | async)  === 2"></app-menu>
+</div>
+

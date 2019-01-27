@@ -1,6 +1,6 @@
 import {ChangeDetectionStrategy, Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {Point, PoleModel, StavPole} from '../../../model/pole.model';
-import {LodModel} from '../../../model/lod.model';
+import {LodeDto, LodModel} from '../../../model/lod.model';
 import {BehaviorSubject} from 'rxjs';
 import {GameState, Gs2Service, Mode, transformers} from '../../../services/gs2.service';
 
@@ -27,6 +27,7 @@ export class MyBoardComponent implements OnInit {
     ) {
         this.poles = new Poles<MyBoardData>(data => {
             let poles : PoleModel[] = [];
+            if(data.polozeneLode != null)
             for(const lod of data.polozeneLode) {
                 const casti = lod.castiLode;
                 poles.push({pozice: lod.pozice, lod: lod.viewData, dalsicasti: casti});
@@ -55,6 +56,7 @@ export class MyBoardComponent implements OnInit {
             }
             return poles;
         });
+        this.poles.data.polozeneLode = [];
     }
 
     getHeight(){
@@ -86,11 +88,13 @@ export class MyBoardComponent implements OnInit {
         this.Hover = [];
         const pole = this.poles.reatatched.value.find(_pole => Point.Equals(_pole.pozice, this.pointLastHovered) &&
             _pole.state === StavPole.lod);
-        if(pole != null)
+
+        if(this.gs2.boardsState.value.mode !== Mode.PlaceShips)
+        if(pole != null && pole.dalsicasti != null){
             for(const casti of pole.dalsicasti) {
                 this.Hover.push({pozice: casti.pozice, state: StavPole.hover});
             }
-        else this.Hover.push({pozice: this.pointLastHovered, state: StavPole.hover});
+        } else this.Hover.push({pozice: this.pointLastHovered, state: StavPole.hover});
 
         if(this.gs2.boardsState.value.mode === Mode.PlaceShips)
             this.poles.reatatch();
@@ -117,12 +121,14 @@ export class MyBoardComponent implements OnInit {
         return lod.pozice.x === pole.pozice.x && lod.pozice.y === pole.pozice.y;
     }
     ngOnInit() {
+        console.log(this.gs2.storage.getData());
         this.gs2.selectedShip.subscribe(data => {
             if(data == null) return;
             this.poles.data.lod.data = data;
         });
         this.zpracujLode(this.gs2.storage.getData(zpracujLode));
         this.gs2.storage.getTransformer<Point[]>(transformers.dopady).subscribe(dopady => {
+            if(dopady == null) return;
             this.poles.data.dopady = dopady.map(point => {
                 if(this.JeLodNapozici(point))
                     return {pozice: point, state: StavPole.poskozenaLod} as PoleModel;
@@ -134,10 +140,17 @@ export class MyBoardComponent implements OnInit {
     }
     floor = Math.floor;
     private zpracujLode = lode => {
-        this.poles.data.lod = new LodModel(lode[0], { x: 1, y: 1 });
+        this.poles.data.lod = new LodModel(lode.filter(lod => lod.rank === 1)[0], { x: 1, y: 1 });
         this.shipsLoaded.next(true);
-        this.poles.data.polozeneLode = this.gs2.storage.getData(data => data.lode['creator'].lode)
+        if(this.gs2.storage.getData(data => data.lode == null)) {
+            this.poles.data.polozeneLode = [];
+            return;
+        }
+        if(this.gs2.storage.getData(data => data.lode.hasOwnProperty('creator')))
+        this.poles.data.polozeneLode = this.gs2.storage.getData(data => data.lode[this.gs2.ls.userData.lastMatch.creator ? 'creator' : 'opponent'].lode)
             .map(lod => new LodModel(lode.find(value => value.uid === lod.LodDataUid), lod.pozice, lod.smer));
+
+        if(this.poles.data.polozeneLode != null)
         for(const lod of this.poles.data.polozeneLode) {
             this.gs2.lodPolozina(lod.data.rank);
         }

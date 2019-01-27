@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit} from '@angular/core';
 import {emitors, Field, Gs2Service} from '../services/gs2.service';
 import {Observable} from 'rxjs';
 
@@ -14,13 +14,17 @@ export class GameComponent implements OnInit {
     public Field = Field;
 
     constructor(
-        public gs2: Gs2Service
+        public gs2: Gs2Service,
+        private cdr: ChangeDetectorRef
     ) {
         this.loading = this.gs2.storage.getEmitor(emitors.match_ready);
         this.rozmisteno = this.gs2.storage.getEmitor(emitors.rozmisteno);
     }
 
     ngOnInit() {
+        this.gs2.boardsState.subscribe(is => {
+            this.cdr.markForCheck();
+        });
     }
 
 }

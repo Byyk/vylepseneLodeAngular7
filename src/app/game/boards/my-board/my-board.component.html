@@ -5,6 +5,7 @@
              *ngFor="let pole of (poles.reatatched | async).concat(Hover); let i = index"
              [style.top.px]="pole.pozice.y * getHeight() / 21"
              [style.left.px]="pole.pozice.x * getHeight() / 21"
+             matTooltip=""
              [style.width.px]="getHeight() / 21"
              [style.height.px]="getHeight() / 21"
              [ngClass]="{

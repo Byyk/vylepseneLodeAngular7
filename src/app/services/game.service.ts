@@ -20,7 +20,7 @@ export interface Limits {
 @Injectable({
     providedIn: 'root'
 })
-export class GameService {
+export class GameServicee {
     public _actualField = new BehaviorSubject<Field>(Field.playerField);
     public ActualField = Field.playerField;
     public actualField: Observable<Field>;
