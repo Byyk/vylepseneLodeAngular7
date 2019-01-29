@@ -9,11 +9,13 @@ import {CanDeactivateGuard} from '../guards/can-deactivate.guard';
 import {CanNotActivateGuard} from '../guards/can-not-activate.guard';
 import {ConfirmResetComponent} from '../confirm-reset/confirm-reset.component';
 
+
 const routes: Routes = [
     {path: 'Login', component: LoginComponent, canActivate: [CanNotActivateGuard]},
     {path: 'profile', component: ProfileComponent, canDeactivate: [CanDeactivateGuard], canActivate: [CanActivateGuard]},
     {path: 'matchmaking', component: MatchMakingComponent, canActivate: [CanActivateGuard]},
     {path: 'resetpassword', component: ConfirmResetComponent, canActivate: [CanNotActivateGuard]},
+    {path: 'game', loadChildren: '../game/game.module#GameModule'},
     {path: '**', component: HomeComponent},
 ];
 
