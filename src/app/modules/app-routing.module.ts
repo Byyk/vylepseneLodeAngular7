@@ -8,12 +8,14 @@ import {CanActivateGuard} from '../guards/can-activate.guard';
 import {CanDeactivateGuard} from '../guards/can-deactivate.guard';
 import {CanNotActivateGuard} from '../guards/can-not-activate.guard';
 import {ConfirmResetComponent} from '../confirm-reset/confirm-reset.component';
+import {ShipEditorModule} from "../ship-editor/ship-editor.module";
 
 const routes: Routes = [
     {path: 'Login', component: LoginComponent, canActivate: [CanNotActivateGuard]},
     {path: 'profile', component: ProfileComponent, canDeactivate: [CanDeactivateGuard], canActivate: [CanActivateGuard]},
-    {path: 'matchmaking', component: MatchMakingComponent, canActivate: [CanActivateGuard]},
-    {path: 'resetpassword', component: ConfirmResetComponent, canActivate: [CanNotActivateGuard]},
+    {path: 'match-making', component: MatchMakingComponent, canActivate: [CanActivateGuard]},
+    {path: 'reset-password', component: ConfirmResetComponent, canActivate: [CanNotActivateGuard]},
+    {path: 'ship-editor', loadChildren: () => ShipEditorModule},
     {path: '**', component: HomeComponent},
 ];
 

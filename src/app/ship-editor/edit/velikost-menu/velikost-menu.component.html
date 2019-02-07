@@ -1,0 +1,22 @@
+<h3> Rovne </h3>
+<mat-form-field>
+    <input matInput placeholder="Výška" type="number" min="1" max="10"
+           [(value)]="patternEditorData.Rovne.y">
+</mat-form-field>
+<mat-form-field>
+    <input matInput placeholder="Šířka" type="number" min="1" max="10"
+           [(value)]="patternEditorData.Rovne.x">
+</mat-form-field>
+
+<h3> Šikmo </h3>
+<mat-form-field>
+    <input matInput placeholder="Výška" type="number" min="1" max="8"
+           [(value)]="patternEditorData.Sikmo.y">
+</mat-form-field>
+<mat-form-field>
+    <input matInput placeholder="Šířka" type="number" min="1" max="12"
+           [(value)]="patternEditorData.Sikmo.x">
+</mat-form-field>
+
+<button id="submit" mat-flat-button (click)="submit()"> Submit </button>
+<button id="close" mat-flat-button (click)="close()"> Close </button>

@@ -1,0 +1,30 @@
+<button mat-flat-button id="add-ship" routerLink="./add"> add ship </button>
+
+<table mat-table *ngIf="es.dataLoaded | async"
+       [dataSource]="es.data" class="mat-elevation-z8">
+  <ng-container matColumnDef="uid">
+    <th mat-header-cell *matHeaderCellDef> Push id </th>
+    <td mat-cell *matCellDef="let element"> {{ element.uid }} </td>
+  </ng-container>
+
+  <ng-container matColumnDef="rank">
+    <th mat-header-cell *matHeaderCellDef> Rank </th>
+    <td mat-cell *matCellDef="let element"> {{ element.rank }} </td>
+  </ng-container>
+
+  <ng-container matColumnDef="name">
+    <th mat-header-cell *matHeaderCellDef> Name </th>
+    <td mat-cell *matCellDef="let element"> {{ element.name }} </td>
+  </ng-container>
+
+  <ng-container matColumnDef="actions">
+    <th mat-header-cell *matHeaderCellDef> Actions </th>
+    <td mat-cell *matCellDef="let element">
+      <button class="edit" mat-button (click)="edit(element.uid)"> edit </button>
+      <button class="delete" mat-button (click)="delete(element.uid)"> delete </button>
+    </td>
+  </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="['rank', 'uid', 'name', 'actions']"></tr>
+  <tr mat-row *matRowDef="let row; columns: ['rank', 'uid', 'name', 'actions']"></tr>
+</table>

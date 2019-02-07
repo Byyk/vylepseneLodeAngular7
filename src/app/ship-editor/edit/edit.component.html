@@ -1,0 +1,24 @@
+<button id="back" mat-button routerLink="/ship-editor"> back </button>
+<mat-card>
+    <div class="row">
+        <div id="pattern-editor-container">
+            <div class="toolbar">
+                <div class="tab"> Rovne </div>
+                <div class="tab"> Sikmo </div>
+                <span style="flex-grow: 1"> </span>
+                <div class="tab" id="velikost-button" (click)="ShowVelikostmenu()">
+                    Nastavit Velikost
+                    <app-velikost-menu
+                            [patternEditorData]="patternEditorData"
+                            [style.display]=" (showVelikostmenu | async) ? 'block' : 'none'"
+                            (submited)="VelikostMenuSubmited($event)"
+                            (closed)="closed()"
+                            [tabindex]="showVelikostmenu ? 1 : -1">
+                    </app-velikost-menu>
+                </div>
+            </div>
+            <app-pattern-editor [style.display]=" (showPatternEditor | async) ? 'block' : 'none'"
+                    [sikmo]="patternEdditorSikmo">  </app-pattern-editor>
+        </div>
+    </div>
+</mat-card>

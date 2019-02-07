@@ -1,0 +1,47 @@
+#back {
+  margin: 30px 0 10px 50px;
+  color: #00ABCD;
+}
+
+mat-card {
+  margin: 0 50px;
+  display: flex;
+  flex-direction: column;
+}
+
+.row {
+  display: flex;
+  flex-direction: row;
+}
+
+#pattern-editor-container {
+  background: #00ABCD;
+  flex: 0.4;
+  .toolbar {
+    background: red;
+    display: flex;
+    flex-direction: row;
+    .tab {
+      padding: 15px 20px;
+      display: block;
+
+      &:hover{
+        background: #fff3;
+      }
+    }
+  }
+}
+
+#velikost-button {
+  position: relative;
+
+  app-velikost-menu {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    transform: translateY(100%);
+    background: #5bc0de;
+    display: none;
+  }
+}
