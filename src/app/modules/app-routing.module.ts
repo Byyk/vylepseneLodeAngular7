@@ -10,12 +10,16 @@ import {CanNotActivateGuard} from '../guards/can-not-activate.guard';
 import {ConfirmResetComponent} from '../confirm-reset/confirm-reset.component';
 import {ShipEditorModule} from "../ship-editor/ship-editor.module";
 
+
 const routes: Routes = [
     {path: 'Login', component: LoginComponent, canActivate: [CanNotActivateGuard]},
     {path: 'profile', component: ProfileComponent, canDeactivate: [CanDeactivateGuard], canActivate: [CanActivateGuard]},
     {path: 'match-making', component: MatchMakingComponent, canActivate: [CanActivateGuard]},
     {path: 'reset-password', component: ConfirmResetComponent, canActivate: [CanNotActivateGuard]},
     {path: 'ship-editor', loadChildren: () => ShipEditorModule},
+    {path: 'match-making', component: MatchMakingComponent, canActivate: [CanActivateGuard]},
+    {path: 'reset-password', component: ConfirmResetComponent, canActivate: [CanNotActivateGuard]},
+    {path: 'game', loadChildren: '../game/game.module#GameModule'},
     {path: '**', component: HomeComponent},
 ];
 

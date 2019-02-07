@@ -35,6 +35,7 @@ import {CookieService} from 'ngx-cookie-service';
 import { SliderComponent } from './match-making/lobby/tabs/tabs-nav/slider/slider.component';
 import { ProfilePopUpComponent } from './profile-pop-up/profile-pop-up.component';
 import {MatchMakingModule} from './match-making/match-making.module';
+import {GameModule} from './game/game.module';
 
 @NgModule({
     declarations: [
@@ -64,7 +65,7 @@ import {MatchMakingModule} from './match-making/match-making.module';
         AngularFireStorageModule,
         AngularFireMessagingModule,
         AppFontAwesomeModule,
-        MatchMakingModule
+        MatchMakingModule,
     ],
     providers: [
         CanDeactivateGuard,

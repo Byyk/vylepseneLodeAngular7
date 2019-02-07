@@ -32,7 +32,7 @@
                 <button mat-button (click)="logout()" [tabindex]="-1" id="logout"> Odhlásit </button>
             </span>
             <button mat-button *ngIf="!(user$ | async) && !(isLoginpage | async)" style="margin-right: 10px"
-                    routerLink="/Login" routerLinkActive="active">
+                    routerLink="/game/play" routerLinkActive="active">
                 Login
             </button>
             <button mat-button *ngIf="(isLoginpage | async)" style="margin-right: 10px" (click)="goBack()">

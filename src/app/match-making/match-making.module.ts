@@ -38,7 +38,6 @@ import {FontAwesomeModule} from '@fortawesome/angular-fontawesome';
     ],
     imports: [
         CommonModule,
-        GameModule,
         MaterialModule,
         ReactiveFormsModule,
         FormsModule,
