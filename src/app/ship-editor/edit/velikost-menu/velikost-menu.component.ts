@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Component, ElementRef, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {PatternEditorData} from "../../model/pattern-editor-data";
 
 @Component({
@@ -17,7 +17,9 @@ export class VelikostMenuComponent implements OnInit {
   @Output()
   public closed = new EventEmitter();
 
-  constructor() { }
+  constructor(
+      private thisC: ElementRef
+  ) { }
 
   ngOnInit() {
   }
@@ -28,6 +30,7 @@ export class VelikostMenuComponent implements OnInit {
 
   close() {
     this.closed.emit();
+    (document.querySelector('') as HTMLElement).style.top = '150px';
   }
 
 }

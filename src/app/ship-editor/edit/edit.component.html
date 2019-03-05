@@ -10,7 +10,7 @@
                     Nastavit Velikost
                     <app-velikost-menu
                             [patternEditorData]="patternEditorData"
-                            [style.display]=" (showVelikostmenu | async) ? 'block' : 'none'"
+                            [style.display]="(showVelikostmenu | async) ? 'block' : 'none'"
                             (submited)="VelikostMenuSubmited($event)"
                             (closed)="closed()"
                             [tabindex]="showVelikostmenu ? 1 : -1">
